@@ -1,26 +1,58 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@source "../components";
+@source "../app";
+
+@theme {
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-dm-sans);
+  --color-cream: #faf9f7;
+  --color-charcoal: #1c1c1c;
+  --color-gold: #b8956c;
+  --color-gold-light: #d4bc94;
+  --color-slate-warm: #6b6560;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: #ede5d8;
+    color: #1c1c1c;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .font-display {
+    font-family: var(--font-display, Georgia, serif);
+  }
+
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-gold;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center bg-gold px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#a6845d] active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center border border-charcoal/20 bg-transparent px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-charcoal transition hover:border-charcoal hover:bg-charcoal hover:text-white;
+  }
+
+  .property-card {
+    @apply transition-shadow duration-300 hover:shadow-xl hover:shadow-black/8;
+  }
+
+  .input-field {
+    @apply w-full border border-charcoal/10 bg-white px-4 py-3 text-sm text-charcoal outline-none transition placeholder:text-slate-warm/60 focus:border-gold focus:ring-1 focus:ring-gold/30;
+  }
 }

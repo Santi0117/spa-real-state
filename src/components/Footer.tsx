@@ -1,12 +1,6 @@
 import { site } from "@/lib/site";
 
-const links = [
-  { href: "#destacadas", label: "Propiedades" },
-  { href: "#zonas", label: "Zonas" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#nosotros", label: "Nosotros" },
-  { href: "#contacto", label: "Contacto" },
-];
+import { navLinks } from "@/lib/nav";
 
 export default function Footer() {
   return (
@@ -26,7 +20,7 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Navegación</p>
             <nav className="mt-4 flex flex-col gap-2.5">
-              {links.map((link) => (
+              {navLinks.map((link) => (
                 <a key={link.href} href={link.href} className="text-sm text-white/70 hover:text-gold-light">
                   {link.label}
                 </a>

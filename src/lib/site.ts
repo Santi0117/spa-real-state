@@ -4,12 +4,20 @@ export const site = {
   tagline: "Propiedades exclusivas en Costa Rica",
   description:
     "Asesoría inmobiliaria premium en Costa Rica. Casas, apartamentos, terrenos y proyectos de lujo en las mejores zonas.",
-  email: "hola@joparealestate.com",
-  phone: "+506 8888 0000",
-  whatsapp: "+50688880000",
-  address: "Escazú, San José, Costa Rica",
+  email: "joparealestate@gmail.com",
+  phone: "506 8640-4222",
+  phoneTel: "+50686404222",
+  whatsapp: "50686404222",
+  address: "Pitahaya, Cartago, Costa Rica",
   handle: "@joparealestate",
 } as const;
+
+export const servicesMarqueeLines = [
+  "Venta de propiedades",
+  "Desarrollo inmobiliario",
+  "Construcción de vivienda",
+  "Asesoría personalizada",
+] as const;
 
 export const stats = [
   { value: "180+", label: "Propiedades vendidas" },

@@ -4,7 +4,11 @@ import { useState } from "react";
 import FormSuccess from "./FormSuccess";
 import VisitCalendar from "./VisitCalendar";
 
-export default function ScheduleVisitForm() {
+type ScheduleVisitFormProps = {
+  propertyName?: string;
+};
+
+export default function ScheduleVisitForm({ propertyName }: ScheduleVisitFormProps) {
   const [sent, setSent] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -22,6 +26,13 @@ export default function ScheduleVisitForm() {
         setSent(true);
       }}
     >
+      {propertyName ? (
+        <div className="rounded-sm border border-gold/30 bg-gold/5 px-4 py-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">Propiedad</p>
+          <p className="mt-1 text-sm font-medium text-charcoal">{propertyName}</p>
+          <input type="hidden" name="property" value={propertyName} />
+        </div>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="firstName" className="mb-1.5 block text-sm font-medium text-charcoal/80">

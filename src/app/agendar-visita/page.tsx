@@ -8,13 +8,23 @@ export const metadata: Metadata = {
   description: "Reservá un horario con un asesor de Jopa Real Estate.",
 };
 
-export default function AgendarVisitaPage() {
+type PageProps = {
+  searchParams: Promise<{ propiedad?: string }>;
+};
+
+export default async function AgendarVisitaPage({ searchParams }: PageProps) {
+  const { propiedad } = await searchParams;
+
   return (
     <FormPageShell
       title="Agendar visita"
-      description="Elegí el día y horario que más te convenga. Un asesor te confirmará la cita por teléfono o correo."
+      description={
+        propiedad
+          ? `Estás agendando una visita para: ${propiedad}. Elegí el día y horario que más te convenga.`
+          : "Elegí el día y horario que más te convenga. Un asesor te confirmará la cita por teléfono o correo."
+      }
     >
-      <ScheduleVisitForm />
+      <ScheduleVisitForm propertyName={propiedad} />
     </FormPageShell>
   );
 }

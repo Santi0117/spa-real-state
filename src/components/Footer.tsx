@@ -1,5 +1,5 @@
+import BrandLogo from "@/components/BrandLogo";
 import { site } from "@/lib/site";
-
 import { navLinks } from "@/lib/nav";
 
 export default function Footer() {
@@ -8,10 +8,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <p className="font-display text-2xl font-bold text-white">{site.name}</p>
-            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-gold-light">
-              Real Estate
-            </p>
+            <BrandLogo href="/" variant="footer" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
               {site.tagline}. Asesoría inmobiliaria premium en las mejores zonas de Costa Rica.
             </p>
@@ -31,7 +28,7 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Contacto</p>
             <div className="mt-4 space-y-2 text-sm text-white/70">
-              <a href={`tel:${site.phone}`} className="block hover:text-gold-light">{site.phone}</a>
+              <a href={`tel:${site.phoneTel}`} className="block hover:text-gold-light">{site.phone}</a>
               <a href={`mailto:${site.email}`} className="block hover:text-gold-light">{site.email}</a>
               <p>{site.address}</p>
             </div>

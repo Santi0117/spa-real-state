@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { site } from "@/lib/site";
+import BrandLogo from "@/components/BrandLogo";
 import { ctaButtons, navLinks } from "@/lib/nav";
 
 export default function Header() {
@@ -11,14 +11,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[72px]">
-        <Link href="/" className="group shrink-0 flex flex-col leading-none">
-          <span className="font-display text-2xl font-semibold tracking-wide text-white lg:text-[1.65rem]">
-            {site.name}
-          </span>
-          <span className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.28em] text-gold-light">
-            Real Estate
-          </span>
-        </Link>
+        <BrandLogo variant="header" />
 
         <nav className="hidden items-center gap-6 xl:flex xl:gap-8">
           {navLinks.map((link) => (

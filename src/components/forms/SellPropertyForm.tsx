@@ -64,12 +64,14 @@ export default function SellPropertyForm() {
         <label htmlFor="negotiable" className="mb-1.5 block text-sm font-medium text-charcoal/80">
           ¿Precio negociable?
         </label>
-        <select id="negotiable" name="negotiable" required className="input-field rounded-sm">
-          <option value="">Seleccioná una opción</option>
-          <option value="si">Sí, es negociable</option>
-          <option value="no">No, precio fijo</option>
-          <option value="parcial">Parcialmente negociable</option>
-        </select>
+        <textarea
+          id="negotiable"
+          name="negotiable"
+          required
+          rows={4}
+          className="input-field min-h-[112px] resize-y rounded-sm"
+          placeholder="Contanos si el precio es negociable, condiciones de venta u otros detalles que consideres importantes…"
+        />
       </div>
       <button type="submit" className="btn-gold w-full justify-center rounded-sm">
         Enviar solicitud

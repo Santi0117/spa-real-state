@@ -1,4 +1,5 @@
-import { formatArea, formatPrice, type Property } from "@/lib/properties";
+import Link from "next/link";
+import { formatArea, formatPrice, propertyHref, type Property } from "@/lib/properties";
 import PropertyImage from "./PropertyImage";
 
 type PropertyCardProps = {
@@ -9,7 +10,7 @@ type PropertyCardProps = {
 export default function PropertyCard({ property, large }: PropertyCardProps) {
   return (
     <article className={`property-card group ${large ? "lg:col-span-2" : ""}`}>
-      <a href={`#propiedad-${property.id}`} className="block">
+      <Link href={propertyHref(property.id)} className="block">
         <div
           className={`relative overflow-hidden bg-stone-200 ${
             large ? "aspect-[16/10] lg:aspect-[2/1]" : "aspect-[4/3]"
@@ -65,7 +66,7 @@ export default function PropertyCard({ property, large }: PropertyCardProps) {
             </div>
           )}
         </div>
-      </a>
+      </Link>
     </article>
   );
 }

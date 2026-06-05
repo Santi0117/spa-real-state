@@ -27,7 +27,7 @@ export default function Contact() {
             <div className="mt-10 space-y-5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">Teléfono</p>
-                <a href={`tel:${site.phone}`} className="mt-1 block text-lg text-charcoal hover:text-gold">
+                <a href={`tel:${site.phoneTel}`} className="mt-1 block text-lg text-charcoal hover:text-gold">
                   {site.phone}
                 </a>
               </div>
@@ -38,7 +38,7 @@ export default function Contact() {
                 </a>
               </div>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">Oficina</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">Oficinas</p>
                 <p className="mt-1 text-lg text-charcoal">{site.address}</p>
               </div>
             </div>

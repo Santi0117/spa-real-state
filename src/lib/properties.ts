@@ -14,10 +14,21 @@ export type Property = {
   baths: number;
   area: number;
   image: string;
+  images: string[];
+  description: string;
+  highlights: string[];
   featured?: boolean;
   new?: boolean;
   tags?: string[];
 };
+
+export function getPropertyById(id: string): Property | undefined {
+  return properties.find((p) => p.id === id);
+}
+
+export function propertyHref(id: string): string {
+  return `/propiedades/${id}`;
+}
 
 export const propertyTypes: PropertyType[] = [
   "Casa",
@@ -48,6 +59,16 @@ export const properties: Property[] = [
     baths: 3.5,
     area: 320,
     image: "/properties/1.jpg",
+    images: ["/properties/1.jpg", "/properties/2.jpg", "/properties/3.jpg"],
+    description:
+      "Villa contemporánea en zona alta de Escazú con amplios ventanales, doble altura en sala y acabados en piedra natural. Ideal para familias que buscan privacidad, seguridad 24/7 y cercanía a colegios, restaurantes y accesos rápidos a San José.",
+    highlights: [
+      "Vista panorámica al valle central",
+      "Piscina con deck y jardín maduro",
+      "Cocina abierta con isla central",
+      "Garaje para 2 vehículos",
+      "Condominio con vigilancia",
+    ],
     featured: true,
     new: true,
     tags: ["Piscina", "Vista"],
@@ -64,6 +85,16 @@ export const properties: Property[] = [
     baths: 4,
     area: 410,
     image: "/properties/2.jpg",
+    images: ["/properties/2.jpg", "/properties/3.jpg", "/properties/4.jpg"],
+    description:
+      "Residencia de arquitectura moderna en Santa Ana con líneas limpias, domótica integrada y espacios sociales amplios. La propiedad combina iluminación natural, materiales de alta gama y zonas verdes privadas para vivir con confort todo el año.",
+    highlights: [
+      "Sistema smart home preinstalado",
+      "Jardín tropical con riego automático",
+      "Oficina o estudio independiente",
+      "Terraza cubierta para reuniones",
+      "A minutos de Lindora y Forum",
+    ],
     featured: true,
     tags: ["Jardín", "Smart home"],
   },
@@ -79,6 +110,16 @@ export const properties: Property[] = [
     baths: 2.5,
     area: 245,
     image: "/properties/3.jpg",
+    images: ["/properties/3.jpg", "/properties/1.jpg", "/properties/5.jpg"],
+    description:
+      "Casa minimalista en Escazú con diseño depurado, paleta neutra y piscina privada. Distribución eficiente en un solo nivel principal, habitaciones con closet walk-in y excelente ventilación cruzada.",
+    highlights: [
+      "Piscina climatizada",
+      "Diseño de un nivel con accesibilidad",
+      "Acabados importados en baños",
+      "Barbecue integrado",
+      "Cerca de City Place y comercios",
+    ],
     featured: true,
     tags: ["Piscina"],
   },
@@ -94,6 +135,16 @@ export const properties: Property[] = [
     baths: 3,
     area: 280,
     image: "/properties/4.jpg",
+    images: ["/properties/4.jpg", "/properties/5.jpg", "/properties/6.jpg"],
+    description:
+      "Penthouse en condominio exclusivo de Santa Ana con terraza privada, acabados de lujo y vista despejada. Incluye áreas sociales del edificio, estacionamiento asignado y opción de ingreso amueblado según negociación.",
+    highlights: [
+      "Terraza panorámica privada",
+      "Cocina gourmet equipada",
+      "Ascensor directo al nivel",
+      "Amenidades: gym y salón social",
+      "Listo para ocupar",
+    ],
     featured: true,
     tags: ["Terraza", "Amueblado"],
   },
@@ -110,6 +161,16 @@ export const properties: Property[] = [
     baths: 2,
     area: 120,
     image: "/properties/5.jpg",
+    images: ["/properties/5.jpg", "/properties/4.jpg", "/properties/9.jpg"],
+    description:
+      "Apartamento de lujo amueblado en Curridabat, pensado para profesionales o parejas que buscan mudanza inmediata. Incluye electrodomésticos premium, balcón con vista y acceso a gimnasio y piscina del condominio.",
+    highlights: [
+      "Completamente amueblado",
+      "Contrato de alquiler flexible",
+      "Gimnasio y piscina del edificio",
+      "Seguridad y parqueo visitas",
+      "Cerca de UCR y Multiplaza del Este",
+    ],
     tags: ["Amueblado", "Gimnasio"],
   },
   {
@@ -124,6 +185,16 @@ export const properties: Property[] = [
     baths: 3,
     area: 290,
     image: "/properties/6.jpg",
+    images: ["/properties/6.jpg", "/properties/8.jpg", "/properties/2.jpg"],
+    description:
+      "Casa colonial renovada en Heredia Centro que conserva fachada clásica con interiores actualizados. Patio interior, amplios techos y madera recuperada crean un ambiente cálido sin sacrificar funcionalidad moderna.",
+    highlights: [
+      "Renovación integral 2023",
+      "Jardín interior y porche",
+      "Estacionamiento techado para 3 autos",
+      "Cerca del centro histórico",
+      "Potencial para home office",
+    ],
     tags: ["Jardín", "Estacionamiento"],
   },
   {
@@ -138,6 +209,16 @@ export const properties: Property[] = [
     baths: 4.5,
     area: 380,
     image: "/properties/7.jpg",
+    images: ["/properties/7.jpg", "/properties/6.jpg", "/properties/3.jpg"],
+    description:
+      "Villa frente al océano en Jacó con acceso caminable a la playa, piscina infinita y amplias terrazas para entretenimiento. Propiedad de alto perfil para retiro, segunda vivienda o renta vacacional premium.",
+    highlights: [
+      "Vista y cercanía al Pacífico",
+      "Piscina infinita con deck",
+      "Suite principal con jacuzzi",
+      "Área BBQ y rancho",
+      "Gestión de alquiler disponible",
+    ],
     new: true,
     tags: ["Playa", "Piscina infinita"],
   },
@@ -153,6 +234,16 @@ export const properties: Property[] = [
     baths: 2,
     area: 195,
     image: "/properties/8.jpg",
+    images: ["/properties/8.jpg", "/properties/6.jpg", "/properties/1.jpg"],
+    description:
+      "Casa familiar en condominio cerrado de Heredia con áreas verdes comunes, calles tranquilas y excelente relación precio–espacio. Distribución clásica con sala, comedor, cocina independiente y cuarto de lavandería.",
+    highlights: [
+      "Seguridad 24/7 y garita",
+      "Parque y áreas infantiles",
+      "Cuota de mantenimiento accesible",
+      "Colegios y supermercados cercanos",
+      "Ideal primera vivienda",
+    ],
     tags: ["Seguridad 24/7"],
   },
   {
@@ -168,6 +259,16 @@ export const properties: Property[] = [
     baths: 2,
     area: 95,
     image: "/properties/9.jpg",
+    images: ["/properties/9.jpg", "/properties/5.jpg", "/properties/1.jpg"],
+    description:
+      "Apartamento con vista panorámica en Escazú, pet friendly y diseño contemporáneo. Piso alto, poca incidencia de ruido y excelente conectividad hacia Autopista Próspero y zonas corporativas.",
+    highlights: [
+      "Vista abierta al oeste",
+      "Política pet friendly",
+      "Balcón con barandas de vidrio",
+      "Dos parqueos asignados",
+      "Mantenimiento incluye agua",
+    ],
     tags: ["Vista", "Pet friendly"],
   },
 ];
@@ -180,7 +281,8 @@ export type PropertyFilters = {
   zone: string;
   type: string;
   status: PropertyStatus | "Todos";
-  priceRange: string;
+  priceMin: number;
+  priceMax: number;
   bedsMin: string;
   bathsMin: string;
   areaMin: string;
@@ -191,12 +293,41 @@ export const defaultFilters: PropertyFilters = {
   zone: "Todas",
   type: "Todos",
   status: "Todos",
-  priceRange: "any",
+  priceMin: 0,
+  priceMax: 400_000,
   bedsMin: "any",
   bathsMin: "any",
   areaMin: "any",
   sort: "newest",
 };
+
+export type PriceSliderConfig = {
+  min: number;
+  max: number;
+  step: number;
+  hint: string;
+  format: (value: number) => string;
+};
+
+export function getPriceSliderConfig(status: PropertyStatus | "Todos"): PriceSliderConfig {
+  if (status === "Alquiler") {
+    return {
+      min: 0,
+      max: 5_000,
+      step: 100,
+      hint: "Precio mensual en USD",
+      format: (v) => `$${v.toLocaleString("en-US")}/mes`,
+    };
+  }
+
+  return {
+    min: 0,
+    max: 400_000,
+    step: 10_000,
+    hint: "Precio de venta en USD",
+    format: (v) => `$${v.toLocaleString("en-US")}`,
+  };
+}
 
 /** Rangos de precio según operación (venta en USD, alquiler USD/mes) */
 export type PriceRangeOption = {
@@ -261,41 +392,16 @@ export const sortOptions: { value: SortOption; label: string }[] = [
   { value: "area-desc", label: "Área: mayor a menor" },
 ];
 
-function parseRange(range: string): { min: number; max: number } | null {
-  if (range === "any") return null;
-  if (range.endsWith("+")) {
-    return { min: Number(range.replace("+", "")), max: Infinity };
-  }
-  const [min, max] = range.split("-").map(Number);
-  return { min, max: max ?? Infinity };
-}
-
-function matchesPrice(property: Property, priceRange: string, status: string): boolean {
-  if (priceRange === "any") return true;
-
-  if (priceRange.startsWith("sale-")) {
-    if (property.status !== "Venta") return false;
-    const raw = priceRange.replace("sale-", "");
-    const r = parseRange(raw);
-    if (!r) return true;
-    return property.price >= r.min && property.price <= r.max;
-  }
-
-  if (priceRange.startsWith("rent-")) {
-    if (property.status !== "Alquiler") return false;
-    const r = parseRange(priceRange.replace("rent-", ""));
-    if (!r) return true;
-    return property.price >= r.min && property.price <= r.max;
-  }
-
-  const r = parseRange(priceRange);
-  if (!r) return true;
-
-  if (status === "Alquiler" || (status === "Todos" && property.status === "Alquiler")) {
-    if (property.status !== "Alquiler") return status !== "Alquiler";
-  }
-
-  return property.price >= r.min && property.price <= r.max;
+function matchesPrice(
+  property: Property,
+  priceMin: number,
+  priceMax: number,
+  status: PropertyStatus | "Todos"
+): boolean {
+  const config = getPriceSliderConfig(status);
+  if (property.price < priceMin) return false;
+  if (priceMax >= config.max) return true;
+  return property.price <= priceMax;
 }
 
 export function filterProperties(
@@ -306,7 +412,7 @@ export function filterProperties(
     if (filters.zone !== "Todas" && p.zone !== filters.zone) return false;
     if (filters.type !== "Todos" && p.type !== filters.type) return false;
     if (filters.status !== "Todos" && p.status !== filters.status) return false;
-    if (!matchesPrice(p, filters.priceRange, filters.status)) return false;
+    if (!matchesPrice(p, filters.priceMin, filters.priceMax, filters.status)) return false;
     if (filters.bedsMin !== "any" && p.beds < Number(filters.bedsMin)) return false;
     if (filters.bathsMin !== "any" && p.baths < Number(filters.bathsMin)) return false;
     if (filters.areaMin !== "any" && p.area < Number(filters.areaMin)) return false;
@@ -349,11 +455,12 @@ export function getActiveFilterTags(filters: PropertyFilters): ActiveFilterTag[]
     tags.push({ key: "status", label: filters.status });
   }
 
-  if (filters.priceRange !== "any") {
-    const opt = getPriceRangeOptions(filters.status).find(
-      (o) => o.value === filters.priceRange
-    );
-    if (opt) tags.push({ key: "priceRange", label: opt.label });
+  if (filters.priceMin > 0 || filters.priceMax < getPriceSliderConfig(filters.status).max) {
+    const cfg = getPriceSliderConfig(filters.status);
+    tags.push({
+      key: "priceMin",
+      label: `${cfg.format(filters.priceMin)} – ${cfg.format(filters.priceMax)}`,
+    });
   }
 
   if (filters.zone !== "Todas") {
@@ -388,9 +495,7 @@ export function getActiveFilterTags(filters: PropertyFilters): ActiveFilterTag[]
 }
 
 export function formatPrice(amount: number, label?: string): string {
-  const formatted = amount >= 10000
-    ? `$${amount.toLocaleString("en-US")}`
-    : `$${amount.toLocaleString("en-US")}`;
+  const formatted = `$${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   return label ? `${formatted}${label}` : formatted;
 }
 

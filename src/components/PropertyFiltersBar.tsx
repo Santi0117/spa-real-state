@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   areaOptions,
-  bathOptions,
-  bedOptions,
   defaultFilters,
   getActiveFilterTags,
   getPriceSliderConfig,
@@ -28,6 +27,46 @@ const statusOptions: { value: PropertyStatus | "Todos"; label: string }[] = [
   { value: "Venta", label: "Venta" },
   { value: "Alquiler", label: "Alquiler" },
 ];
+
+const bedPills = [
+  { value: "any", label: "Todos" },
+  { value: "1", label: "+ 1" },
+  { value: "2", label: "+ 2" },
+  { value: "3", label: "+ 3" },
+  { value: "4", label: "+ 4" },
+  { value: "5", label: "+ 5" },
+];
+
+const bathPills = [
+  { value: "any", label: "Todos" },
+  { value: "1", label: "+ 1" },
+  { value: "2", label: "+ 2" },
+  { value: "3", label: "+ 3" },
+  { value: "4", label: "+ 4" },
+];
+
+const zoneOptions = [
+  { value: "Todas", label: "Todas" },
+  { value: "Escazú", label: "Escazú" },
+  { value: "Santa Ana", label: "Santa Ana" },
+  { value: "Heredia", label: "Heredia" },
+  { value: "Jacó", label: "Jacó" },
+  { value: "Curridabat", label: "Curridabat" },
+];
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
 
 function ChevronDown({ open }: { open: boolean }) {
   return (
@@ -59,10 +98,10 @@ function FilterPill({
     <button
       type="button"
       onClick={onClick}
-      className={`filter-pill ${active ? "filter-pill-active" : ""}`}
+      className={`filter-pill max-w-full ${active ? "filter-pill-active" : ""}`}
       aria-expanded={open}
     >
-      <span>{label}</span>
+      <span className="truncate">{label}</span>
       <ChevronDown open={open} />
     </button>
   );
@@ -178,6 +217,68 @@ function DropdownPanel({
   );
 }
 
+function MobileFilterSheet({
+  open,
+  title,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[200] flex items-end justify-center sm:items-center">
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/45"
+        aria-label="Cerrar filtros"
+        onClick={onClose}
+      />
+      <div
+        className="relative z-10 max-h-[85vh] w-full overflow-y-auto rounded-t-2xl border border-charcoal/10 bg-white p-5 shadow-2xl sm:mx-4 sm:max-w-lg sm:rounded-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+      >
+        <div className="mb-4 flex items-center justify-between gap-3 border-b border-charcoal/8 pb-3">
+          <p className="font-display text-lg font-medium text-charcoal">{title}</p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-slate-warm hover:bg-cream"
+            aria-label="Cerrar"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 export default function PropertyFiltersBar({
   filters,
   onChange,
@@ -185,6 +286,7 @@ export default function PropertyFiltersBar({
 }: PropertyFiltersBarProps) {
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useIsDesktop();
   const priceConfig = getPriceSliderConfig(filters.status);
 
   function update<K extends keyof PropertyFilters>(key: K, value: PropertyFilters[K]) {
@@ -207,13 +309,14 @@ export default function PropertyFiltersBar({
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
+      if (!isDesktop) return;
       if (barRef.current && !barRef.current.contains(e.target as Node)) {
         setOpenPanel(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isDesktop]);
 
   const activeTags = getActiveFilterTags(filters);
 
@@ -236,177 +339,210 @@ export default function PropertyFiltersBar({
   const moreActive =
     filters.zone !== "Todas" || filters.areaMin !== "any" || filters.sort !== "newest";
 
-  const bedPills = [
-    { value: "any", label: "Todos" },
-    { value: "1", label: "+ 1" },
-    { value: "2", label: "+ 2" },
-    { value: "3", label: "+ 3" },
-    { value: "4", label: "+ 4" },
-    { value: "5", label: "+ 5" },
-  ];
+  const panelTitles: Record<Exclude<OpenPanel, null>, string> = {
+    status: "Operación",
+    type: "Tipo de propiedad",
+    price: "Precio",
+    rooms: "Recámaras y baños",
+    more: "Más filtros",
+  };
 
-  const bathPills = [
-    { value: "any", label: "Todos" },
-    { value: "1", label: "+ 1" },
-    { value: "2", label: "+ 2" },
-    { value: "3", label: "+ 3" },
-    { value: "4", label: "+ 4" },
-  ];
+  const statusPanel = (
+    <>
+      <p className="filter-dropdown-title">Operación</p>
+      <OptionPills options={statusOptions} value={filters.status} onChange={updateStatus} />
+    </>
+  );
+
+  const typePanel = (
+    <>
+      <p className="filter-dropdown-title">Tipo de propiedad</p>
+      <OptionPills
+        options={types.map((t) => ({ value: t, label: t }))}
+        value={filters.type}
+        onChange={(v) => update("type", v)}
+      />
+    </>
+  );
+
+  const pricePanel = (
+    <>
+      <p className="filter-dropdown-title">Rango de precio</p>
+      <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
+      <PriceRangeSlider
+        min={priceConfig.min}
+        max={priceConfig.max}
+        step={priceConfig.step}
+        valueMin={filters.priceMin}
+        valueMax={filters.priceMax}
+        formatValue={priceConfig.format}
+        onChange={(priceMin, priceMax) => onChange({ ...filters, priceMin, priceMax })}
+      />
+      <button
+        type="button"
+        className="mt-4 text-xs font-medium text-gold hover:underline"
+        onClick={() =>
+          onChange({ ...filters, priceMin: priceConfig.min, priceMax: priceConfig.max })
+        }
+      >
+        Restablecer precio
+      </button>
+    </>
+  );
+
+  const roomsPanel = (
+    <div className="space-y-5">
+      <div>
+        <p className="filter-dropdown-title mb-3">Recámaras</p>
+        <OptionPills
+          options={bedPills}
+          value={filters.bedsMin}
+          onChange={(v) => update("bedsMin", v)}
+        />
+      </div>
+      <div>
+        <p className="filter-dropdown-title mb-3">Baños</p>
+        <OptionPills
+          options={bathPills}
+          value={filters.bathsMin}
+          onChange={(v) => update("bathsMin", v)}
+        />
+      </div>
+    </div>
+  );
+
+  const morePanel = (
+    <div className="space-y-5">
+      <div>
+        <p className="filter-dropdown-title mb-3">Zona</p>
+        <OptionPills
+          options={zoneOptions}
+          value={filters.zone}
+          onChange={(v) => update("zone", v)}
+        />
+      </div>
+      <div>
+        <p className="filter-dropdown-title mb-3">Área mínima</p>
+        <OptionPills
+          options={areaOptions.map((o) => ({
+            value: o.value,
+            label: o.value === "any" ? "Cualquiera" : o.label,
+          }))}
+          value={filters.areaMin}
+          onChange={(v) => update("areaMin", v)}
+        />
+      </div>
+      <div>
+        <p className="filter-dropdown-title mb-3">Ordenar por</p>
+        <OptionPills
+          options={sortOptions}
+          value={filters.sort}
+          onChange={(v) => update("sort", v)}
+        />
+      </div>
+    </div>
+  );
+
+  const mobilePanelContent =
+    openPanel === "status"
+      ? statusPanel
+      : openPanel === "type"
+        ? typePanel
+        : openPanel === "price"
+          ? pricePanel
+          : openPanel === "rooms"
+            ? roomsPanel
+            : openPanel === "more"
+              ? morePanel
+              : null;
 
   return (
     <div ref={barRef} className="mt-10 space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative">
-          <FilterPill
-            label={statusLabel}
-            active={filters.status !== "Todos"}
-            open={openPanel === "status"}
-            onClick={() => toggle("status")}
-          />
-          <DropdownPanel open={openPanel === "status"}>
-            <p className="filter-dropdown-title">Operación</p>
-            <OptionPills
-              options={statusOptions}
-              value={filters.status}
-              onChange={updateStatus}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <FilterPill
+              label={statusLabel}
+              active={filters.status !== "Todos"}
+              open={openPanel === "status"}
+              onClick={() => toggle("status")}
             />
-          </DropdownPanel>
-        </div>
+            {isDesktop && <DropdownPanel open={openPanel === "status"}>{statusPanel}</DropdownPanel>}
+          </div>
 
-        <div className="relative">
-          <FilterPill
-            label={typeLabel}
-            active={filters.type !== "Todos"}
-            open={openPanel === "type"}
-            onClick={() => toggle("type")}
-          />
-          <DropdownPanel open={openPanel === "type"}>
-            <p className="filter-dropdown-title">Tipo de propiedad</p>
-            <OptionPills
-              options={types.map((t) => ({ value: t, label: t }))}
-              value={filters.type}
-              onChange={(v) => update("type", v)}
+          <div className="relative">
+            <FilterPill
+              label={typeLabel}
+              active={filters.type !== "Todos"}
+              open={openPanel === "type"}
+              onClick={() => toggle("type")}
             />
-          </DropdownPanel>
-        </div>
+            {isDesktop && <DropdownPanel open={openPanel === "type"}>{typePanel}</DropdownPanel>}
+          </div>
 
-        <div className="relative">
-          <FilterPill
-            label={priceLabel}
-            active={priceActive}
-            open={openPanel === "price"}
-            onClick={() => toggle("price")}
-          />
-          <DropdownPanel open={openPanel === "price"} className="min-w-[300px]">
-            <p className="filter-dropdown-title">Rango de precio</p>
-            <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
-            <PriceRangeSlider
-              min={priceConfig.min}
-              max={priceConfig.max}
-              step={priceConfig.step}
-              valueMin={filters.priceMin}
-              valueMax={filters.priceMax}
-              formatValue={priceConfig.format}
-              onChange={(priceMin, priceMax) => onChange({ ...filters, priceMin, priceMax })}
+          <div className="relative">
+            <FilterPill
+              label={priceLabel}
+              active={priceActive}
+              open={openPanel === "price"}
+              onClick={() => toggle("price")}
             />
+            {isDesktop && (
+              <DropdownPanel open={openPanel === "price"} className="min-w-[300px]">
+                {pricePanel}
+              </DropdownPanel>
+            )}
+          </div>
+
+          <div className="relative">
+            <FilterPill
+              label={roomsLabel}
+              active={roomsActive}
+              open={openPanel === "rooms"}
+              onClick={() => toggle("rooms")}
+            />
+            {isDesktop && (
+              <DropdownPanel open={openPanel === "rooms"} className="min-w-[320px]">
+                {roomsPanel}
+              </DropdownPanel>
+            )}
+          </div>
+
+          <div className="relative">
+            <FilterPill
+              label="Más filtros"
+              active={moreActive}
+              open={openPanel === "more"}
+              onClick={() => toggle("more")}
+            />
+            {isDesktop && (
+              <DropdownPanel open={openPanel === "more"} className="min-w-[300px]">
+                {morePanel}
+              </DropdownPanel>
+            )}
+          </div>
+
+          {activeTags.length > 0 && (
             <button
               type="button"
-              className="mt-4 text-xs font-medium text-gold hover:underline"
-              onClick={() =>
-                onChange({ ...filters, priceMin: priceConfig.min, priceMax: priceConfig.max })
-              }
+              onClick={() => onChange(defaultFilters)}
+              className="text-xs font-medium text-slate-warm underline-offset-2 hover:text-charcoal hover:underline"
             >
-              Restablecer precio
+              Limpiar filtros
             </button>
-          </DropdownPanel>
+          )}
         </div>
-
-        <div className="relative">
-          <FilterPill
-            label={roomsLabel}
-            active={roomsActive}
-            open={openPanel === "rooms"}
-            onClick={() => toggle("rooms")}
-          />
-          <DropdownPanel open={openPanel === "rooms"} className="min-w-[320px]">
-            <div className="space-y-5">
-              <div>
-                <p className="filter-dropdown-title mb-3">Recámaras</p>
-                <OptionPills
-                  options={bedPills}
-                  value={filters.bedsMin}
-                  onChange={(v) => update("bedsMin", v)}
-                />
-              </div>
-              <div>
-                <p className="filter-dropdown-title mb-3">Baños</p>
-                <OptionPills
-                  options={bathPills}
-                  value={filters.bathsMin}
-                  onChange={(v) => update("bathsMin", v)}
-                />
-              </div>
-            </div>
-          </DropdownPanel>
-        </div>
-
-        <div className="relative">
-          <FilterPill
-            label="Más filtros"
-            active={moreActive}
-            open={openPanel === "more"}
-            onClick={() => toggle("more")}
-          />
-          <DropdownPanel open={openPanel === "more"} className="min-w-[300px]">
-            <div className="space-y-5">
-              <div>
-                <p className="filter-dropdown-title mb-3">Zona</p>
-                <OptionPills
-                  options={[
-                    { value: "Todas", label: "Todas" },
-                    { value: "Escazú", label: "Escazú" },
-                    { value: "Santa Ana", label: "Santa Ana" },
-                    { value: "Heredia", label: "Heredia" },
-                    { value: "Jacó", label: "Jacó" },
-                    { value: "Curridabat", label: "Curridabat" },
-                  ]}
-                  value={filters.zone}
-                  onChange={(v) => update("zone", v)}
-                />
-              </div>
-              <div>
-                <p className="filter-dropdown-title mb-3">Área mínima</p>
-                <OptionPills
-                  options={areaOptions.map((o) => ({
-                    value: o.value,
-                    label: o.value === "any" ? "Cualquiera" : o.label,
-                  }))}
-                  value={filters.areaMin}
-                  onChange={(v) => update("areaMin", v)}
-                />
-              </div>
-              <div>
-                <p className="filter-dropdown-title mb-3">Ordenar por</p>
-                <OptionPills
-                  options={sortOptions}
-                  value={filters.sort}
-                  onChange={(v) => update("sort", v)}
-                />
-              </div>
-            </div>
-          </DropdownPanel>
-        </div>
-
-        {activeTags.length > 0 && (
-          <button
-            type="button"
-            onClick={() => onChange(defaultFilters)}
-            className="ml-auto text-xs font-medium text-slate-warm underline-offset-2 hover:text-charcoal hover:underline"
-          >
-            Limpiar filtros
-          </button>
-        )}
       </div>
+
+      {!isDesktop && openPanel && (
+        <MobileFilterSheet
+          open
+          title={panelTitles[openPanel]}
+          onClose={() => setOpenPanel(null)}
+        >
+          {mobilePanelContent}
+        </MobileFilterSheet>
+      )}
 
       <p className="text-sm text-slate-warm">
         {resultCount} {resultCount === 1 ? "propiedad" : "propiedades"}

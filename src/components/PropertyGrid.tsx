@@ -16,7 +16,7 @@ export default function PropertyGrid() {
 
   return (
     <section id="listings" className="border-t border-charcoal/8 bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+      <div className="mx-auto min-w-0 max-w-7xl px-4 sm:px-6">
         <div className="max-w-xl">
           <p className="section-label">Catálogo completo</p>
           <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">

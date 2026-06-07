@@ -65,7 +65,7 @@ export default function LanguageFlags() {
 
   return (
     <div
-      className="hidden shrink-0 flex-col gap-1 lg:flex"
+      className="flex shrink-0 flex-col gap-1"
       role="group"
       aria-label="Idioma"
     >

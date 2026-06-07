@@ -10,8 +10,8 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[72px]">
+    <header className="relative fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[72px] lg:pr-[5.5rem] xl:pr-[6rem]">
         <BrandLogo variant="header" />
 
         <nav className="hidden items-center gap-6 xl:flex xl:gap-8">
@@ -26,9 +26,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          <LanguageFlags />
-
+        <div className="flex items-center gap-1.5 lg:gap-2">
           <div className="hidden items-center gap-1.5 lg:flex">
             {ctaButtons.map((btn) => (
               <Link key={btn.href} href={btn.href} className="btn-gold-sm">
@@ -48,6 +46,10 @@ export default function Header() {
             <span className={`block h-px w-5 bg-white transition-transform ${open ? "-translate-y-[5px] -rotate-45" : ""}`} />
           </button>
         </div>
+      </div>
+
+      <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 lg:block sm:right-6">
+        <LanguageFlags />
       </div>
 
       {open && (
@@ -73,6 +75,9 @@ export default function Header() {
                 {btn.label}
               </Link>
             ))}
+          </div>
+          <div className="mt-5 flex justify-end">
+            <LanguageFlags />
           </div>
         </div>
       )}

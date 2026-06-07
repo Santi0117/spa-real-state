@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import CondominiumListingCard from "./CondominiumListingCard";
 import PropertyCard from "./PropertyCard";
 import PropertyFiltersBar from "./PropertyFiltersBar";
+import { condominiums } from "@/lib/condominiums";
 import {
   defaultFilters,
   filterProperties,
@@ -34,6 +36,9 @@ export default function PropertyGrid() {
         />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          {condominiums.map((condo) => (
+            <CondominiumListingCard key={condo.id} condominium={condo} />
+          ))}
           {filtered.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}

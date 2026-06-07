@@ -1,5 +1,6 @@
 export const navLinks = [
   { href: "/#destacadas", label: "Propiedades" },
+  { href: "/condominios/vista-verde", label: "Condominio" },
   { href: "/#zonas", label: "Zonas" },
   { href: "/#servicios", label: "Servicios" },
   { href: "/#nosotros", label: "Nosotros" },

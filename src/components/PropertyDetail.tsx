@@ -12,7 +12,7 @@ type PropertyDetailProps = {
 };
 
 export default function PropertyDetail({ property }: PropertyDetailProps) {
-  const visitHref = `/agendar-visita?propiedad=${encodeURIComponent(property.title)}`;
+  const visitHref = `/agendar-visita?id=${encodeURIComponent(property.id)}`;
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">

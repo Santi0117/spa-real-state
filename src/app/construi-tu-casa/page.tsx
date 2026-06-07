@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ConstruiTuCasaPage() {
   return (
     <FormPageShell
-      title="Construí tu casa"
+      title="Construir tu casa"
       description="Contanos tu situación y presupuesto. Te acompañamos en la búsqueda de lote, diseño y construcción."
     >
       <BuildHouseForm />

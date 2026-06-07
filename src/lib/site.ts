@@ -1,7 +1,11 @@
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://spa-real-state.vercel.app";
+
 export const site = {
   name: "Jopa",
   brand: "Jopa Real Estate",
   tagline: "Propiedades exclusivas en Costa Rica",
+  url: siteUrl,
   description:
     "Asesoría inmobiliaria premium en Costa Rica. Casas, apartamentos, terrenos y proyectos de lujo en las mejores zonas.",
   email: "joparealestate@gmail.com",

@@ -29,7 +29,7 @@ export default function BrandLogo({
       />
       <span className="flex min-w-[5.5rem] flex-col items-center text-center leading-none">
         <span
-          className={`font-display w-full font-semibold tracking-wide ${
+          className={`font-display w-full font-semibold uppercase tracking-wide ${
             isHeader
               ? "text-xl text-white sm:text-2xl lg:text-[1.65rem]"
               : "text-2xl text-white"

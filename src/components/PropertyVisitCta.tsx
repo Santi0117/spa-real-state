@@ -7,7 +7,7 @@ type PropertyVisitCtaProps = {
 };
 
 export default function PropertyVisitCta({ property, className = "" }: PropertyVisitCtaProps) {
-  const visitHref = `/agendar-visita?propiedad=${encodeURIComponent(property.title)}`;
+  const visitHref = `/agendar-visita?id=${encodeURIComponent(property.id)}`;
 
   return (
     <div

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
+import LanguageFlags from "@/components/LanguageFlags";
 import { ctaButtons, navLinks } from "@/lib/nav";
 
 export default function Header() {
@@ -25,7 +26,9 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <LanguageFlags />
+
           <div className="hidden items-center gap-1.5 lg:flex">
             {ctaButtons.map((btn) => (
               <Link key={btn.href} href={btn.href} className="btn-gold-sm">
@@ -33,6 +36,7 @@ export default function Header() {
               </Link>
             ))}
           </div>
+
           <button
             type="button"
             className="flex flex-col gap-1.5 p-2 lg:hidden"

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function VenderPropiedadPage() {
   return (
     <FormPageShell
-      title="Vender propiedad"
+      title="Vender tu casa"
       description="Completá el formulario con los datos de tu propiedad. Te contactaremos para una valuación y plan de venta."
     >
       <SellPropertyForm />

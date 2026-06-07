@@ -45,7 +45,7 @@
   }
 
   .btn-gold-sm {
-    @apply inline-flex shrink-0 items-center justify-center whitespace-nowrap bg-gold px-2.5 py-2 text-[8px] font-semibold uppercase leading-tight tracking-[0.08em] text-white transition hover:bg-[#a6845d] active:scale-[0.98] xl:px-3 xl:text-[9px];
+    @apply inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-sm bg-gold px-3 py-2.5 text-[10px] font-semibold uppercase leading-tight tracking-[0.1em] text-white transition hover:bg-[#a6845d] active:scale-[0.98] xl:px-3.5 xl:py-2.5 xl:text-[11px];
   }
 
   .btn-outline {
@@ -94,6 +94,19 @@
 
   .price-range-input::-moz-range-thumb {
     @apply pointer-events-auto h-5 w-5 cursor-grab rounded-full border-2 border-white bg-gold shadow-md;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn-gold-inverse {
+    @apply inline-flex items-center justify-center border border-white/30 bg-white px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-gold transition hover:bg-cream active:scale-[0.98];
   }
 }
 

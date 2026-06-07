@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FormPageShell from "@/components/FormPageShell";
 import ScheduleVisitForm from "@/components/forms/ScheduleVisitForm";
+import { getPropertyById } from "@/lib/properties";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,22 +10,25 @@ export const metadata: Metadata = {
 };
 
 type PageProps = {
-  searchParams: Promise<{ propiedad?: string }>;
+  searchParams: Promise<{ propiedad?: string; id?: string }>;
 };
 
 export default async function AgendarVisitaPage({ searchParams }: PageProps) {
-  const { propiedad } = await searchParams;
+  const { propiedad, id } = await searchParams;
+  const property = id ? getPropertyById(id) : undefined;
+  const propertyName = property?.title ?? propiedad;
+  const propertyId = property?.id ?? id;
 
   return (
     <FormPageShell
       title="Agendar visita"
       description={
-        propiedad
-          ? `Estás agendando una visita para: ${propiedad}. Elegí el día y horario que más te convenga.`
-          : "Elegí el día y horario que más te convenga. Un asesor te confirmará la cita por teléfono o correo."
+        propertyName
+          ? `Estás agendando una visita para: ${propertyName}. Elegí el día y horario que más te convenga.`
+          : "Elegí la propiedad, el día y horario que más te convenga. Un asesor te confirmará la cita."
       }
     >
-      <ScheduleVisitForm propertyName={propiedad} />
+      <ScheduleVisitForm propertyName={propertyName} propertyId={propertyId} />
     </FormPageShell>
   );
 }

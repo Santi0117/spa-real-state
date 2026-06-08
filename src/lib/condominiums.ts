@@ -5,13 +5,14 @@ export type LotStatus = "disponible" | "reservado" | "vendido";
 export type CondominiumLot = {
   id: string;
   label: string;
-  path: string;
   areaM2: number;
   price: number;
   status: LotStatus;
   description: string;
   features: string[];
   propertyId?: string;
+  /** Lote esquinero — resaltado en el plano */
+  corner?: boolean;
 };
 
 export type Condominium = {
@@ -28,11 +29,6 @@ export type Condominium = {
   propertyIds: string[];
   lots: CondominiumLot[];
 };
-
-/** Polígono helper → path SVG */
-function lotRect(x: number, y: number, w: number, h: number, skew = 0): string {
-  return `M ${x} ${y} L ${x + w + skew} ${y} L ${x + w} ${y + h} L ${x - skew} ${y + h} Z`;
-}
 
 export const vistaVerde: Condominium = {
   id: "vista-verde",
@@ -57,7 +53,7 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-a1",
       label: "Lote A-1",
-      path: lotRect(60, 80, 200, 140, 8),
+      corner: true,
       areaM2: 420,
       price: 185000,
       status: "disponible",
@@ -67,7 +63,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-a2",
       label: "Lote A-2",
-      path: lotRect(280, 80, 180, 140),
       areaM2: 380,
       price: 168000,
       status: "disponible",
@@ -77,7 +72,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-a3",
       label: "Lote A-3",
-      path: lotRect(480, 80, 200, 140, -6),
       areaM2: 410,
       price: 178000,
       status: "reservado",
@@ -87,7 +81,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-a4",
       label: "Lote A-4",
-      path: lotRect(700, 80, 220, 140, 10),
       areaM2: 450,
       price: 195000,
       status: "disponible",
@@ -97,7 +90,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-b1",
       label: "Lote B-1",
-      path: lotRect(60, 260, 190, 130, -5),
       areaM2: 360,
       price: 155000,
       status: "vendido",
@@ -108,7 +100,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-b2",
       label: "Lote B-2",
-      path: lotRect(270, 260, 190, 130),
       areaM2: 370,
       price: 162000,
       status: "disponible",
@@ -118,7 +109,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-b3",
       label: "Lote B-3",
-      path: lotRect(480, 260, 200, 130, 6),
       areaM2: 395,
       price: 172000,
       status: "disponible",
@@ -128,7 +118,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-b4",
       label: "Lote B-4",
-      path: lotRect(700, 260, 220, 130),
       areaM2: 430,
       price: 188000,
       status: "disponible",
@@ -139,7 +128,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-c1",
       label: "Lote C-1",
-      path: lotRect(120, 430, 180, 120),
       areaM2: 340,
       price: 148000,
       status: "disponible",
@@ -149,7 +137,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-c2",
       label: "Lote C-2",
-      path: lotRect(330, 430, 190, 120, -4),
       areaM2: 355,
       price: 152000,
       status: "reservado",
@@ -159,7 +146,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-c3",
       label: "Lote C-3",
-      path: lotRect(550, 430, 180, 120),
       areaM2: 350,
       price: 150000,
       status: "disponible",
@@ -169,7 +155,6 @@ export const vistaVerde: Condominium = {
     {
       id: "lote-c4",
       label: "Lote C-4",
-      path: lotRect(760, 430, 180, 120, 5),
       areaM2: 365,
       price: 158000,
       status: "disponible",

@@ -1,38 +1,67 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import LanguageFlags from "@/components/LanguageFlags";
 import { ctaButtons, navLinks } from "@/lib/nav";
+import { agendarVisitaHref, propertyIdFromPathname } from "@/lib/visit-scheduling";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const currentPropertyId = propertyIdFromPathname(pathname);
+
+  function ctaHref(href: string) {
+    if (href === "/agendar-visita" && currentPropertyId) {
+      return agendarVisitaHref({ propertyId: currentPropertyId });
+    }
+    return href;
+  }
 
   return (
-    <header className="relative fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[72px] lg:pr-[5.5rem] xl:pr-[6rem]">
-        <BrandLogo variant="header" />
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4 sm:gap-3 sm:px-6 lg:h-[72px]">
+        {/* Logo — ancho fijo, sin solapamiento */}
+        <div className="relative z-10 w-[8.5rem] shrink-0 sm:w-[9.25rem] lg:w-[9.75rem]">
+          <BrandLogo variant="header" />
+        </div>
 
-        <nav className="hidden items-center gap-6 xl:flex xl:gap-8">
+        {/* Nav centrado en el espacio entre logo y acciones */}
+        <nav
+          className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex xl:gap-3 2xl:gap-5"
+          aria-label="Principal"
+        >
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-[12px] font-medium uppercase tracking-[0.12em] text-white/75 transition hover:text-white"
+              className="whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.08em] text-white/75 transition hover:text-white lg:text-[9px] xl:text-[11px] xl:tracking-[0.12em]"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-1.5 lg:gap-2">
-          <div className="hidden items-center gap-1.5 lg:flex">
+        {/* CTAs + banderas */}
+        <div className="ml-auto flex shrink-0 items-center gap-1 lg:gap-1.5 xl:gap-2">
+          <div className="hidden items-center gap-1 lg:flex lg:gap-1 xl:gap-1.5 2xl:gap-2">
             {ctaButtons.map((btn) => (
-              <Link key={btn.href} href={btn.href} className="btn-gold-sm">
-                {btn.label}
+              <Link
+                key={btn.href}
+                href={ctaHref(btn.href)}
+                title={btn.label}
+                className="btn-gold-sm !px-2 !py-2 !text-[9px] !tracking-[0.08em] xl:!px-2.5 xl:!py-2.5 xl:!text-[10px] 2xl:!px-3.5 2xl:!text-[11px]"
+              >
+                <span className="xl:hidden">{btn.shortLabel}</span>
+                <span className="hidden xl:inline">{btn.label}</span>
               </Link>
             ))}
+          </div>
+
+          <div className="hidden shrink-0 origin-right scale-[0.88] lg:block xl:scale-100">
+            <LanguageFlags />
           </div>
 
           <button
@@ -46,10 +75,6 @@ export default function Header() {
             <span className={`block h-px w-5 bg-white transition-transform ${open ? "-translate-y-[5px] -rotate-45" : ""}`} />
           </button>
         </div>
-      </div>
-
-      <div className="absolute right-4 top-1/2 hidden -translate-y-1/2 lg:block sm:right-6">
-        <LanguageFlags />
       </div>
 
       {open && (
@@ -68,7 +93,7 @@ export default function Header() {
             {ctaButtons.map((btn) => (
               <Link
                 key={btn.href}
-                href={btn.href}
+                href={ctaHref(btn.href)}
                 className="btn-gold w-full justify-center rounded-sm text-[11px]"
                 onClick={() => setOpen(false)}
               >

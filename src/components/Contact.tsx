@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import OfficeAddress from "@/components/OfficeAddress";
+import SocialLinks from "@/components/SocialLinks";
 import { site } from "@/lib/site";
 
 export default function Contact() {
@@ -18,7 +20,7 @@ export default function Contact() {
           <div>
             <p className="section-label">Contacto</p>
             <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
-              Agendá una visita
+              Contáctanos
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-slate-warm">
               Contanos qué buscás y un asesor de {site.brand} te contactará en menos de 24 horas.
@@ -39,7 +41,13 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">Oficinas</p>
-                <p className="mt-1 text-lg text-charcoal">{site.address}</p>
+                <div className="mt-1 text-lg text-charcoal">
+                  <OfficeAddress addressClassName="text-charcoal" />
+                </div>
+                <SocialLinks
+                  className="mt-4 flex items-center gap-4"
+                  iconClassName="h-5 w-5 text-charcoal transition hover:text-gold"
+                />
               </div>
             </div>
           </div>

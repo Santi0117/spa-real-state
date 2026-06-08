@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Property } from "@/lib/properties";
+import { agendarVisitaHref } from "@/lib/visit-scheduling";
 
 type PropertyVisitCtaProps = {
   property: Property;
@@ -7,7 +8,7 @@ type PropertyVisitCtaProps = {
 };
 
 export default function PropertyVisitCta({ property, className = "" }: PropertyVisitCtaProps) {
-  const visitHref = `/agendar-visita?id=${encodeURIComponent(property.id)}`;
+  const visitHref = agendarVisitaHref({ propertyId: property.id });
 
   return (
     <div
@@ -18,11 +19,12 @@ export default function PropertyVisitCta({ property, className = "" }: PropertyV
         Agendar visita
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-slate-warm">
-        Coordiná un recorrido de esta propiedad con un asesor de Jopa. Elegí día y horario en el
-        formulario.
+        Coordiná un recorrido de{" "}
+        <span className="font-medium text-charcoal">{property.title}</span> con un asesor de Jopa.
+        Elegí día y horario en el formulario.
       </p>
       <Link href={visitHref} className="btn-gold mt-6 w-full justify-center rounded-sm">
-        Agendar visita
+        Agendar visita a esta propiedad
       </Link>
       <Link
         href="/#listings"

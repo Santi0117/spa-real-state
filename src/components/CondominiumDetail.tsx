@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { BackLink } from "./BackLink";
 import CondominiumLotMap from "./CondominiumLotMap";
 import LotCard from "./LotCard";
 import PropertyCard from "./PropertyCard";
@@ -31,12 +32,7 @@ export default function CondominiumDetail({ condominium }: CondominiumDetailProp
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-      <Link
-        href="/#listings"
-        className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-warm transition hover:text-gold"
-      >
-        ← Volver al catálogo
-      </Link>
+      <BackLink href="/#listings">← Volver al catálogo</BackLink>
 
       <article className="property-card mt-8 overflow-hidden border border-charcoal/8 bg-white">
         <div className="relative aspect-[16/10] overflow-hidden bg-stone-200 lg:aspect-[2/1]">

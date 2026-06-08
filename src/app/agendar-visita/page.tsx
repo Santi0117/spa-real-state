@@ -21,10 +21,10 @@ export default async function AgendarVisitaPage({ searchParams }: PageProps) {
 
   return (
     <FormPageShell
-      title="Agendar visita"
+      title={propertyName ? `Agendar visita — ${propertyName}` : "Agendar visita"}
       description={
         propertyName
-          ? `Estás agendando una visita para: ${propertyName}. Elegí el día y horario que más te convenga.`
+          ? `Estás agendando una visita para esta propiedad. Elegí el día y horario que más te convenga; un asesor te confirmará la cita.`
           : "Elegí la propiedad, el día y horario que más te convenga. Un asesor te confirmará la cita."
       }
     >

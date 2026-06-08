@@ -8,7 +8,7 @@ export const navLinks = [
 ] as const;
 
 export const ctaButtons = [
-  { href: "/agendar-visita", label: "Agendar visita" },
-  { href: "/construi-tu-casa", label: "Construir tu casa" },
-  { href: "/vender-propiedad", label: "Vender tu casa" },
+  { href: "/agendar-visita", label: "Agendar visita", shortLabel: "Agendar" },
+  { href: "/construi-tu-casa", label: "Construir tu casa", shortLabel: "Construir" },
+  { href: "/vender-propiedad", label: "Vender tu casa", shortLabel: "Vender" },
 ] as const;

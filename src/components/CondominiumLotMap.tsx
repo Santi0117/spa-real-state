@@ -2,6 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { googleMapsUrl } from "@/lib/maps";
+import {
+  getLotMapShape,
+  lotMapAmenities,
+  lotMapRoads,
+  lotMapViewBox,
+} from "@/lib/condominium-lot-map";
 import {
   lotStatusLabels,
   type Condominium,
@@ -15,15 +22,21 @@ type CondominiumLotMapProps = {
   onLotSelect?: (lot: CondominiumLot) => void;
 };
 
-function lotFill(status: CondominiumLot["status"], active: boolean, hovered: boolean) {
-  if (active || hovered) {
-    if (status === "vendido") return "fill-charcoal stroke-gold";
-    if (status === "reservado") return "fill-amber-600/80 stroke-amber-700";
+function lotShortLabel(label: string) {
+  return label.replace("Lote ", "");
+}
+
+function lotPathClass(lot: CondominiumLot, highlighted: boolean) {
+  if (highlighted) {
     return "fill-gold stroke-[#a6845d]";
   }
-  if (status === "vendido") return "fill-charcoal/25 stroke-charcoal/30";
-  if (status === "reservado") return "fill-amber-100 stroke-amber-300/80";
-  return "fill-gold-light/50 stroke-gold/40 hover:fill-gold-light/80";
+  if (lot.status === "vendido") {
+    return "fill-neutral-300 hover:fill-neutral-400";
+  }
+  if (lot.status === "reservado") {
+    return "fill-amber-100 hover:fill-gold-light/70";
+  }
+  return "fill-neutral-200 hover:fill-gold-light/60";
 }
 
 export default function CondominiumLotMap({
@@ -47,50 +60,57 @@ export default function CondominiumLotMap({
   }
 
   return (
-    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px] xl:gap-10">
-      <div className="border border-charcoal/10 bg-cream/80 p-4 sm:p-6 md:p-8">
+    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_320px] lg:gap-12">
+      <div className="border border-charcoal/10 bg-cream/50 p-4 sm:p-6 md:p-8">
         <svg
-          viewBox="0 0 1000 650"
-          className="h-auto w-full max-h-[480px]"
+          viewBox={lotMapViewBox}
+          className="h-auto max-h-[520px] w-full"
           role="img"
-          aria-label={`Plano de lotes — Condominio ${condominium.name}`}
+          aria-label={`Mapa interactivo de lotes — Condominio ${condominium.name}`}
         >
-          {/* Áreas comunes */}
-          <path
-            d="M 420 250 L 580 250 L 580 380 L 420 380 Z"
-            className="fill-emerald-100/80 stroke-emerald-300/60"
-            strokeWidth={2}
-          />
-          <text x="500" y="320" textAnchor="middle" className="fill-emerald-800 text-[18px] font-medium">
-            Parque central
-          </text>
-          <path
-            d="M 820 80 L 960 80 L 960 200 L 820 200 Z"
-            className="fill-stone-200 stroke-stone-300"
-            strokeWidth={2}
-          />
-          <text x="890" y="145" textAnchor="middle" className="fill-stone-600 text-[14px]">
-            Club house
-          </text>
-          {/* Calle principal */}
-          <path
-            d="M 40 220 L 960 220 L 960 240 L 40 240 Z"
-            className="fill-stone-300/70 stroke-none"
-          />
-          <path
-            d="M 40 400 L 960 400 L 960 418 L 40 418 Z"
-            className="fill-stone-300/70 stroke-none"
-          />
+          {/* Calles */}
+          {lotMapRoads.map((road, i) => (
+            <rect
+              key={`road-${i}`}
+              x={road.x}
+              y={road.y}
+              width={road.width}
+              height={road.height}
+              className="fill-neutral-300"
+              rx={2}
+            />
+          ))}
 
+          {/* Club house */}
+          <path
+            d={lotMapAmenities.clubHouse.path}
+            className="fill-neutral-300/90 stroke-neutral-400"
+            strokeWidth={1}
+            pointerEvents="none"
+          />
+          <text
+            x={lotMapAmenities.clubHouse.labelX}
+            y={lotMapAmenities.clubHouse.labelY}
+            textAnchor="middle"
+            className="pointer-events-none fill-neutral-600 text-[12px] font-medium"
+            style={{ fontFamily: "var(--font-dm-sans)" }}
+          >
+            {lotMapAmenities.clubHouse.label}
+          </text>
+
+          {/* Lotes */}
           {condominium.lots.map((lot) => {
-            const isActive = active.id === lot.id;
+            const shape = getLotMapShape(lot.id);
+            if (!shape) return null;
+
+            const isActive = active.id === lot.id || activeLotId === lot.id;
             const isHovered = hovered?.id === lot.id;
-            const isExternalActive = activeLotId === lot.id;
+            const highlighted = isActive || isHovered;
 
             return (
               <g key={lot.id}>
                 <path
-                  d={lot.path}
+                  d={shape.path}
                   onClick={() => selectLot(lot)}
                   onMouseEnter={() => setHovered(lot)}
                   onMouseLeave={() => setHovered(null)}
@@ -99,34 +119,42 @@ export default function CondominiumLotMap({
                   tabIndex={0}
                   role="button"
                   aria-label={`${lot.label} — ${lotStatusLabels[lot.status]}`}
-                  aria-pressed={isActive || isExternalActive}
-                  className={`cursor-pointer outline-none transition-all duration-300 ease-out stroke-[2] focus-visible:stroke-gold ${lotFill(
-                    lot.status,
-                    isActive || isExternalActive,
-                    isHovered
+                  aria-pressed={highlighted}
+                  className={`cursor-pointer outline-none transition-all duration-300 ease-out stroke-white stroke-[2] focus-visible:fill-gold focus-visible:stroke-gold ${lotPathClass(
+                    lot,
+                    highlighted
                   )}`}
                   style={{
-                    filter:
-                      isActive || isHovered || isExternalActive
-                        ? "drop-shadow(0 4px 12px rgb(184 149 108 / 0.35))"
-                        : "none",
+                    filter: highlighted
+                      ? "drop-shadow(0 4px 12px rgb(184 149 108 / 0.35))"
+                      : "none",
                   }}
                 />
                 <text
-                  x={lot.path.match(/M (\d+)/)?.[1] ?? 0}
-                  y={Number(lot.path.match(/M \d+ (\d+)/)?.[1] ?? 0) + 24}
-                  className="pointer-events-none fill-charcoal/70 text-[13px] font-semibold"
+                  x={shape.labelX}
+                  y={shape.labelY}
+                  textAnchor="middle"
+                  className="pointer-events-none fill-charcoal/60 text-[12px] font-semibold"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
-                  {lot.label.replace("Lote ", "")}
+                  {lotShortLabel(lot.label)}
                 </text>
               </g>
             );
           })}
         </svg>
+
         <p className="mt-4 text-center text-xs text-slate-warm lg:text-left">
-          Pasá el cursor sobre un lote para ver detalles · Tocá para seleccionar
+          Tocá o pasá el cursor sobre un lote
         </p>
+        <a
+          href={googleMapsUrl(`Condominio ${condominium.name}, ${condominium.location}, Costa Rica`)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-block text-[10px] font-semibold uppercase tracking-wider text-slate-warm transition hover:text-gold lg:mt-1"
+        >
+          Google Maps ↗
+        </a>
       </div>
 
       <div
@@ -136,30 +164,41 @@ export default function CondominiumLotMap({
             : "border-charcoal/10 bg-white"
         }`}
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
-          {display.label}
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+          Lote
         </p>
-        <h3 className="font-display mt-2 text-2xl font-medium tracking-tight text-charcoal">
-          {lotStatusLabels[display.status]}
+        <h3 className="font-display mb-1 text-2xl font-medium tracking-tight text-charcoal">
+          {lotShortLabel(display.label)}
         </h3>
-        <p className="mt-1 font-display text-xl font-semibold text-gold">
-          {formatPrice(display.price)}
+        <p className="mb-6 text-sm text-slate-warm">
+          {lotStatusLabels[display.status]} · {formatArea(display.areaM2)}
         </p>
-        <p className="mt-1 text-sm text-slate-warm">{formatArea(display.areaM2)}</p>
 
-        <p className="mt-5 text-sm leading-relaxed text-charcoal/85">{display.description}</p>
-
-        <ul className="mt-4 space-y-2">
-          {display.features.map((feature) => (
-            <li
-              key={feature}
-              className="flex items-center gap-2 text-sm text-slate-warm"
-            >
-              <span className="h-1 w-1 shrink-0 rounded-full bg-gold" aria-hidden />
-              {feature}
-            </li>
-          ))}
-        </ul>
+        <dl className="space-y-4 text-sm">
+          <div>
+            <dt className="mb-1 text-slate-warm">Precio</dt>
+            <dd className="font-display text-xl font-semibold text-gold">
+              {formatPrice(display.price)}
+            </dd>
+          </div>
+          <div>
+            <dt className="mb-1 text-slate-warm">Descripción</dt>
+            <dd className="leading-relaxed text-charcoal/85">{display.description}</dd>
+          </div>
+          <div>
+            <dt className="mb-1 text-slate-warm">Características</dt>
+            <dd className="text-charcoal/80">
+              <ul className="space-y-1.5">
+                {display.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2">
+                    <span className="h-1 w-1 shrink-0 rounded-full bg-gold" aria-hidden />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        </dl>
 
         {display.status === "disponible" && (
           <Link

@@ -1,4 +1,6 @@
 import BrandLogo from "@/components/BrandLogo";
+import OfficeAddress from "@/components/OfficeAddress";
+import SocialLinks from "@/components/SocialLinks";
 import { site } from "@/lib/site";
 import { navLinks } from "@/lib/nav";
 
@@ -30,7 +32,13 @@ export default function Footer() {
             <div className="mt-4 space-y-2 text-sm text-white/70">
               <a href={`tel:${site.phoneTel}`} className="block hover:text-gold-light">{site.phone}</a>
               <a href={`mailto:${site.email}`} className="block hover:text-gold-light">{site.email}</a>
-              <p>{site.address}</p>
+              <div className="pt-1">
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/40">
+                  Oficinas
+                </p>
+                <OfficeAddress addressClassName="text-white/70" />
+                <SocialLinks className="mt-4 flex items-center gap-4" />
+              </div>
             </div>
           </div>
         </div>
@@ -40,8 +48,10 @@ export default function Footer() {
             © {new Date().getFullYear()} {site.brand}. Todos los derechos reservados.
           </p>
           <div className="flex gap-6 text-xs text-white/40">
+            <a href="#terminos" id="terminos" className="hover:text-gold-light">
+              Términos
+            </a>
             <a href="#" className="hover:text-gold-light">Privacidad</a>
-            <a href="#" className="hover:text-gold-light">Términos</a>
           </div>
         </div>
       </div>

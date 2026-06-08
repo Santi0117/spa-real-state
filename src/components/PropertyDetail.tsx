@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BackLink } from "./BackLink";
 import PropertyGallery from "./PropertyGallery";
 import PropertyVisitCta from "./PropertyVisitCta";
 import {
@@ -6,22 +7,18 @@ import {
   formatPrice,
   type Property,
 } from "@/lib/properties";
+import { agendarVisitaHref } from "@/lib/visit-scheduling";
 
 type PropertyDetailProps = {
   property: Property;
 };
 
 export default function PropertyDetail({ property }: PropertyDetailProps) {
-  const visitHref = `/agendar-visita?id=${encodeURIComponent(property.id)}`;
+  const visitHref = agendarVisitaHref({ propertyId: property.id });
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-      <Link
-        href="/#listings"
-        className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-warm transition hover:text-gold"
-      >
-        ← Volver al catálogo
-      </Link>
+      <BackLink href="/#listings">← Volver al catálogo</BackLink>
 
       <div className="mt-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-10 xl:gap-14">
         <div>
@@ -114,7 +111,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
 
           <div className="mt-10 border-t border-charcoal/8 pt-8 lg:hidden">
             <Link href={visitHref} className="btn-gold w-full justify-center rounded-sm">
-              Agendar visita
+              Agendar visita a esta propiedad
             </Link>
           </div>
         </div>

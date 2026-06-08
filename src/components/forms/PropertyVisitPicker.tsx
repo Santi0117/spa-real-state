@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { properties } from "@/lib/properties";
 
@@ -12,6 +13,16 @@ export default function PropertyVisitPicker({
   selectedId,
   onSelect,
 }: PropertyVisitPickerProps) {
+  const selectedRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    selectedRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [selectedId]);
+
   return (
     <div>
       <p className="mb-2 text-sm font-medium text-charcoal/80">
@@ -23,6 +34,7 @@ export default function PropertyVisitPicker({
           return (
             <button
               key={property.id}
+              ref={isSelected ? selectedRef : undefined}
               type="button"
               onClick={() => onSelect(property.id, property.title)}
               className={`snap-start shrink-0 w-[7.5rem] text-left transition ${

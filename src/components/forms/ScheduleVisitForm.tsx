@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import FormSuccess from "./FormSuccess";
 import PropertyVisitPicker from "./PropertyVisitPicker";
+import SelectedPropertySummary from "./SelectedPropertySummary";
 import VisitCalendar from "./VisitCalendar";
 import { getPropertyById, properties } from "@/lib/properties";
 
@@ -11,43 +13,65 @@ type ScheduleVisitFormProps = {
   propertyId?: string;
 };
 
+function resolvePrefill(propertyId?: string, propertyName?: string) {
+  if (propertyId) {
+    const property = getPropertyById(propertyId);
+    if (property) {
+      return { id: property.id, title: property.title, property, prefilled: true };
+    }
+    return {
+      id: propertyId,
+      title: propertyName ?? "",
+      property: undefined,
+      prefilled: Boolean(propertyId || propertyName),
+    };
+  }
+  if (propertyName) {
+    const match = properties.find((p) => p.title === propertyName);
+    if (match) {
+      return { id: match.id, title: match.title, property: match, prefilled: true };
+    }
+    return { id: "", title: propertyName, property: undefined, prefilled: true };
+  }
+  return { id: "", title: "", property: undefined, prefilled: false };
+}
+
 export default function ScheduleVisitForm({
   propertyName: initialName,
   propertyId: initialId,
 }: ScheduleVisitFormProps) {
+  const prefill = useMemo(
+    () => resolvePrefill(initialId, initialName),
+    [initialId, initialName]
+  );
+
   const [sent, setSent] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [selectedId, setSelectedId] = useState(initialId ?? "");
-  const [selectedTitle, setSelectedTitle] = useState(initialName ?? "");
+  const [selectedId, setSelectedId] = useState(prefill.id);
+  const [selectedTitle, setSelectedTitle] = useState(prefill.title);
+  const [selectedProperty, setSelectedProperty] = useState(prefill.property);
+  const [showPicker, setShowPicker] = useState(!prefill.prefilled);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
-    if (initialId) {
-      const property = getPropertyById(initialId);
-      if (property) {
-        setSelectedId(property.id);
-        setSelectedTitle(property.title);
-        return;
-      }
-    }
-    if (initialName) {
-      const match = properties.find((p) => p.title === initialName);
-      if (match) {
-        setSelectedId(match.id);
-        setSelectedTitle(match.title);
-      } else {
-        setSelectedTitle(initialName);
-      }
-    }
-  }, [initialId, initialName]);
+    setSelectedId(prefill.id);
+    setSelectedTitle(prefill.title);
+    setSelectedProperty(prefill.property);
+    setShowPicker(!prefill.prefilled);
+  }, [prefill]);
 
-  const canSubmit = Boolean(selectedDate && selectedTime && selectedTitle);
+  const canSubmit = Boolean(
+    selectedDate && selectedTime && selectedTitle && acceptedTerms
+  );
 
   if (sent) return <FormSuccess />;
 
   function handlePropertySelect(id: string, title: string) {
     setSelectedId(id);
     setSelectedTitle(title);
+    setSelectedProperty(getPropertyById(id));
+    setShowPicker(false);
   }
 
   return (
@@ -59,22 +83,28 @@ export default function ScheduleVisitForm({
         setSent(true);
       }}
     >
-      <PropertyVisitPicker selectedId={selectedId} onSelect={handlePropertySelect} />
+      {showPicker ? (
+        <PropertyVisitPicker selectedId={selectedId} onSelect={handlePropertySelect} />
+      ) : selectedTitle ? (
+        <SelectedPropertySummary
+          property={selectedProperty}
+          title={selectedTitle}
+          onChange={() => setShowPicker(true)}
+        />
+      ) : null}
 
-      {selectedTitle ? (
-        <div className="rounded-sm border border-gold/30 bg-gold/5 px-4 py-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-            Visita para
-          </p>
-          <p className="mt-1 text-sm font-medium text-charcoal">{selectedTitle}</p>
-          <input type="hidden" name="property" value={selectedTitle} />
-          {selectedId ? <input type="hidden" name="propertyId" value={selectedId} /> : null}
-        </div>
-      ) : (
+      {!selectedTitle && showPicker ? (
         <p className="text-xs text-slate-warm">
           Seleccioná una propiedad arriba para continuar.
         </p>
-      )}
+      ) : null}
+
+      {selectedTitle ? (
+        <>
+          <input type="hidden" name="property" value={selectedTitle} />
+          {selectedId ? <input type="hidden" name="propertyId" value={selectedId} /> : null}
+        </>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -109,6 +139,24 @@ export default function ScheduleVisitForm({
         onDateChange={setSelectedDate}
         onTimeChange={setSelectedTime}
       />
+
+      <label className="flex cursor-pointer items-start gap-3 text-sm text-charcoal/85">
+        <input
+          type="checkbox"
+          name="terms"
+          checked={acceptedTerms}
+          onChange={(e) => setAcceptedTerms(e.target.checked)}
+          required
+          className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
+        />
+        <span>
+          Acepto los{" "}
+          <Link href="/#terminos" className="font-medium text-gold underline-offset-2 hover:underline">
+            términos y condiciones
+          </Link>{" "}
+          de Jopa Real Estate.
+        </span>
+      </label>
 
       <button
         type="submit"

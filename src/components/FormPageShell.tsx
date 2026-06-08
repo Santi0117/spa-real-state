@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 
 type FormPageShellProps = {
   title: string;
@@ -14,12 +14,7 @@ export default function FormPageShell({ title, description, children }: FormPage
       <Header />
       <main className="min-h-screen bg-cream pt-24 pb-20 md:pt-28">
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
-          <Link
-            href="/"
-            className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-warm transition hover:text-gold"
-          >
-            ← Volver al inicio
-          </Link>
+          <BackLink href="/">← Volver al inicio</BackLink>
           <p className="section-label mt-8">Formulario</p>
           <h1 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
             {title}

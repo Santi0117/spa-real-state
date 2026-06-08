@@ -3,6 +3,7 @@ export const siteUrl =
 
 export const site = {
   name: "Jopa",
+  subtitle: "Real Estate",
   brand: "Jopa Real Estate",
   tagline: "Propiedades exclusivas en Costa Rica",
   url: siteUrl,
@@ -14,6 +15,10 @@ export const site = {
   whatsapp: "50686404222",
   address: "Pitahaya, Cartago, Costa Rica",
   handle: "@joparealestate",
+  social: {
+    instagram: "https://www.instagram.com/joparealestate",
+    facebook: "https://www.facebook.com/joparealestate",
+  },
 } as const;
 
 export const servicesMarqueeLines = [

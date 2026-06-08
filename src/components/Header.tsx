@@ -45,7 +45,7 @@ export default function Header() {
         </nav>
 
         {/* CTAs + banderas */}
-        <div className="ml-auto flex shrink-0 items-center gap-1 lg:gap-1.5 xl:gap-2">
+        <div className="ml-auto flex shrink-0 items-center">
           <div className="hidden items-center gap-1 lg:flex lg:gap-1 xl:gap-1.5 2xl:gap-2">
             {ctaButtons.map((btn) => (
               <Link
@@ -60,7 +60,7 @@ export default function Header() {
             ))}
           </div>
 
-          <div className="hidden shrink-0 origin-right scale-[0.88] lg:block xl:scale-100">
+          <div className="ml-8 hidden shrink-0 lg:block xl:ml-10 2xl:ml-12">
             <LanguageFlags />
           </div>
 
@@ -101,7 +101,7 @@ export default function Header() {
               </Link>
             ))}
           </div>
-          <div className="mt-5 flex justify-end">
+          <div className="mt-5 flex justify-end pl-8">
             <LanguageFlags />
           </div>
         </div>

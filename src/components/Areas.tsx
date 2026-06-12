@@ -8,7 +8,7 @@ export default function Areas() {
         <div className="text-center">
           <p className="section-label">Ubicaciones</p>
           <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
-            Zonas premium
+            Zonas disponibles
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-slate-warm">
             Las mejores áreas de Costa Rica para vivir, invertir o disfrutar.

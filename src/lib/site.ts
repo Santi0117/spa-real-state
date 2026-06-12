@@ -29,24 +29,18 @@ export const servicesMarqueeLines = [
 ] as const;
 
 export const stats = [
-  { value: "180+", label: "Propiedades vendidas" },
-  { value: "12", label: "Años de experiencia" },
+  { value: "50", label: "Casas vendidas" },
+  { value: "5", label: "Años de experiencia" },
   { value: "98%", label: "Clientes satisfechos" },
-  { value: "6", label: "Zonas premium" },
+  { value: "4", label: "Zonas disponibles" },
 ] as const;
 
 export const areas = [
   {
-    name: "Escazú",
-    description: "Villas modernas con vista a la ciudad",
-    image: "/properties/2.jpg",
-    count: 24,
-  },
-  {
-    name: "Santa Ana",
-    description: "Condominios de lujo y naturaleza",
-    image: "/properties/4.jpg",
-    count: 18,
+    name: "Jacó",
+    description: "Propiedades frente al Pacífico",
+    image: "/properties/7.jpg",
+    count: 12,
   },
   {
     name: "Heredia",
@@ -55,10 +49,16 @@ export const areas = [
     count: 15,
   },
   {
-    name: "Jacó & Pacífico",
-    description: "Propiedades frente al mar",
-    image: "/properties/7.jpg",
-    count: 12,
+    name: "Cartago",
+    description: "Viviendas con tradición y plusvalía",
+    image: "/properties/2.jpg",
+    count: 18,
+  },
+  {
+    name: "San José",
+    description: "Opciones urbanas y de fácil acceso",
+    image: "/properties/4.jpg",
+    count: 14,
   },
 ] as const;
 
@@ -66,12 +66,12 @@ export const services = [
   {
     title: "Compra y venta",
     description:
-      "Te acompañamos en cada paso: valuación, negociación y cierre con total transparencia.",
+      "Te acompañamos en cada paso, negociación, trámites bancarios y cierre con total transparencia.",
   },
   {
     title: "Alquiler premium",
     description:
-      "Propiedades seleccionadas para expatriados, ejecutivos y familias que buscan calidad.",
+      "Propiedades seleccionadas para jóvenes, ejecutivos y familias que buscan calidad.",
   },
   {
     title: "Inversión",
@@ -88,20 +88,20 @@ export const services = [
 export const testimonials = [
   {
     quote:
-      "Jopa nos encontró la casa perfecta en Escazú en menos de un mes. Profesionales, honestos y siempre disponibles.",
+      "Jopa nos encontró la casa perfecta en Cartago en menos de un mes. Profesionales, honestos y siempre disponibles.",
     name: "María & Carlos R.",
-    role: "Compradores — Escazú",
+    role: "Compradores — Cartago",
   },
   {
     quote:
-      "Vendí mi apartamento al precio que quería. El marketing y las fotos hicieron toda la diferencia.",
+      "Vendí mi apartamento en Cartago al precio que quería. El marketing y las fotos hicieron toda la diferencia.",
     name: "Andrea V.",
-    role: "Vendedora — Santa Ana",
+    role: "Vendedora — Cartago",
   },
   {
     quote:
-      "Como inversionista extranjero, necesitaba confianza. Jopa me guió en todo el proceso legal sin complicaciones.",
+      "Como inversionista, necesitaba confianza. Jopa me guió en todo el proceso legal en Cartago sin complicaciones.",
     name: "James T.",
-    role: "Inversionista — Heredia",
+    role: "Inversionista — Cartago",
   },
 ] as const;

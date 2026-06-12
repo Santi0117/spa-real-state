@@ -2,18 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { properties } from "@/lib/properties";
+import { properties, type Property } from "@/lib/properties";
 
 type PropertyVisitPickerProps = {
   selectedId?: string;
   onSelect: (id: string, title: string) => void;
+  filter?: (property: Property) => boolean;
 };
 
 export default function PropertyVisitPicker({
   selectedId,
   onSelect,
+  filter,
 }: PropertyVisitPickerProps) {
   const selectedRef = useRef<HTMLButtonElement>(null);
+  const visibleProperties = filter ? properties.filter(filter) : properties;
 
   useEffect(() => {
     selectedRef.current?.scrollIntoView({
@@ -29,7 +32,7 @@ export default function PropertyVisitPicker({
         Elegí la propiedad
       </p>
       <div className="hide-scrollbar -mx-1 flex gap-3 overflow-x-auto px-1 pb-2 snap-x snap-mandatory">
-        {properties.map((property) => {
+        {visibleProperties.map((property) => {
           const isSelected = selectedId === property.id;
           return (
             <button

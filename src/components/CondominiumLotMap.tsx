@@ -201,14 +201,24 @@ export default function CondominiumLotMap({
         </dl>
 
         {display.status === "disponible" && (
-          <Link
-            href={`/agendar-visita?propiedad=${encodeURIComponent(
-              `Condominio ${condominium.name} — ${display.label}`
-            )}`}
-            className="btn-gold mt-8 inline-flex w-full justify-center rounded-sm"
-          >
-            Agendar visita
-          </Link>
+          <div className="mt-8 space-y-3">
+            <Link
+              href={`/agendar-visita?propiedad=${encodeURIComponent(
+                `Condominio ${condominium.name} — ${display.label}`
+              )}`}
+              className="btn-gold inline-flex w-full justify-center rounded-sm"
+            >
+              Agendar visita
+            </Link>
+            <Link
+              href={`/financiar?propiedad=${encodeURIComponent(
+                `Condominio ${condominium.name} — ${display.label}`
+              )}`}
+              className="btn-gold inline-flex w-full justify-center rounded-sm"
+            >
+              Financiar
+            </Link>
+          </div>
         )}
       </div>
     </div>

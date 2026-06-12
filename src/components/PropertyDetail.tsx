@@ -7,7 +7,7 @@ import {
   formatPrice,
   type Property,
 } from "@/lib/properties";
-import { agendarVisitaHref } from "@/lib/visit-scheduling";
+import { agendarVisitaHref, financiarHref } from "@/lib/visit-scheduling";
 
 type PropertyDetailProps = {
   property: Property;
@@ -15,6 +15,7 @@ type PropertyDetailProps = {
 
 export default function PropertyDetail({ property }: PropertyDetailProps) {
   const visitHref = agendarVisitaHref({ propertyId: property.id });
+  const financeHref = financiarHref({ propertyId: property.id });
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -109,9 +110,12 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
             </section>
           )}
 
-          <div className="mt-10 border-t border-charcoal/8 pt-8 lg:hidden">
+          <div className="mt-10 space-y-3 border-t border-charcoal/8 pt-8 lg:hidden">
             <Link href={visitHref} className="btn-gold w-full justify-center rounded-sm">
               Agendar visita a esta propiedad
+            </Link>
+            <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
+              Financiar
             </Link>
           </div>
         </div>

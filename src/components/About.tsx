@@ -14,7 +14,7 @@ export default function About() {
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute bottom-6 left-6 right-6 border border-white/20 bg-charcoal/80 p-5 backdrop-blur-sm">
-              <p className="font-display text-3xl font-medium text-white">12+</p>
+              <p className="font-display text-3xl font-medium text-white">5+</p>
               <p className="mt-1 text-[11px] uppercase tracking-wider text-white/70">
                 Años en el mercado CR
               </p>
@@ -33,7 +33,7 @@ export default function About() {
             </p>
             <p className="mt-4 leading-relaxed text-slate-warm">
               Conocemos cada zona, cada condominio y cada detalle legal. Por eso más de
-              180 familias confiaron en nosotros para encontrar su hogar ideal.
+              50 familias confiaron en nosotros para encontrar su hogar ideal.
             </p>
 
             <ul className="mt-8 space-y-3">

@@ -5,15 +5,11 @@ import { languages, type LanguageCode } from "@/lib/languages";
 
 function FlagIcon({ country }: { country: string }) {
   switch (country) {
-    case "CR":
+    case "ES":
       return (
         <svg viewBox="0 0 24 16" className="h-full w-full" aria-hidden>
-          <rect width="24" height="16" fill="#002b7f" />
-          <rect width="24" height="2.67" y="2.67" fill="#fff" />
-          <rect width="24" height="2.67" y="5.33" fill="#ce1126" />
-          <rect width="24" height="2.67" y="8" fill="#fff" />
-          <rect width="24" height="2.67" y="10.67" fill="#ce1126" />
-          <rect width="24" height="2.67" y="13.33" fill="#fff" />
+          <rect width="24" height="16" fill="#c60b1e" />
+          <rect width="24" height="8" y="4" fill="#ffc400" />
         </svg>
       );
     case "US":

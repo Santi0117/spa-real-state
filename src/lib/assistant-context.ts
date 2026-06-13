@@ -1,10 +1,12 @@
-import { properties, zones } from "./properties";
+import { formatPrice, properties, zones } from "./properties";
 import { site } from "./site";
 
 const zoneList = zones.filter((z) => z !== "Todas").join(", ");
 const listingSummary = properties
-  .slice(0, 6)
-  .map((p) => `- ${p.title} (${p.zone}, ${p.status}, ${p.type})`)
+  .map(
+    (p) =>
+      `- ${p.title} (${p.location}, ${p.status}, ${p.type}, ${formatPrice(p.price, p.priceLabel)})`
+  )
   .join("\n");
 
 export const assistantContext = {

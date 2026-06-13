@@ -26,6 +26,47 @@ export function getPropertyById(id: string): Property | undefined {
   return properties.find((p) => p.id === id);
 }
 
+/** Lista del catálogo para pickers (agendar, financiar, etc.). */
+export function getCatalogProperties(
+  filter?: (property: Property) => boolean
+): Property[] {
+  return filter ? properties.filter(filter) : properties;
+}
+
+/** Resuelve una propiedad por id o título (query ?id= / ?propiedad=). */
+export function resolvePropertyRef(options?: {
+  id?: string | null;
+  title?: string | null;
+}): Property | undefined {
+  const id = options?.id?.trim();
+  if (id) {
+    return getPropertyById(id);
+  }
+  const title = options?.title?.trim();
+  if (title) {
+    return properties.find((p) => p.title === title);
+  }
+  return undefined;
+}
+
+export type PropertySelection = {
+  id: string;
+  property?: Property;
+};
+
+/** Selección inicial para formularios con propiedad precargada. */
+export function resolvePropertySelection(options?: {
+  id?: string | null;
+  title?: string | null;
+  filter?: (property: Property) => boolean;
+}): PropertySelection {
+  const property = resolvePropertyRef({ id: options?.id, title: options?.title });
+  if (property && (!options?.filter || options.filter(property))) {
+    return { id: property.id, property };
+  }
+  return { id: "", property: undefined };
+}
+
 export function propertyHref(id: string): string {
   return `/propiedades/${id}`;
 }
@@ -44,34 +85,44 @@ export const zones = [
   "Heredia",
   "Jacó",
   "Curridabat",
+  "Cartago",
 ] as const;
 
 export const properties: Property[] = [
   {
     id: "1",
-    title: "Villa contemporánea con vista",
-    location: "Escazú, San José",
-    zone: "Escazú",
+    title: "Cabaña en alquiler con piscina",
+    location: "Orosí, Cartago",
+    zone: "Cartago",
     type: "Casa",
-    status: "Venta",
-    price: 485000,
-    beds: 4,
-    baths: 3.5,
-    area: 320,
-    image: "/properties/1.jpg",
-    images: ["/properties/1.jpg", "/properties/2.jpg", "/properties/3.jpg"],
+    status: "Alquiler",
+    price: 950,
+    priceLabel: "/mes",
+    beds: 3,
+    baths: 2,
+    area: 280,
+    image: "/properties/orosi/cover.png",
+    images: [
+      "/properties/orosi/cover.png",
+      "/properties/orosi/interior-dining.png",
+      "/properties/orosi/attic-bedroom.png",
+      "/properties/orosi/bedroom.png",
+      "/properties/orosi/bathroom.png",
+      "/properties/orosi/garden.png",
+      "/properties/orosi/gallery.png",
+    ],
     description:
-      "Villa contemporánea en zona alta de Escazú con amplios ventanales, doble altura en sala y acabados en piedra natural. Ideal para familias que buscan privacidad, seguridad 24/7 y cercanía a colegios, restaurantes y accesos rápidos a San José.",
+      "Cabaña de madera en Orosí con piscina privada, rancho con asador y amplios jardines. Ideal para descanso en el valle de Orosí, con clima fresco, naturaleza y espacios interiores cómodos para familias o grupos.",
     highlights: [
-      "Vista panorámica al valle central",
-      "Piscina con deck y jardín maduro",
-      "Cocina abierta con isla central",
-      "Garaje para 2 vehículos",
-      "Condominio con vigilancia",
+      "Piscina privada y rancho con asador",
+      "Cabaña de madera con techos altos",
+      "Jardín amplio y entorno natural",
+      "Varias habitaciones y baños completos",
+      "Ubicación en Orosí, Cartago",
     ],
     featured: true,
     new: true,
-    tags: ["Piscina", "Vista"],
+    tags: ["Piscina", "Cabaña"],
   },
   {
     id: "2",

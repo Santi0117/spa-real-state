@@ -1,25 +1,47 @@
+"use client";
+
 import Link from "next/link";
 import { BackLink } from "./BackLink";
 import PropertyGallery from "./PropertyGallery";
 import PropertyVisitCta from "./PropertyVisitCta";
+import { useTranslations } from "@/components/LanguageProvider";
 import {
   formatArea,
   formatPrice,
   type Property,
 } from "@/lib/properties";
+import { type Translations } from "@/lib/i18n";
 import { agendarVisitaHref, financiarHref } from "@/lib/visit-scheduling";
 
 type PropertyDetailProps = {
   property: Property;
 };
 
+function translatePropertyType(type: Property["type"], t: Translations) {
+  switch (type) {
+    case "Casa":
+      return t.search.house;
+    case "Apartamento":
+      return t.search.apartment;
+    case "Terreno":
+      return t.search.land;
+    case "Penthouse":
+      return t.search.penthouse;
+    default:
+      return type;
+  }
+}
+
 export default function PropertyDetail({ property }: PropertyDetailProps) {
+  const { t } = useTranslations();
   const visitHref = agendarVisitaHref({ propertyId: property.id });
   const financeHref = financiarHref({ propertyId: property.id });
+  const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
+  const typeLabel = translatePropertyType(property.type, t);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6">
-      <BackLink href="/#listings">← Volver al catálogo</BackLink>
+      <BackLink href="/#listings">{t.common.backToCatalog}</BackLink>
 
       <div className="mt-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-10 xl:gap-14">
         <div>
@@ -28,14 +50,14 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           <div className="mt-8 flex flex-wrap items-center gap-2">
             {property.new && (
               <span className="bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-                Nueva
+                {t.property.new}
               </span>
             )}
             <span className="bg-charcoal px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-              {property.status}
+              {statusLabel}
             </span>
             <span className="border border-charcoal/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-charcoal">
-              {property.type}
+              {typeLabel}
             </span>
           </div>
 
@@ -50,37 +72,37 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-charcoal/8 py-6 sm:grid-cols-4">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-                Zona
+                {t.propertyDetail.zone}
               </dt>
               <dd className="mt-1 font-medium text-charcoal">{property.zone}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-                Habitaciones
+                {t.propertyDetail.bedrooms}
               </dt>
               <dd className="mt-1 font-medium text-charcoal">{property.beds}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-                Baños
+                {t.propertyDetail.bathrooms}
               </dt>
               <dd className="mt-1 font-medium text-charcoal">{property.baths}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-                Área
+                {t.propertyDetail.area}
               </dt>
               <dd className="mt-1 font-medium text-charcoal">{formatArea(property.area)}</dd>
             </div>
           </dl>
 
           <section className="mt-10">
-            <h2 className="section-label">Descripción</h2>
+            <h2 className="section-label">{t.propertyDetail.description}</h2>
             <p className="mt-4 text-base leading-relaxed text-charcoal/90">{property.description}</p>
           </section>
 
           <section className="mt-10">
-            <h2 className="section-label">Características</h2>
+            <h2 className="section-label">{t.propertyDetail.features}</h2>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
               {property.highlights.map((item) => (
                 <li
@@ -96,7 +118,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
 
           {property.tags && property.tags.length > 0 && (
             <section className="mt-10">
-              <h2 className="section-label">Etiquetas</h2>
+              <h2 className="section-label">{t.propertyDetail.tags}</h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {property.tags.map((tag) => (
                   <span
@@ -112,10 +134,10 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
 
           <div className="mt-10 space-y-3 border-t border-charcoal/8 pt-8 lg:hidden">
             <Link href={visitHref} className="btn-gold w-full justify-center rounded-sm">
-              Agendar visita a esta propiedad
+              {t.propertyDetail.scheduleVisitProperty}
             </Link>
             <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
-              Financiar
+              {t.common.finance}
             </Link>
           </div>
         </div>

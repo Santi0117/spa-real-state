@@ -1,4 +1,4 @@
-export const MIN_DOWN_PAYMENT_RATIO = 0.2;
+export const MIN_DOWN_PAYMENT_RATIO = 0.1;
 
 export const FINANCING_TERMS = [10, 15, 20, 25] as const;
 
@@ -41,10 +41,10 @@ export const financingLenders: FinancingLender[] = [
     fixedRate: 9.25,
   },
   {
-    id: "promerica",
-    name: "Promerica",
-    shortName: "Promerica",
-    logo: "/banks/promerica.svg",
+    id: "mucap",
+    name: "MUCAP",
+    shortName: "MUCAP",
+    logo: "/banks/mucap.svg",
     fixedRate: 8.75,
     monthlyInsurance: 35,
   },

@@ -2,6 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import {
+  mainFrameClass,
+  thumbFrameClass,
+  useImageOrientation,
+} from "./useImageOrientation";
 
 type PropertyGalleryProps = {
   images: string[];
@@ -10,11 +15,15 @@ type PropertyGalleryProps = {
 
 export default function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const [active, setActive] = useState(0);
+  const { register, getOrientation } = useImageOrientation();
   const main = images[active] ?? images[0];
+  const mainOrientation = getOrientation(main);
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-[4/3] overflow-hidden bg-stone-200 md:aspect-[16/10]">
+      <div
+        className={`relative mx-auto overflow-hidden bg-stone-100 ${mainFrameClass(mainOrientation, true)}`}
+      >
         <Image
           key={main}
           src={main}
@@ -22,32 +31,45 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
           fill
           priority
           quality={92}
-          className="object-cover"
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            register(main, img.naturalWidth, img.naturalHeight);
+          }}
+          className="object-cover object-bottom"
           sizes="(max-width: 1024px) 100vw, 66vw"
         />
       </div>
       {images.length > 1 && (
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:gap-3">
-          {images.map((src, index) => (
-            <button
-              key={src}
-              type="button"
-              onClick={() => setActive(index)}
-              className={`relative aspect-[4/3] overflow-hidden border-2 transition ${
-                index === active ? "border-gold" : "border-transparent opacity-80 hover:opacity-100"
-              }`}
-              aria-label={`Ver foto ${index + 1}`}
-              aria-current={index === active}
-            >
-              <Image
-                src={src}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="120px"
-              />
-            </button>
-          ))}
+        <div className="flex items-end gap-2 overflow-x-auto pb-1">
+          {images.map((src, index) => {
+            const orientation = getOrientation(src);
+            return (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setActive(index)}
+                className={`relative shrink-0 overflow-hidden bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                  index === active
+                    ? "ring-2 ring-gold ring-offset-2"
+                    : "opacity-80 hover:opacity-100"
+                }`}
+                aria-label={`Ver foto ${index + 1}`}
+                aria-current={index === active}
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  onLoad={(e) => {
+                    const img = e.currentTarget;
+                    register(src, img.naturalWidth, img.naturalHeight);
+                  }}
+                  className="object-contain"
+                  sizes="120px"
+                />
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

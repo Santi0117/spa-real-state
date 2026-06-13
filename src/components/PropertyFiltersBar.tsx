@@ -7,10 +7,11 @@ import {
   defaultFilters,
   getActiveFilterTags,
   getPriceSliderConfig,
-  sortOptions,
   type PropertyFilters,
   type PropertyStatus,
 } from "@/lib/properties";
+import { useTranslations } from "@/components/LanguageProvider";
+import { formatMessage } from "@/lib/i18n";
 
 type PropertyFiltersBarProps = {
   filters: PropertyFilters;
@@ -22,37 +23,7 @@ type OpenPanel = "status" | "type" | "price" | "rooms" | "more" | null;
 
 const types = ["Todos", "Casa", "Apartamento", "Terreno", "Penthouse"] as const;
 
-const statusOptions: { value: PropertyStatus | "Todos"; label: string }[] = [
-  { value: "Todos", label: "Venta y alquiler" },
-  { value: "Venta", label: "Venta" },
-  { value: "Alquiler", label: "Alquiler" },
-];
-
-const bedPills = [
-  { value: "any", label: "Todos" },
-  { value: "1", label: "+ 1" },
-  { value: "2", label: "+ 2" },
-  { value: "3", label: "+ 3" },
-  { value: "4", label: "+ 4" },
-  { value: "5", label: "+ 5" },
-];
-
-const bathPills = [
-  { value: "any", label: "Todos" },
-  { value: "1", label: "+ 1" },
-  { value: "2", label: "+ 2" },
-  { value: "3", label: "+ 3" },
-  { value: "4", label: "+ 4" },
-];
-
-const zoneOptions = [
-  { value: "Todas", label: "Todas" },
-  { value: "Escazú", label: "Escazú" },
-  { value: "Santa Ana", label: "Santa Ana" },
-  { value: "Heredia", label: "Heredia" },
-  { value: "Jacó", label: "Jacó" },
-  { value: "Curridabat", label: "Curridabat" },
-];
+const zoneValues = ["Todas", "Escazú", "Santa Ana", "Heredia", "Jacó", "Curridabat", "Cartago"] as const;
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -140,6 +111,8 @@ function PriceRangeSlider({
   step,
   formatValue,
   onChange,
+  minLabel,
+  maxLabel,
 }: {
   min: number;
   max: number;
@@ -148,6 +121,8 @@ function PriceRangeSlider({
   step: number;
   formatValue: (n: number) => string;
   onChange: (min: number, max: number) => void;
+  minLabel: string;
+  maxLabel: string;
 }) {
   const minId = useId();
   const maxId = useId();
@@ -182,7 +157,7 @@ function PriceRangeSlider({
           value={safeMin}
           onChange={(e) => onChange(Number(e.target.value), safeMax)}
           className="price-range-input"
-          aria-label="Precio mínimo"
+          aria-label={minLabel}
         />
         <input
           id={maxId}
@@ -193,7 +168,7 @@ function PriceRangeSlider({
           value={safeMax}
           onChange={(e) => onChange(safeMin, Number(e.target.value))}
           className="price-range-input"
-          aria-label="Precio máximo"
+          aria-label={maxLabel}
         />
       </div>
     </div>
@@ -222,11 +197,15 @@ function MobileFilterSheet({
   title,
   onClose,
   children,
+  closeFiltersLabel,
+  closeLabel,
 }: {
   open: boolean;
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  closeFiltersLabel: string;
+  closeLabel: string;
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -250,7 +229,7 @@ function MobileFilterSheet({
       <button
         type="button"
         className="absolute inset-0 bg-black/45"
-        aria-label="Cerrar filtros"
+        aria-label={closeFiltersLabel}
         onClick={onClose}
       />
       <div
@@ -265,7 +244,7 @@ function MobileFilterSheet({
             type="button"
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-full text-slate-warm hover:bg-cream"
-            aria-label="Cerrar"
+            aria-label={closeLabel}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
@@ -284,10 +263,59 @@ export default function PropertyFiltersBar({
   onChange,
   resultCount,
 }: PropertyFiltersBarProps) {
+  const { t } = useTranslations();
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const priceConfig = getPriceSliderConfig(filters.status);
+
+  const statusOptions: { value: PropertyStatus | "Todos"; label: string }[] = [
+    { value: "Todos", label: t.filters.saleAndRent },
+    { value: "Venta", label: t.property.sale },
+    { value: "Alquiler", label: t.property.rent },
+  ];
+
+  const typeLabels: Record<(typeof types)[number], string> = {
+    Todos: t.filters.all,
+    Casa: t.search.house,
+    Apartamento: t.search.apartment,
+    Terreno: t.search.land,
+    Penthouse: t.search.penthouse,
+  };
+
+  const bedPills = [
+    { value: "any" as const, label: t.filters.all },
+    { value: "1" as const, label: "+ 1" },
+    { value: "2" as const, label: "+ 2" },
+    { value: "3" as const, label: "+ 3" },
+    { value: "4" as const, label: "+ 4" },
+    { value: "5" as const, label: "+ 5" },
+  ];
+
+  const bathPills = [
+    { value: "any" as const, label: t.filters.all },
+    { value: "1" as const, label: "+ 1" },
+    { value: "2" as const, label: "+ 2" },
+    { value: "3" as const, label: "+ 3" },
+    { value: "4" as const, label: "+ 4" },
+  ];
+
+  const zoneOptions = zoneValues.map((zone) => ({
+    value: zone,
+    label: zone === "Todas" ? t.filters.allZones : zone,
+  }));
+
+  const translatedSortOptions = [
+    { value: "newest" as const, label: t.filters.sortNewest },
+    { value: "price-asc" as const, label: t.filters.sortPriceAsc },
+    { value: "price-desc" as const, label: t.filters.sortPriceDesc },
+    { value: "area-desc" as const, label: t.filters.sortAreaDesc },
+  ];
+
+  const translatedAreaOptions = areaOptions.map((option) => ({
+    value: option.value,
+    label: option.value === "any" ? t.filters.areaSqm : option.label,
+  }));
 
   function update<K extends keyof PropertyFilters>(key: K, value: PropertyFilters[K]) {
     onChange({ ...filters, [key]: value });
@@ -321,44 +349,47 @@ export default function PropertyFiltersBar({
   const activeTags = getActiveFilterTags(filters);
 
   const statusLabel =
-    statusOptions.find((o) => o.value === filters.status)?.label ?? "Operación";
+    statusOptions.find((o) => o.value === filters.status)?.label ?? t.filters.operation;
 
-  const typeLabel = filters.type === "Todos" ? "Tipo de propiedad" : filters.type;
+  const typeLabel =
+    filters.type === "Todos"
+      ? t.filters.propertyType
+      : typeLabels[filters.type as (typeof types)[number]];
 
   const priceActive =
     filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max;
   const priceLabel = priceActive
     ? filters.priceMax >= priceConfig.max
-      ? `Desde ${priceConfig.format(filters.priceMin)}`
+      ? formatMessage(t.filters.fromPrice, { price: priceConfig.format(filters.priceMin) })
       : `${priceConfig.format(filters.priceMin)} – ${priceConfig.format(filters.priceMax)}`
-    : "Precio";
+    : t.filters.price;
 
   const roomsActive = filters.bedsMin !== "any" || filters.bathsMin !== "any";
-  const roomsLabel = roomsActive ? "Recámaras y baños · filtrado" : "Recámaras y baños";
+  const roomsLabel = roomsActive ? t.filters.roomsFiltered : t.filters.rooms;
 
   const moreActive =
     filters.zone !== "Todas" || filters.areaMin !== "any" || filters.sort !== "newest";
 
   const panelTitles: Record<Exclude<OpenPanel, null>, string> = {
-    status: "Operación",
-    type: "Tipo de propiedad",
-    price: "Precio",
-    rooms: "Recámaras y baños",
-    more: "Más filtros",
+    status: t.filters.operation,
+    type: t.filters.propertyType,
+    price: t.filters.price,
+    rooms: t.filters.rooms,
+    more: t.filters.more,
   };
 
   const statusPanel = (
     <>
-      <p className="filter-dropdown-title">Operación</p>
+      <p className="filter-dropdown-title">{t.filters.operation}</p>
       <OptionPills options={statusOptions} value={filters.status} onChange={updateStatus} />
     </>
   );
 
   const typePanel = (
     <>
-      <p className="filter-dropdown-title">Tipo de propiedad</p>
+      <p className="filter-dropdown-title">{t.filters.propertyType}</p>
       <OptionPills
-        options={types.map((t) => ({ value: t, label: t }))}
+        options={types.map((type) => ({ value: type, label: typeLabels[type] }))}
         value={filters.type}
         onChange={(v) => update("type", v)}
       />
@@ -367,7 +398,7 @@ export default function PropertyFiltersBar({
 
   const pricePanel = (
     <>
-      <p className="filter-dropdown-title">Rango de precio</p>
+      <p className="filter-dropdown-title">{t.filters.priceRange}</p>
       <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
       <PriceRangeSlider
         min={priceConfig.min}
@@ -376,6 +407,8 @@ export default function PropertyFiltersBar({
         valueMin={filters.priceMin}
         valueMax={filters.priceMax}
         formatValue={priceConfig.format}
+        minLabel={t.filters.minPrice}
+        maxLabel={t.filters.maxPrice}
         onChange={(priceMin, priceMax) => onChange({ ...filters, priceMin, priceMax })}
       />
       <button
@@ -385,7 +418,7 @@ export default function PropertyFiltersBar({
           onChange({ ...filters, priceMin: priceConfig.min, priceMax: priceConfig.max })
         }
       >
-        Restablecer precio
+        {t.filters.resetPrice}
       </button>
     </>
   );
@@ -393,7 +426,7 @@ export default function PropertyFiltersBar({
   const roomsPanel = (
     <div className="space-y-5">
       <div>
-        <p className="filter-dropdown-title mb-3">Recámaras</p>
+        <p className="filter-dropdown-title mb-3">{t.filters.beds}</p>
         <OptionPills
           options={bedPills}
           value={filters.bedsMin}
@@ -401,7 +434,7 @@ export default function PropertyFiltersBar({
         />
       </div>
       <div>
-        <p className="filter-dropdown-title mb-3">Baños</p>
+        <p className="filter-dropdown-title mb-3">{t.filters.baths}</p>
         <OptionPills
           options={bathPills}
           value={filters.bathsMin}
@@ -414,7 +447,7 @@ export default function PropertyFiltersBar({
   const morePanel = (
     <div className="space-y-5">
       <div>
-        <p className="filter-dropdown-title mb-3">Zona</p>
+        <p className="filter-dropdown-title mb-3">{t.filters.zone}</p>
         <OptionPills
           options={zoneOptions}
           value={filters.zone}
@@ -422,20 +455,20 @@ export default function PropertyFiltersBar({
         />
       </div>
       <div>
-        <p className="filter-dropdown-title mb-3">Área mínima</p>
+        <p className="filter-dropdown-title mb-3">{t.filters.minArea}</p>
         <OptionPills
-          options={areaOptions.map((o) => ({
+          options={translatedAreaOptions.map((o) => ({
             value: o.value,
-            label: o.value === "any" ? "Cualquiera" : o.label,
+            label: o.value === "any" ? t.filters.any : o.label,
           }))}
           value={filters.areaMin}
           onChange={(v) => update("areaMin", v)}
         />
       </div>
       <div>
-        <p className="filter-dropdown-title mb-3">Ordenar por</p>
+        <p className="filter-dropdown-title mb-3">{t.filters.sortBy}</p>
         <OptionPills
-          options={sortOptions}
+          options={translatedSortOptions}
           value={filters.sort}
           onChange={(v) => update("sort", v)}
         />
@@ -510,7 +543,7 @@ export default function PropertyFiltersBar({
 
           <div className="relative">
             <FilterPill
-              label="Más filtros"
+            label={t.filters.more}
               active={moreActive}
               open={openPanel === "more"}
               onClick={() => toggle("more")}
@@ -528,7 +561,7 @@ export default function PropertyFiltersBar({
               onClick={() => onChange(defaultFilters)}
               className="text-xs font-medium text-slate-warm underline-offset-2 hover:text-charcoal hover:underline"
             >
-              Limpiar filtros
+              {t.filters.clear}
             </button>
           )}
         </div>
@@ -539,13 +572,15 @@ export default function PropertyFiltersBar({
           open
           title={panelTitles[openPanel]}
           onClose={() => setOpenPanel(null)}
+          closeFiltersLabel={t.filters.closeFilters}
+          closeLabel={t.filters.close}
         >
           {mobilePanelContent}
         </MobileFilterSheet>
       )}
 
       <p className="text-sm text-slate-warm">
-        {resultCount} {resultCount === 1 ? "propiedad" : "propiedades"}
+        {formatMessage(t.filters.results, { count: resultCount })}
       </p>
     </div>
   );

@@ -11,6 +11,8 @@ import {
   type FinancingLender,
   type FinancingTermYears,
 } from "@/lib/financing";
+import { formatMessage } from "@/lib/i18n";
+import { useTranslations } from "@/components/LanguageProvider";
 
 type FinanceLenderCardProps = {
   lender: FinancingLender;
@@ -23,6 +25,7 @@ export default function FinanceLenderCard({
   propertyPrice,
   defaultDownPayment,
 }: FinanceLenderCardProps) {
+  const { t } = useTranslations();
   const minimumDown = minDownPayment(
     propertyPrice,
     lender.minDownPaymentRatio
@@ -87,14 +90,14 @@ export default function FinanceLenderCard({
 
       <dl className="mt-4 space-y-4 text-sm">
         <div>
-          <dt className="text-slate-warm">Tasa fija</dt>
+          <dt className="text-slate-warm">{t.financeCard.fixedRate}</dt>
           <dd className="mt-1 text-lg font-semibold text-charcoal">
             {lender.fixedRate.toFixed(2)}%
           </dd>
         </div>
 
         <div>
-          <dt className="text-slate-warm">Prima ($)</dt>
+          <dt className="text-slate-warm">{t.financeCard.downPayment}</dt>
           <dd className="mt-2">
             <div className="flex gap-2">
               <input
@@ -110,21 +113,23 @@ export default function FinanceLenderCard({
                 type="button"
                 onClick={applyDownPayment}
                 className="btn-gold shrink-0 !px-3 !py-2 !text-[10px]"
-                aria-label="Calcular con esta prima"
+                aria-label={t.financeCard.calculate}
               >
                 →
               </button>
             </div>
             {belowMinimum ? (
               <p className="mt-2 text-xs text-amber-700">
-                * La prima no puede ser menor a {formatFinanceAmount(minimumDown)}
+                {formatMessage(t.financeCard.minDownPayment, {
+                  amount: formatFinanceAmount(minimumDown),
+                })}
               </p>
             ) : null}
           </dd>
         </div>
 
         <div>
-          <dt className="mb-2 text-slate-warm">Plazo</dt>
+          <dt className="mb-2 text-slate-warm">{t.financeCard.term}</dt>
           <dd className="flex flex-wrap gap-2">
             {FINANCING_TERMS.map((years) => (
               <label
@@ -143,7 +148,7 @@ export default function FinanceLenderCard({
                   onChange={() => setTermYears(years)}
                   className="sr-only"
                 />
-                {years} años
+                {formatMessage(t.financeCard.years, { n: years })}
               </label>
             ))}
           </dd>
@@ -152,7 +157,7 @@ export default function FinanceLenderCard({
 
       <div className="mt-auto space-y-3 border-t border-charcoal/8 pt-4">
         <div className="flex items-end justify-between gap-3 text-sm">
-          <span className="text-slate-warm">Cuota bancaria</span>
+          <span className="text-slate-warm">{t.financeCard.bankPayment}</span>
           <span className="font-medium text-charcoal">
             {formatFinanceAmount(payment.bankPayment)}
           </span>
@@ -160,7 +165,7 @@ export default function FinanceLenderCard({
 
         {lender.monthlyInsurance ? (
           <div className="flex items-end justify-between gap-3 text-sm">
-            <span className="text-slate-warm">Seguro estimado</span>
+            <span className="text-slate-warm">{t.financeCard.insurance}</span>
             <span className="font-medium text-charcoal">
               + {formatFinanceAmount(payment.insurance)}
             </span>
@@ -168,7 +173,7 @@ export default function FinanceLenderCard({
         ) : null}
 
         <div className="rounded-sm bg-cream/80 px-3 py-3">
-          <p className="text-xs uppercase tracking-wide text-slate-warm">Cuota mensual</p>
+          <p className="text-xs uppercase tracking-wide text-slate-warm">{t.financeCard.monthlyPayment}</p>
           <p className="font-display mt-1 text-3xl font-semibold text-gold">
             {formatFinanceAmount(payment.total)}
           </p>

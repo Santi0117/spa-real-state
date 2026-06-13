@@ -4,6 +4,7 @@ import { useState } from "react";
 import CondominiumListingCard from "./CondominiumListingCard";
 import PropertyCard from "./PropertyCard";
 import PropertyFiltersBar from "./PropertyFiltersBar";
+import { useTranslations } from "@/components/LanguageProvider";
 import { condominiums } from "@/lib/condominiums";
 import {
   defaultFilters,
@@ -13,6 +14,7 @@ import {
 } from "@/lib/properties";
 
 export default function PropertyGrid() {
+  const { t } = useTranslations();
   const [filters, setFilters] = useState<PropertyFilters>(defaultFilters);
   const filtered = filterProperties(properties, filters);
 
@@ -20,13 +22,11 @@ export default function PropertyGrid() {
     <section id="listings" className="border-t border-charcoal/8 bg-white py-20 md:py-28">
       <div className="mx-auto min-w-0 max-w-7xl px-4 sm:px-6">
         <div className="max-w-xl">
-          <p className="section-label">Catálogo completo</p>
+          <p className="section-label">{t.catalog.label}</p>
           <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
-            Todas las propiedades
+            {t.catalog.title}
           </h2>
-          <p className="mt-4 text-slate-warm">
-            Filtrá por zona, tipo y operación para encontrar tu próxima inversión o hogar.
-          </p>
+          <p className="mt-4 text-slate-warm">{t.catalog.description}</p>
         </div>
 
         <PropertyFiltersBar
@@ -45,9 +45,7 @@ export default function PropertyGrid() {
         </div>
 
         {filtered.length === 0 && (
-          <p className="py-20 text-center text-slate-warm">
-            No hay propiedades con esos filtros. Probá otra combinación.
-          </p>
+          <p className="py-20 text-center text-slate-warm">{t.catalog.noResults}</p>
         )}
       </div>
     </section>

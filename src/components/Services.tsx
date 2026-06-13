@@ -1,6 +1,10 @@
-import { services } from "@/lib/site";
+"use client";
+
+import { useTranslations } from "@/components/LanguageProvider";
 
 export default function Services() {
+  const { t } = useTranslations();
+
   return (
     <section
       id="servicios"
@@ -10,26 +14,22 @@ export default function Services() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/75">
-              Lo que hacemos
+              {t.services.label}
             </p>
             <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-white md:text-5xl">
-              Servicios integrales
+              {t.services.title}
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-white/85">
-              Más que una inmobiliaria: somos tu aliado en cada etapa del proceso,
-              con atención personalizada y conocimiento profundo del mercado costarricense.
+              {t.services.description}
             </p>
             <a href="#contacto" className="btn-gold-inverse mt-8 inline-flex">
-              Consultar gratis
+              {t.services.cta}
             </a>
           </div>
 
           <div className="grid gap-px bg-white/15 sm:grid-cols-2">
-            {services.map((service) => (
-              <div
-                key={service.title}
-                className="bg-charcoal p-6 lg:p-8"
-              >
+            {t.services.items.map((service) => (
+              <div key={service.title} className="bg-charcoal p-6 lg:p-8">
                 <div className="mb-4 h-px w-8 bg-gold-light" />
                 <h3 className="font-display text-xl font-medium text-white">
                   {service.title}

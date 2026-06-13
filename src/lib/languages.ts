@@ -1,9 +1,9 @@
+import type { LanguageCode } from "@/lib/i18n";
+
 export const languages = [
-  { code: "es", label: "Español", country: "ES" },
-  { code: "en", label: "English", country: "US" },
-  { code: "pt", label: "Português", country: "BR" },
-  { code: "fr", label: "Français", country: "FR" },
-  { code: "de", label: "Deutsch", country: "DE" },
+  { code: "es" as const, label: "Español", country: "ES" },
+  { code: "en" as const, label: "English", country: "US" },
+  { code: "pt" as const, label: "Português", country: "BR" },
 ] as const;
 
-export type LanguageCode = (typeof languages)[number]["code"];
+export type { LanguageCode };

@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useTranslations } from "@/components/LanguageProvider";
 import { zones } from "@/lib/properties";
 
-const types = ["Todos", "Casa", "Apartamento", "Terreno", "Penthouse"];
-
 export default function SearchBar() {
-  const [type, setType] = useState("Todos");
-  const [zone, setZone] = useState("Todas");
+  const { t } = useTranslations();
+
+  const types = [
+    { value: "Todos", label: t.search.all },
+    { value: "Casa", label: t.search.house },
+    { value: "Apartamento", label: t.search.apartment },
+    { value: "Terreno", label: t.search.land },
+    { value: "Penthouse", label: t.search.penthouse },
+  ];
 
   return (
     <form
@@ -18,47 +23,37 @@ export default function SearchBar() {
       <div className="grid gap-2 sm:grid-cols-4">
         <div className="sm:col-span-1">
           <label htmlFor="search-type" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-            Tipo
+            {t.search.type}
           </label>
-          <select
-            id="search-type"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="input-field rounded-sm"
-          >
-            {types.map((t) => (
-              <option key={t} value={t}>{t}</option>
+          <select id="search-type" className="input-field rounded-sm">
+            {types.map((item) => (
+              <option key={item.value} value={item.value}>{item.label}</option>
             ))}
           </select>
         </div>
         <div className="sm:col-span-1">
           <label htmlFor="search-zone" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-            Zona
+            {t.search.zone}
           </label>
-          <select
-            id="search-zone"
-            value={zone}
-            onChange={(e) => setZone(e.target.value)}
-            className="input-field rounded-sm"
-          >
+          <select id="search-zone" className="input-field rounded-sm">
             {zones.map((z) => (
-              <option key={z} value={z}>{z}</option>
+              <option key={z} value={z}>{z === "Todas" ? t.search.allZones : z}</option>
             ))}
           </select>
         </div>
         <div className="sm:col-span-1">
           <label htmlFor="search-status" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-            Operación
+            {t.search.operation}
           </label>
           <select id="search-status" className="input-field rounded-sm">
-            <option>Venta</option>
-            <option>Alquiler</option>
-            <option>Ambos</option>
+            <option>{t.search.sale}</option>
+            <option>{t.search.rent}</option>
+            <option>{t.search.both}</option>
           </select>
         </div>
         <div className="flex items-end sm:col-span-1">
           <a href="#listings" className="btn-gold w-full justify-center rounded-sm py-3.5">
-            Buscar
+            {t.search.search}
           </a>
         </div>
       </div>

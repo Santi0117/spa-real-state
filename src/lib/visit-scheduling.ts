@@ -12,18 +12,18 @@ export function agendarVisitaHref(options?: {
   return "/agendar-visita";
 }
 
-/** URL del formulario de financiamiento, con propiedad precargada si aplica. */
+/** Enlace a la sección de financiamiento en el landing, con propiedad precargada si aplica. */
 export function financiarHref(options?: {
   propertyId?: string;
   propertyName?: string;
 }): string {
   if (options?.propertyId) {
-    return `/financiar?id=${encodeURIComponent(options.propertyId)}`;
+    return `/?id=${encodeURIComponent(options.propertyId)}#financiamiento`;
   }
   if (options?.propertyName) {
-    return `/financiar?propiedad=${encodeURIComponent(options.propertyName)}`;
+    return `/?propiedad=${encodeURIComponent(options.propertyName)}#financiamiento`;
   }
-  return "/financiar";
+  return "/#financiamiento";
 }
 
 /** Detecta si la ruta actual es detalle de propiedad y devuelve su id. */

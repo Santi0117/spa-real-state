@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import FormPageShell from "@/components/FormPageShell";
-import SellPropertyForm from "@/components/forms/SellPropertyForm";
+import SellPropertyPageClient from "@/components/pages/SellPropertyPageClient";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,12 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function VenderPropiedadPage() {
-  return (
-    <FormPageShell
-      title="Vender tu casa"
-      description="Completá el formulario con los datos de tu propiedad. Te contactaremos para una valuación y plan de venta."
-    >
-      <SellPropertyForm />
-    </FormPageShell>
-  );
+  return <SellPropertyPageClient />;
 }

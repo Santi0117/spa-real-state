@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { quickReplies, welcomeMessage } from "@/lib/chatbot";
+import { useTranslations } from "@/components/LanguageProvider";
 import { site } from "@/lib/site";
 
 type Message = {
@@ -27,13 +27,16 @@ function getSessionId() {
 }
 
 export default function Assistant() {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: "welcome", role: "assistant", content: welcomeMessage },
-  ]);
+  const { t, locale } = useTranslations();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMessages([{ id: "welcome", role: "assistant", content: t.assistant.welcomeMessage }]);
+  }, [locale, t.assistant.welcomeMessage]);
 
   const scrollToBottom = useCallback(() => {
     requestAnimationFrame(() => {
@@ -82,7 +85,7 @@ export default function Assistant() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error ?? "No se pudo enviar el mensaje.");
+        throw new Error(data.error ?? t.assistant.sendError);
       }
 
       setMessages((prev) => [
@@ -94,7 +97,7 @@ export default function Assistant() {
         },
       ]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error de conexión.");
+      setError(err instanceof Error ? err.message : t.assistant.connectionError);
     } finally {
       setLoading(false);
     }
@@ -109,13 +112,12 @@ export default function Assistant() {
     <section id="asistente" className="border-t border-charcoal/8 bg-white py-20 md:py-28">
       <div className="mx-auto max-w-2xl px-4 sm:px-6">
         <div className="text-center">
-          <p className="section-label">Asistente</p>
+          <p className="section-label">{t.assistant.label}</p>
           <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
-            ¿Tenés preguntas?
+            {t.assistant.title}
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-slate-warm">
-            Preguntale al asistente de {site.brand}. Responde al instante sobre propiedades,
-            zonas, visitas y servicios.
+            {t.assistant.description}
           </p>
         </div>
 
@@ -125,10 +127,10 @@ export default function Assistant() {
               J
             </div>
             <div>
-              <p className="text-sm font-semibold text-charcoal">Asistente virtual</p>
+              <p className="text-sm font-semibold text-charcoal">{t.assistant.virtualAssistant}</p>
               <p className="flex items-center gap-1.5 text-xs text-slate-warm">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
-                En línea ahora
+                {t.assistant.onlineNow}
               </p>
             </div>
           </div>
@@ -169,7 +171,7 @@ export default function Assistant() {
 
           <div className="border-t border-charcoal/8 px-5 pb-4 pt-3">
             <div className="flex flex-wrap gap-2">
-              {quickReplies.map((reply) => (
+              {t.assistant.quickReplies.map((reply) => (
                 <button
                   key={reply}
                   type="button"
@@ -191,7 +193,7 @@ export default function Assistant() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribí tu pregunta..."
+              placeholder={t.assistant.placeholder}
               disabled={loading}
               maxLength={500}
               className="input-field flex-1 rounded-sm"
@@ -200,7 +202,7 @@ export default function Assistant() {
               type="submit"
               disabled={loading || !input.trim()}
               className="btn-gold flex h-11 w-11 shrink-0 items-center justify-center rounded-sm p-0 disabled:opacity-40"
-              aria-label="Enviar"
+              aria-label={t.assistant.send}
             >
               →
             </button>
@@ -209,13 +211,13 @@ export default function Assistant() {
 
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link href="/agendar-visita" className="btn-gold rounded-sm">
-            Agendar visita
+            {t.cta.schedule}
           </Link>
           <a
             href={`mailto:${site.email}`}
             className="text-sm text-slate-warm transition hover:text-gold"
           >
-            o escribinos → {site.email}
+            {t.assistant.orWriteUs} {site.email}
           </a>
         </div>
       </div>

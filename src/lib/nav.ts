@@ -1,15 +1,14 @@
 export const navLinks = [
-  { href: "/#destacadas", label: "Propiedades" },
-  { href: "/condominios/vista-verde", label: "Condominio" },
-  { href: "/#zonas", label: "Zonas" },
-  { href: "/#servicios", label: "Servicios" },
-  { href: "/#nosotros", label: "Nosotros" },
-  { href: "/#contacto", label: "Contacto" },
+  { href: "/#destacadas", key: "properties" as const },
+  { href: "/condominios/vista-verde", key: "condominium" as const },
+  { href: "/#zonas", key: "zones" as const },
+  { href: "/#servicios", key: "services" as const },
+  { href: "/#nosotros", key: "about" as const },
+  { href: "/#contacto", key: "contact" as const },
 ] as const;
 
 export const ctaButtons = [
-  { href: "/agendar-visita", label: "Agendar visita", shortLabel: "Agendar" },
-  { href: "/financiar", label: "Financiar", shortLabel: "Financiar" },
-  { href: "/construi-tu-casa", label: "Construir tu casa", shortLabel: "Construir" },
-  { href: "/vender-propiedad", label: "Vender tu casa", shortLabel: "Vender" },
+  { href: "/agendar-visita", key: "schedule" as const },
+  { href: "/construi-tu-casa", key: "build" as const },
+  { href: "/vender-propiedad", key: "sell" as const },
 ] as const;

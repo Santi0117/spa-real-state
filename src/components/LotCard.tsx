@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import {
   getLotCoverImage,
-  lotStatusLabels,
   type CondominiumLot,
 } from "@/lib/condominiums";
 import { formatArea, formatPrice } from "@/lib/properties";
+import { useTranslations } from "@/components/LanguageProvider";
+import { formatMessage } from "@/lib/i18n";
 import PropertyImage from "./PropertyImage";
 
 type LotCardProps = {
@@ -16,6 +19,22 @@ type LotCardProps = {
   showFullDescription?: boolean;
 };
 
+function lotStatusLabel(
+  status: CondominiumLot["status"],
+  t: ReturnType<typeof useTranslations>["t"]
+) {
+  switch (status) {
+    case "disponible":
+      return t.condominium.statusAvailable;
+    case "reservado":
+      return t.condominium.statusReserved;
+    case "vendido":
+      return t.condominium.statusSold;
+    default:
+      return status;
+  }
+}
+
 export default function LotCard({
   lot,
   condominiumName,
@@ -24,8 +43,9 @@ export default function LotCard({
   compact = true,
   showFullDescription,
 }: LotCardProps) {
+  const { t } = useTranslations();
   const image = getLotCoverImage(lot, index);
-  const statusLabel = lotStatusLabels[lot.status];
+  const statusLabel = lotStatusLabel(lot.status, t);
   const visitHref = `/agendar-visita?propiedad=${encodeURIComponent(
     `Condominio ${condominiumName} — ${lot.label}`
   )}`;
@@ -37,7 +57,7 @@ export default function LotCard({
 
         <div className="absolute left-0 top-0 flex gap-px">
           <span className="bg-charcoal/90 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-white">
-            Terreno
+            {t.condominium.land}
           </span>
           <span
             className={`px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-white ${
@@ -61,7 +81,7 @@ export default function LotCard({
 
       <div className="border border-t-0 border-charcoal/8 bg-white p-3 sm:p-3.5">
         <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-gold">
-          Lote · {condominiumName}
+          {formatMessage(t.condominium.lotLabel, { name: condominiumName })}
         </p>
         <h3 className="font-display mt-1 text-base font-medium leading-snug text-charcoal group-hover:text-gold sm:text-lg">
           {lot.label}
@@ -93,7 +113,7 @@ export default function LotCard({
 
         {lot.status === "disponible" && (
           <span className="mt-3 inline-flex text-[10px] font-semibold uppercase tracking-wide text-gold group-hover:text-[#a6845d]">
-            Agendar visita →
+            {t.condominium.scheduleVisit}
           </span>
         )}
       </div>

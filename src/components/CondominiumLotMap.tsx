@@ -10,11 +10,13 @@ import {
   lotMapViewBox,
 } from "@/lib/condominium-lot-map";
 import {
-  lotStatusLabels,
   type Condominium,
   type CondominiumLot,
 } from "@/lib/condominiums";
 import { formatArea, formatPrice } from "@/lib/properties";
+import { financiarHref } from "@/lib/visit-scheduling";
+import { useTranslations } from "@/components/LanguageProvider";
+import { formatMessage } from "@/lib/i18n";
 
 type CondominiumLotMapProps = {
   condominium: Condominium;
@@ -39,11 +41,28 @@ function lotPathClass(lot: CondominiumLot, highlighted: boolean) {
   return "fill-neutral-200 hover:fill-gold-light/60";
 }
 
+function lotStatusLabel(
+  status: CondominiumLot["status"],
+  t: ReturnType<typeof useTranslations>["t"]
+) {
+  switch (status) {
+    case "disponible":
+      return t.condominium.statusAvailable;
+    case "reservado":
+      return t.condominium.statusReserved;
+    case "vendido":
+      return t.condominium.statusSold;
+    default:
+      return status;
+  }
+}
+
 export default function CondominiumLotMap({
   condominium,
   activeLotId,
   onLotSelect,
 }: CondominiumLotMapProps) {
+  const { t } = useTranslations();
   const defaultLot =
     condominium.lots.find((l) => l.id === activeLotId) ??
     condominium.lots.find((l) => l.status === "disponible") ??
@@ -66,7 +85,7 @@ export default function CondominiumLotMap({
           viewBox={lotMapViewBox}
           className="h-auto max-h-[520px] w-full"
           role="img"
-          aria-label={`Mapa interactivo de lotes — Condominio ${condominium.name}`}
+          aria-label={formatMessage(t.condominium.lotMapAria, { name: condominium.name })}
         >
           {/* Calles */}
           {lotMapRoads.map((road, i) => (
@@ -118,7 +137,7 @@ export default function CondominiumLotMap({
                   onBlur={() => setHovered(null)}
                   tabIndex={0}
                   role="button"
-                  aria-label={`${lot.label} — ${lotStatusLabels[lot.status]}`}
+                  aria-label={`${lot.label} — ${lotStatusLabel(lot.status, t)}`}
                   aria-pressed={highlighted}
                   className={`cursor-pointer outline-none transition-all duration-300 ease-out stroke-white stroke-[2] focus-visible:fill-gold focus-visible:stroke-gold ${lotPathClass(
                     lot,
@@ -145,7 +164,7 @@ export default function CondominiumLotMap({
         </svg>
 
         <p className="mt-4 text-center text-xs text-slate-warm lg:text-left">
-          Tocá o pasá el cursor sobre un lote
+          {t.condominium.lotMapHoverHint}
         </p>
         <a
           href={googleMapsUrl(`Condominio ${condominium.name}, ${condominium.location}, Costa Rica`)}
@@ -165,28 +184,28 @@ export default function CondominiumLotMap({
         }`}
       >
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
-          Lote
+          {t.condominium.lot}
         </p>
         <h3 className="font-display mb-1 text-2xl font-medium tracking-tight text-charcoal">
           {lotShortLabel(display.label)}
         </h3>
         <p className="mb-6 text-sm text-slate-warm">
-          {lotStatusLabels[display.status]} · {formatArea(display.areaM2)}
+          {lotStatusLabel(display.status, t)} · {formatArea(display.areaM2)}
         </p>
 
         <dl className="space-y-4 text-sm">
           <div>
-            <dt className="mb-1 text-slate-warm">Precio</dt>
+            <dt className="mb-1 text-slate-warm">{t.filters.price}</dt>
             <dd className="font-display text-xl font-semibold text-gold">
               {formatPrice(display.price)}
             </dd>
           </div>
           <div>
-            <dt className="mb-1 text-slate-warm">Descripción</dt>
+            <dt className="mb-1 text-slate-warm">{t.propertyDetail.description}</dt>
             <dd className="leading-relaxed text-charcoal/85">{display.description}</dd>
           </div>
           <div>
-            <dt className="mb-1 text-slate-warm">Características</dt>
+            <dt className="mb-1 text-slate-warm">{t.propertyDetail.features}</dt>
             <dd className="text-charcoal/80">
               <ul className="space-y-1.5">
                 {display.features.map((feature) => (
@@ -208,15 +227,15 @@ export default function CondominiumLotMap({
               )}`}
               className="btn-gold inline-flex w-full justify-center rounded-sm"
             >
-              Agendar visita
+              {t.propertyVisit.title}
             </Link>
             <Link
-              href={`/financiar?propiedad=${encodeURIComponent(
-                `Condominio ${condominium.name} — ${display.label}`
-              )}`}
+              href={financiarHref({
+                propertyName: `Condominio ${condominium.name} — ${display.label}`,
+              })}
               className="btn-gold inline-flex w-full justify-center rounded-sm"
             >
-              Financiar
+              {t.common.finance}
             </Link>
           </div>
         )}

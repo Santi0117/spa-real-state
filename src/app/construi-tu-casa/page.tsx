@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import FormPageShell from "@/components/FormPageShell";
-import BuildHouseForm from "@/components/forms/BuildHouseForm";
+import BuildHousePageClient from "@/components/pages/BuildHousePageClient";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,12 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ConstruiTuCasaPage() {
-  return (
-    <FormPageShell
-      title="Construir tu casa"
-      description="Contanos tu situación y presupuesto. Te acompañamos en la búsqueda de lote, diseño y construcción."
-    >
-      <BuildHouseForm />
-    </FormPageShell>
-  );
+  return <BuildHousePageClient />;
 }

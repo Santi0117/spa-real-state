@@ -6,7 +6,11 @@ import FormSuccess from "./FormSuccess";
 import PropertyVisitPicker from "./PropertyVisitPicker";
 import SelectedPropertySummary from "./SelectedPropertySummary";
 import VisitCalendar from "./VisitCalendar";
-import { getPropertyById, properties } from "@/lib/properties";
+import { useTranslations } from "@/components/LanguageProvider";
+import {
+  getPropertyById,
+  resolvePropertySelection,
+} from "@/lib/properties";
 
 type ScheduleVisitFormProps = {
   propertyName?: string;
@@ -14,24 +18,20 @@ type ScheduleVisitFormProps = {
 };
 
 function resolvePrefill(propertyId?: string, propertyName?: string) {
-  if (propertyId) {
-    const property = getPropertyById(propertyId);
-    if (property) {
-      return { id: property.id, title: property.title, property, prefilled: true };
-    }
+  const { id, property } = resolvePropertySelection({
+    id: propertyId,
+    title: propertyName,
+  });
+  if (property) {
+    return { id: property.id, title: property.title, property, prefilled: true };
+  }
+  if (propertyId || propertyName) {
     return {
-      id: propertyId,
+      id: propertyId ?? "",
       title: propertyName ?? "",
       property: undefined,
-      prefilled: Boolean(propertyId || propertyName),
+      prefilled: true,
     };
-  }
-  if (propertyName) {
-    const match = properties.find((p) => p.title === propertyName);
-    if (match) {
-      return { id: match.id, title: match.title, property: match, prefilled: true };
-    }
-    return { id: "", title: propertyName, property: undefined, prefilled: true };
   }
   return { id: "", title: "", property: undefined, prefilled: false };
 }
@@ -40,6 +40,7 @@ export default function ScheduleVisitForm({
   propertyName: initialName,
   propertyId: initialId,
 }: ScheduleVisitFormProps) {
+  const { t } = useTranslations();
   const prefill = useMemo(
     () => resolvePrefill(initialId, initialName),
     [initialId, initialName]
@@ -49,15 +50,18 @@ export default function ScheduleVisitForm({
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedId, setSelectedId] = useState(prefill.id);
-  const [selectedTitle, setSelectedTitle] = useState(prefill.title);
-  const [selectedProperty, setSelectedProperty] = useState(prefill.property);
+  const [manualTitle, setManualTitle] = useState(
+    prefill.property ? "" : prefill.title
+  );
   const [showPicker, setShowPicker] = useState(!prefill.prefilled);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const selectedProperty = selectedId ? getPropertyById(selectedId) : undefined;
+  const selectedTitle = selectedProperty?.title ?? manualTitle;
+
   useEffect(() => {
     setSelectedId(prefill.id);
-    setSelectedTitle(prefill.title);
-    setSelectedProperty(prefill.property);
+    setManualTitle(prefill.property ? "" : prefill.title);
     setShowPicker(!prefill.prefilled);
   }, [prefill]);
 
@@ -67,10 +71,9 @@ export default function ScheduleVisitForm({
 
   if (sent) return <FormSuccess />;
 
-  function handlePropertySelect(id: string, title: string) {
+  function handlePropertySelect(id: string, _title: string) {
     setSelectedId(id);
-    setSelectedTitle(title);
-    setSelectedProperty(getPropertyById(id));
+    setManualTitle("");
     setShowPicker(false);
   }
 
@@ -87,16 +90,14 @@ export default function ScheduleVisitForm({
         <PropertyVisitPicker selectedId={selectedId} onSelect={handlePropertySelect} />
       ) : selectedTitle ? (
         <SelectedPropertySummary
-          property={selectedProperty}
+          propertyId={selectedId}
           title={selectedTitle}
           onChange={() => setShowPicker(true)}
         />
       ) : null}
 
       {!selectedTitle && showPicker ? (
-        <p className="text-xs text-slate-warm">
-          Seleccioná una propiedad arriba para continuar.
-        </p>
+        <p className="text-xs text-slate-warm">{t.forms.selectPropertyHint}</p>
       ) : null}
 
       {selectedTitle ? (
@@ -109,26 +110,26 @@ export default function ScheduleVisitForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="firstName" className="mb-1.5 block text-sm font-medium text-charcoal/80">
-            Nombre
+            {t.forms.firstName}
           </label>
           <input id="firstName" name="firstName" required className="input-field rounded-sm" />
         </div>
         <div>
           <label htmlFor="lastName" className="mb-1.5 block text-sm font-medium text-charcoal/80">
-            Apellido
+            {t.forms.lastName}
           </label>
           <input id="lastName" name="lastName" required className="input-field rounded-sm" />
         </div>
       </div>
       <div>
         <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-charcoal/80">
-          Número
+          {t.forms.phone}
         </label>
         <input id="phone" name="phone" type="tel" required className="input-field rounded-sm" />
       </div>
       <div>
         <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-charcoal/80">
-          Correo
+          {t.forms.email}
         </label>
         <input id="email" name="email" type="email" required className="input-field rounded-sm" />
       </div>
@@ -150,11 +151,11 @@ export default function ScheduleVisitForm({
           className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
         />
         <span>
-          Acepto los{" "}
+          {t.forms.termsPrefix}{" "}
           <Link href="/#terminos" className="font-medium text-gold underline-offset-2 hover:underline">
-            términos y condiciones
+            {t.forms.termsLink}
           </Link>{" "}
-          de Jopa Real Estate.
+          {t.forms.termsSuffix}
         </span>
       </label>
 
@@ -163,7 +164,7 @@ export default function ScheduleVisitForm({
         disabled={!canSubmit}
         className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Confirmar visita
+        {t.forms.scheduleVisit.confirm}
       </button>
     </form>
   );

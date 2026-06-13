@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import AppProviders from "@/components/AppProviders";
 import { site, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -41,7 +42,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${cormorant.variable} ${dmSans.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

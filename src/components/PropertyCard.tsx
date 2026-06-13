@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { formatArea, formatPrice, propertyHref, type Property } from "@/lib/properties";
+import { useTranslations } from "@/components/LanguageProvider";
+import { formatMessage, type Translations } from "@/lib/i18n";
 import PropertyImage from "./PropertyImage";
+import PropertyCardGallery from "./PropertyCardGallery";
 
 type PropertyCardProps = {
   property: Property;
@@ -9,14 +14,31 @@ type PropertyCardProps = {
   showDescription?: boolean;
 };
 
+function translatePropertyType(type: Property["type"], t: Translations) {
+  switch (type) {
+    case "Casa":
+      return t.search.house;
+    case "Apartamento":
+      return t.search.apartment;
+    case "Terreno":
+      return t.search.land;
+    case "Penthouse":
+      return t.search.penthouse;
+    default:
+      return type;
+  }
+}
+
 export default function PropertyCard({
   property,
   large,
   compact,
   showDescription,
 }: PropertyCardProps) {
+  const { t } = useTranslations();
+
   const imageAspect = large
-    ? "aspect-[16/10] lg:aspect-[2/1]"
+    ? ""
     : compact
       ? "aspect-[4/3]"
       : "aspect-[4/3]";
@@ -34,32 +56,70 @@ export default function PropertyCard({
     ? "mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-charcoal/8 pt-3 text-[10px] font-medium uppercase tracking-wide text-slate-warm"
     : "mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-charcoal/8 pt-4 text-[12px] font-medium uppercase tracking-wide text-slate-warm";
 
+  const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
+  const typeLabel = translatePropertyType(property.type, t);
+
   return (
     <article className={`property-card group ${large ? "lg:col-span-2" : ""}`}>
       <Link href={propertyHref(property.id)} className="block">
         <div className={`relative overflow-hidden bg-stone-200 ${imageAspect}`}>
-          <PropertyImage src={property.image} alt={property.title} />
+          {large && property.images.length > 1 ? (
+            <PropertyCardGallery
+              images={property.images}
+              title={property.title}
+              large
+              overlay={
+                <>
+                  <div className="pointer-events-none absolute left-0 top-0 flex gap-px">
+                    {property.new && (
+                      <span
+                        className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}
+                      >
+                        {t.property.new}
+                      </span>
+                    )}
+                    <span
+                      className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}
+                    >
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <div className="pointer-events-none absolute right-3 top-3 sm:right-4 sm:top-4">
+                    <p
+                      className={`rounded-sm bg-charcoal/85 px-3 py-1.5 font-display font-semibold text-white shadow-sm backdrop-blur-sm ${large ? "text-lg sm:text-xl" : ""}`}
+                    >
+                      {formatPrice(property.price, property.priceLabel)}
+                    </p>
+                  </div>
+                </>
+              }
+            />
+          ) : (
+            <>
+              <PropertyImage src={property.image} alt={property.title} />
 
-          <div className="absolute left-0 top-0 flex gap-px">
-            {property.new && (
-              <span
-                className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}
+              <div className="pointer-events-none absolute left-0 top-0 flex gap-px">
+                {property.new && (
+                  <span
+                    className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}
+                  >
+                    {t.property.new}
+                  </span>
+                )}
+                <span
+                  className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}
+                >
+                  {statusLabel}
+                </span>
+              </div>
+
+              <div
+                className={`pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal/80 to-transparent ${imagePadding}`}
               >
-                Nueva
-              </span>
-            )}
-            <span
-              className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}
-            >
-              {property.status}
-            </span>
-          </div>
-
-          <div
-            className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal/80 to-transparent ${imagePadding}`}
-          >
-            <p className={priceClass}>{formatPrice(property.price, property.priceLabel)}</p>
-          </div>
+                <p className={priceClass}>{formatPrice(property.price, property.priceLabel)}</p>
+              </div>
+            </>
+          )}
         </div>
 
         <div className={`border border-t-0 border-charcoal/8 bg-white ${bodyPadding}`}>
@@ -68,7 +128,7 @@ export default function PropertyCard({
               compact ? "text-[9px]" : "text-[10px]"
             }`}
           >
-            {property.type} · {property.zone}
+            {typeLabel} · {property.zone}
           </p>
           <h3 className={titleClass}>{property.title}</h3>
           <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
@@ -82,9 +142,9 @@ export default function PropertyCard({
           )}
 
           <div className={statsClass}>
-            <span>{property.beds} hab</span>
+            <span>{formatMessage(t.property.beds, { count: property.beds })}</span>
             <span className="text-charcoal/20">|</span>
-            <span>{property.baths} baños</span>
+            <span>{formatMessage(t.property.baths, { count: property.baths })}</span>
             <span className="text-charcoal/20">|</span>
             <span>{formatArea(property.area)}</span>
           </div>

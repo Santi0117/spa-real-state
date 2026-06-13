@@ -1,12 +1,15 @@
-import { servicesMarqueeLines } from "@/lib/site";
+"use client";
+
+import { useTranslations } from "@/components/LanguageProvider";
 
 export default function ServicesMarquee() {
-  const items = [...servicesMarqueeLines, ...servicesMarqueeLines];
+  const { t } = useTranslations();
+  const items = [...t.marquee, ...t.marquee];
 
   return (
     <div
       className="services-marquee overflow-hidden border-y border-[#a6845d]/50 bg-gold"
-      aria-label="Servicios de Jopa Real Estate"
+      aria-label={t.services.title}
     >
       <div className="services-marquee-track flex flex-nowrap">
         {items.map((text, i) => (

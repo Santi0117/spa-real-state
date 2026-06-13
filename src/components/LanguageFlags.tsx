@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { languages, type LanguageCode } from "@/lib/languages";
+import { languages } from "@/lib/languages";
+import type { LanguageCode } from "@/lib/i18n";
+import { useTranslations } from "@/components/LanguageProvider";
 
 function FlagIcon({ country }: { country: string }) {
   switch (country) {
@@ -33,76 +34,37 @@ function FlagIcon({ country }: { country: string }) {
           <circle cx="12" cy="8" r="3.2" fill="#002776" />
         </svg>
       );
-    case "FR":
-      return (
-        <svg viewBox="0 0 24 16" className="h-full w-full" aria-hidden>
-          <rect width="8" height="16" fill="#002395" />
-          <rect x="8" width="8" height="16" fill="#fff" />
-          <rect x="16" width="8" height="16" fill="#ed2939" />
-        </svg>
-      );
-    case "DE":
-      return (
-        <svg viewBox="0 0 24 16" className="h-full w-full" aria-hidden>
-          <rect width="24" height="5.33" fill="#000" />
-          <rect width="24" height="5.33" y="5.33" fill="#dd0000" />
-          <rect width="24" height="5.34" y="10.66" fill="#ffce00" />
-        </svg>
-      );
     default:
       return null;
   }
 }
 
 export default function LanguageFlags() {
-  const [active, setActive] = useState<LanguageCode>("es");
-  const topRow = languages.slice(0, 3);
-  const bottomRow = languages.slice(3, 5);
+  const { locale, setLocale, t } = useTranslations();
 
   return (
     <div
-      className="flex shrink-0 flex-col gap-1"
+      className="flex shrink-0 gap-1"
       role="group"
-      aria-label="Idioma"
+      aria-label={t.common.language}
     >
-      <div className="grid grid-cols-3 gap-1">
-        {topRow.map((lang) => (
-          <button
-            key={lang.code}
-            type="button"
-            title={lang.label}
-            aria-label={lang.label}
-            aria-pressed={active === lang.code}
-            onClick={() => setActive(lang.code)}
-            className={`h-5 w-7 overflow-hidden rounded-sm border transition ${
-              active === lang.code
-                ? "border-gold ring-1 ring-gold/60"
-                : "border-white/20 opacity-80 hover:border-white/50 hover:opacity-100"
-            }`}
-          >
-            <FlagIcon country={lang.country} />
-          </button>
-        ))}
-      </div>
-      <div className="flex justify-center gap-1">
-        {bottomRow.map((lang) => (
-          <button
-            key={lang.code}
-            type="button"
-            title={lang.label}
-            aria-label={lang.label}
-            aria-pressed={active === lang.code}
-            onClick={() => setActive(lang.code)}
-            className={`h-5 w-7 overflow-hidden rounded-sm border transition ${
-              active === lang.code
-                ? "border-gold ring-1 ring-gold/60"
-                : "border-white/20 opacity-80 hover:border-white/50 hover:opacity-100"
-            }`}
-          >
-            <FlagIcon country={lang.country} />
-          </button>
-        ))}
-      </div>
+      {languages.map((lang) => (
+        <button
+          key={lang.code}
+          type="button"
+          title={lang.label}
+          aria-label={lang.label}
+          aria-pressed={locale === lang.code}
+          onClick={() => setLocale(lang.code as LanguageCode)}
+          className={`h-5 w-7 overflow-hidden rounded-sm border transition ${
+            locale === lang.code
+              ? "border-gold ring-1 ring-gold/60"
+              : "border-white/20 opacity-80 hover:border-white/50 hover:opacity-100"
+          }`}
+        >
+          <FlagIcon country={lang.country} />
+        </button>
+      ))}
     </div>
   );
 }

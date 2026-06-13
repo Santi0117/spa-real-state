@@ -1,40 +1,66 @@
 "use client";
 
 import Image from "next/image";
-import type { Property } from "@/lib/properties";
+import { formatPrice, getPropertyById, type Property } from "@/lib/properties";
+import { useTranslations } from "@/components/LanguageProvider";
+import { useImageOrientation } from "@/components/useImageOrientation";
 
 type SelectedPropertySummaryProps = {
   property?: Property;
+  propertyId?: string;
   title: string;
   onChange?: () => void;
 };
 
 export default function SelectedPropertySummary({
-  property,
+  property: propertyProp,
+  propertyId,
   title,
   onChange,
 }: SelectedPropertySummaryProps) {
+  const { t } = useTranslations();
+  const { register, getOrientation } = useImageOrientation();
+  const property =
+    (propertyId ? getPropertyById(propertyId) : undefined) ?? propertyProp;
+  const displayTitle = property?.title ?? title;
+  const orientation = property ? getOrientation(property.image) : "landscape";
+
   return (
     <div className="rounded-sm border border-gold/30 bg-gold/5 p-4">
       <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-        Visita para esta propiedad
+        {t.forms.selectedProperty.label}
       </p>
       <div className="mt-3 flex gap-4">
         {property ? (
-          <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-sm border border-charcoal/10">
+          <div
+            className={`relative shrink-0 overflow-hidden rounded-sm border border-charcoal/10 bg-stone-100 ${
+              orientation === "portrait" ? "h-20 w-14" : "h-16 w-24"
+            }`}
+          >
             <Image
               src={property.image}
               alt={property.title}
               fill
               sizes="96px"
-              className="object-cover"
+              onLoad={(e) => {
+                const img = e.currentTarget;
+                register(property.image, img.naturalWidth, img.naturalHeight);
+              }}
+              className="object-contain object-bottom"
             />
           </div>
         ) : null}
         <div className="min-w-0 flex-1">
-          <p className="font-display text-base font-medium leading-snug text-charcoal">{title}</p>
+          <p className="font-display text-base font-medium leading-snug text-charcoal">
+            {displayTitle}
+          </p>
           {property ? (
-            <p className="mt-1 text-xs text-slate-warm">{property.location}</p>
+            <>
+              <p className="mt-1 text-xs text-slate-warm">{property.location}</p>
+              <p className="mt-1 text-xs font-semibold text-gold">
+                {formatPrice(property.price, property.priceLabel)}
+              </p>
+            </>
           ) : null}
         </div>
       </div>
@@ -44,7 +70,7 @@ export default function SelectedPropertySummary({
           onClick={onChange}
           className="mt-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-warm transition hover:text-gold"
         >
-          Elegir otra propiedad
+          {t.forms.selectedProperty.chooseOther}
         </button>
       ) : null}
     </div>

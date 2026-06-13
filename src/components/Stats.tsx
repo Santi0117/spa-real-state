@@ -10,10 +10,10 @@ export default function Stats() {
   const labels = [t.stats.sold, t.stats.experience, t.stats.satisfied, t.stats.zones];
 
   return (
-    <section className="border-b border-charcoal/8 bg-white">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-charcoal/8 lg:grid-cols-4">
+    <section className="overflow-hidden border-b border-charcoal/8 bg-white">
+      <div className="mx-auto grid min-w-0 max-w-7xl grid-cols-2 divide-x divide-charcoal/8 px-4 sm:px-6 lg:grid-cols-4">
         {stats.map((stat, index) => (
-          <div key={statKeys[index]} className="px-6 py-10 text-center sm:py-12">
+          <div key={statKeys[index]} className="min-w-0 px-2 py-10 text-center sm:px-4 sm:py-12">
             <p className="font-display text-4xl font-semibold text-charcoal sm:text-5xl">
               {stat.value}
             </p>

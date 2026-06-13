@@ -23,6 +23,7 @@
     background-color: var(--color-cream);
     color: var(--color-charcoal);
     -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -53,7 +54,7 @@
   }
 
   .property-card {
-    @apply transition-shadow duration-300 hover:shadow-xl hover:shadow-black/8;
+    @apply min-w-0 max-w-full overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-black/8;
   }
 
   .input-field {

@@ -60,9 +60,9 @@ export default function PropertyCard({
   const typeLabel = translatePropertyType(property.type, t);
 
   return (
-    <article className={`property-card group ${large ? "lg:col-span-2" : ""}`}>
-      <Link href={propertyHref(property.id)} className="block">
-        <div className={`relative overflow-hidden bg-stone-200 ${imageAspect}`}>
+    <article className={`property-card group w-full ${large ? "lg:col-span-2" : ""}`}>
+      <Link href={propertyHref(property.id)} className="block min-w-0">
+        <div className={`relative w-full min-w-0 overflow-hidden bg-stone-200 ${imageAspect}`}>
           {large && property.images.length > 1 ? (
             <PropertyCardGallery
               images={property.images}
@@ -84,9 +84,9 @@ export default function PropertyCard({
                       {statusLabel}
                     </span>
                   </div>
-                  <div className="pointer-events-none absolute right-3 top-3 sm:right-4 sm:top-4">
+                  <div className="pointer-events-none absolute right-2 top-2 sm:right-3 sm:top-3">
                     <p
-                      className={`rounded-sm bg-charcoal/85 px-3 py-1.5 font-display font-semibold text-white shadow-sm backdrop-blur-sm ${large ? "text-lg sm:text-xl" : ""}`}
+                      className={`rounded-sm bg-charcoal/85 px-2 py-1 font-display text-sm font-semibold text-white shadow-sm backdrop-blur-sm sm:px-3 sm:py-1.5 sm:text-lg lg:text-xl`}
                     >
                       {formatPrice(property.price, property.priceLabel)}
                     </p>
@@ -150,7 +150,7 @@ export default function PropertyCard({
           </div>
 
           {property.tags && property.tags.length > 0 && (
-            <div className={`flex flex-wrap gap-1.5 ${compact ? "mt-2" : "mt-3"}`}>
+            <div className={`flex min-w-0 flex-wrap gap-1.5 ${compact ? "mt-2" : "mt-3"}`}>
               {property.tags.map((tag) => (
                 <span
                   key={tag}

@@ -20,9 +20,9 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
   const mainOrientation = getOrientation(main);
 
   return (
-    <div className="space-y-3">
+    <div className="min-w-0 max-w-full space-y-3">
       <div
-        className={`relative mx-auto overflow-hidden bg-stone-100 ${mainFrameClass(mainOrientation, true)}`}
+        className={`relative mx-auto w-full overflow-hidden bg-stone-100 ${mainFrameClass(mainOrientation, true)}`}
       >
         <Image
           key={main}
@@ -40,7 +40,7 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
         />
       </div>
       {images.length > 1 && (
-        <div className="flex items-end gap-2 overflow-x-auto pb-1">
+        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-2 overflow-x-auto pb-1">
           {images.map((src, index) => {
             const orientation = getOrientation(src);
             return (
@@ -50,7 +50,7 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                 onClick={() => setActive(index)}
                 className={`relative shrink-0 overflow-hidden bg-stone-100 transition ${thumbFrameClass(orientation)} ${
                   index === active
-                    ? "ring-2 ring-gold ring-offset-2"
+                    ? "ring-2 ring-inset ring-gold"
                     : "opacity-80 hover:opacity-100"
                 }`}
                 aria-label={`Ver foto ${index + 1}`}

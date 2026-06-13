@@ -40,11 +40,11 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
   const typeLabel = translatePropertyType(property.type, t);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <div className="mx-auto min-w-0 max-w-7xl px-4 sm:px-6">
       <BackLink href="/#listings">{t.common.backToCatalog}</BackLink>
 
-      <div className="mt-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-10 xl:gap-14">
-        <div>
+      <div className="mt-8 min-w-0 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-10 xl:gap-14">
+        <div className="min-w-0">
           <PropertyGallery images={property.images} title={property.title} />
 
           <div className="mt-8 flex flex-wrap items-center gap-2">

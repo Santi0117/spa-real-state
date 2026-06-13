@@ -78,8 +78,8 @@ export default function FinancingSection() {
   }
 
   return (
-    <section id="financiamiento" className="scroll-mt-28 border-t border-charcoal/8 bg-cream py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <section id="financiamiento" className="scroll-mt-28 overflow-hidden border-t border-charcoal/8 bg-cream py-16 md:py-20">
+      <div className="mx-auto min-w-0 max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
           <p className="section-label">{t.financing.label}</p>
           <h2 className="font-display mt-3 text-3xl font-medium tracking-tight text-charcoal md:text-4xl">
@@ -90,7 +90,7 @@ export default function FinancingSection() {
           </p>
         </div>
 
-        <div className="mt-8 rounded-sm border border-charcoal/8 bg-white p-4 shadow-sm sm:p-5">
+        <div className="mt-8 min-w-0 rounded-sm border border-charcoal/8 bg-white p-4 shadow-sm sm:p-5">
           <PropertyVisitPicker
             selectedId={selectedId}
             onSelect={handlePropertySelect}

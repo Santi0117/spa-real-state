@@ -25,7 +25,7 @@ export default function PropertyImage({ src, alt }: PropertyImageProps) {
       alt={alt}
       fill
       quality={90}
-      className="object-cover transition duration-700 group-hover:scale-105"
+      className="object-cover transition duration-700 group-hover:scale-105 max-lg:group-hover:scale-100"
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       onError={() => setFailed(true)}
     />

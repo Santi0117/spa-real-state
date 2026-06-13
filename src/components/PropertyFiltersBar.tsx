@@ -490,9 +490,9 @@ export default function PropertyFiltersBar({
               : null;
 
   return (
-    <div ref={barRef} className="mt-10 space-y-4">
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
+    <div ref={barRef} className="mt-10 min-w-0 space-y-4">
+      <div className="min-w-0 max-w-full overflow-x-auto">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
           <div className="relative">
             <FilterPill
               label={statusLabel}

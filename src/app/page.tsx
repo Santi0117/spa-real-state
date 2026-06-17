@@ -24,7 +24,9 @@ export default function Home() {
         <FeaturedProperties />
         <ServicesMarquee />
         <Areas />
-        <PropertyGrid />
+        <Suspense fallback={null}>
+          <PropertyGrid />
+        </Suspense>
         <Suspense fallback={null}>
           <FinancingSection />
         </Suspense>

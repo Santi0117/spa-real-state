@@ -325,5 +325,6 @@ export type Translations = {
     sortAreaDesc: string;
     areaSqm: string;
     allZones: string;
+    selectOperationForPrice: string;
   };
 };

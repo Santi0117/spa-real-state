@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   areaOptions,
@@ -69,7 +69,7 @@ function FilterPill({
     <button
       type="button"
       onClick={onClick}
-      className={`filter-pill max-w-full ${active ? "filter-pill-active" : ""}`}
+      className={`filter-pill shrink-0 ${active ? "filter-pill-active" : ""}`}
       aria-expanded={open}
     >
       <span className="truncate">{label}</span>
@@ -175,20 +175,54 @@ function PriceRangeSlider({
   );
 }
 
-function DropdownPanel({
+function FilterDropdownPortal({
   open,
+  anchorRef,
   children,
   className = "",
 }: {
   open: boolean;
+  anchorRef: React.RefObject<HTMLElement | null>;
   children: React.ReactNode;
   className?: string;
 }) {
-  if (!open) return null;
-  return (
-    <div className={`filter-dropdown ${className}`} role="dialog">
+  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open || !anchorRef.current) return;
+
+    const update = () => {
+      if (!anchorRef.current) return;
+      const rect = anchorRef.current.getBoundingClientRect();
+      setPosition({ top: rect.bottom + 8, left: rect.left });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [open, anchorRef]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div
+      data-filter-dropdown
+      className={`filter-dropdown-portal fixed ${className}`}
+      style={{ top: position.top, left: position.left }}
+      role="dialog"
+    >
       {children}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -266,6 +300,11 @@ export default function PropertyFiltersBar({
   const { t } = useTranslations();
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const typeRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
+  const roomsRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const priceConfig = getPriceSliderConfig(filters.status);
 
@@ -317,13 +356,18 @@ export default function PropertyFiltersBar({
     label: option.value === "any" ? t.filters.areaSqm : option.label,
   }));
 
+  function applyFilters(next: PropertyFilters, closePanel = true) {
+    onChange(next);
+    if (closePanel && isDesktop) setOpenPanel(null);
+  }
+
   function update<K extends keyof PropertyFilters>(key: K, value: PropertyFilters[K]) {
-    onChange({ ...filters, [key]: value });
+    applyFilters({ ...filters, [key]: value });
   }
 
   function updateStatus(status: PropertyStatus | "Todos") {
     const config = getPriceSliderConfig(status);
-    onChange({
+    applyFilters({
       ...filters,
       status,
       priceMin: config.min,
@@ -337,14 +381,15 @@ export default function PropertyFiltersBar({
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (!isDesktop) return;
-      if (barRef.current && !barRef.current.contains(e.target as Node)) {
-        setOpenPanel(null);
-      }
+      if (!isDesktop || !openPanel) return;
+      const target = e.target as Node;
+      if (barRef.current?.contains(target)) return;
+      if ((target as Element).closest?.("[data-filter-dropdown]")) return;
+      setOpenPanel(null);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isDesktop]);
+  }, [isDesktop, openPanel]);
 
   const activeTags = getActiveFilterTags(filters);
 
@@ -357,7 +402,8 @@ export default function PropertyFiltersBar({
       : typeLabels[filters.type as (typeof types)[number]];
 
   const priceActive =
-    filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max;
+    filters.status !== "Todos" &&
+    (filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max);
   const priceLabel = priceActive
     ? filters.priceMax >= priceConfig.max
       ? formatMessage(t.filters.fromPrice, { price: priceConfig.format(filters.priceMin) })
@@ -396,32 +442,41 @@ export default function PropertyFiltersBar({
     </>
   );
 
-  const pricePanel = (
-    <>
-      <p className="filter-dropdown-title">{t.filters.priceRange}</p>
-      <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
-      <PriceRangeSlider
-        min={priceConfig.min}
-        max={priceConfig.max}
-        step={priceConfig.step}
-        valueMin={filters.priceMin}
-        valueMax={filters.priceMax}
-        formatValue={priceConfig.format}
-        minLabel={t.filters.minPrice}
-        maxLabel={t.filters.maxPrice}
-        onChange={(priceMin, priceMax) => onChange({ ...filters, priceMin, priceMax })}
-      />
-      <button
-        type="button"
-        className="mt-4 text-xs font-medium text-gold hover:underline"
-        onClick={() =>
-          onChange({ ...filters, priceMin: priceConfig.min, priceMax: priceConfig.max })
-        }
-      >
-        {t.filters.resetPrice}
-      </button>
-    </>
-  );
+  const pricePanel =
+    filters.status === "Todos" ? (
+      <p className="text-sm leading-relaxed text-slate-warm">{t.filters.selectOperationForPrice}</p>
+    ) : (
+      <>
+        <p className="filter-dropdown-title">{t.filters.priceRange}</p>
+        <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
+        <PriceRangeSlider
+          min={priceConfig.min}
+          max={priceConfig.max}
+          step={priceConfig.step}
+          valueMin={filters.priceMin}
+          valueMax={filters.priceMax}
+          formatValue={priceConfig.format}
+          minLabel={t.filters.minPrice}
+          maxLabel={t.filters.maxPrice}
+          onChange={(priceMin, priceMax) =>
+            applyFilters({ ...filters, priceMin, priceMax }, false)
+          }
+        />
+        <button
+          type="button"
+          className="mt-4 text-xs font-medium text-gold hover:underline"
+          onClick={() =>
+            applyFilters({
+              ...filters,
+              priceMin: priceConfig.min,
+              priceMax: priceConfig.max,
+            })
+          }
+        >
+          {t.filters.resetPrice}
+        </button>
+      </>
+    );
 
   const roomsPanel = (
     <div className="space-y-5">
@@ -490,81 +545,99 @@ export default function PropertyFiltersBar({
               : null;
 
   return (
-    <div ref={barRef} className="mt-10 min-w-0 space-y-4">
-      <div className="min-w-0 max-w-full overflow-x-auto">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <div className="relative">
-            <FilterPill
-              label={statusLabel}
-              active={filters.status !== "Todos"}
-              open={openPanel === "status"}
-              onClick={() => toggle("status")}
-            />
-            {isDesktop && <DropdownPanel open={openPanel === "status"}>{statusPanel}</DropdownPanel>}
-          </div>
-
-          <div className="relative">
-            <FilterPill
-              label={typeLabel}
-              active={filters.type !== "Todos"}
-              open={openPanel === "type"}
-              onClick={() => toggle("type")}
-            />
-            {isDesktop && <DropdownPanel open={openPanel === "type"}>{typePanel}</DropdownPanel>}
-          </div>
-
-          <div className="relative">
-            <FilterPill
-              label={priceLabel}
-              active={priceActive}
-              open={openPanel === "price"}
-              onClick={() => toggle("price")}
-            />
-            {isDesktop && (
-              <DropdownPanel open={openPanel === "price"} className="min-w-[300px]">
-                {pricePanel}
-              </DropdownPanel>
-            )}
-          </div>
-
-          <div className="relative">
-            <FilterPill
-              label={roomsLabel}
-              active={roomsActive}
-              open={openPanel === "rooms"}
-              onClick={() => toggle("rooms")}
-            />
-            {isDesktop && (
-              <DropdownPanel open={openPanel === "rooms"} className="min-w-[320px]">
-                {roomsPanel}
-              </DropdownPanel>
-            )}
-          </div>
-
-          <div className="relative">
-            <FilterPill
-            label={t.filters.more}
-              active={moreActive}
-              open={openPanel === "more"}
-              onClick={() => toggle("more")}
-            />
-            {isDesktop && (
-              <DropdownPanel open={openPanel === "more"} className="min-w-[300px]">
-                {morePanel}
-              </DropdownPanel>
-            )}
-          </div>
-
-          {activeTags.length > 0 && (
-            <button
-              type="button"
-              onClick={() => onChange(defaultFilters)}
-              className="text-xs font-medium text-slate-warm underline-offset-2 hover:text-charcoal hover:underline"
-            >
-              {t.filters.clear}
-            </button>
+    <div ref={barRef} className={`relative mt-10 min-w-0 space-y-4 ${openPanel ? "z-50" : "z-30"}`}>
+      <div className="hide-scrollbar flex items-center gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0">
+        <div className="relative shrink-0" ref={statusRef}>
+          <FilterPill
+            label={statusLabel}
+            active={filters.status !== "Todos"}
+            open={openPanel === "status"}
+            onClick={() => toggle("status")}
+          />
+          {isDesktop && (
+            <FilterDropdownPortal open={openPanel === "status"} anchorRef={statusRef}>
+              {statusPanel}
+            </FilterDropdownPortal>
           )}
         </div>
+
+        <div className="relative shrink-0" ref={typeRef}>
+          <FilterPill
+            label={typeLabel}
+            active={filters.type !== "Todos"}
+            open={openPanel === "type"}
+            onClick={() => toggle("type")}
+          />
+          {isDesktop && (
+            <FilterDropdownPortal open={openPanel === "type"} anchorRef={typeRef}>
+              {typePanel}
+            </FilterDropdownPortal>
+          )}
+        </div>
+
+        <div className="relative shrink-0" ref={priceRef}>
+          <FilterPill
+            label={priceLabel}
+            active={priceActive}
+            open={openPanel === "price"}
+            onClick={() => toggle("price")}
+          />
+          {isDesktop && (
+            <FilterDropdownPortal
+              open={openPanel === "price"}
+              anchorRef={priceRef}
+              className="min-w-[300px]"
+            >
+              {pricePanel}
+            </FilterDropdownPortal>
+          )}
+        </div>
+
+        <div className="relative shrink-0" ref={roomsRef}>
+          <FilterPill
+            label={roomsLabel}
+            active={roomsActive}
+            open={openPanel === "rooms"}
+            onClick={() => toggle("rooms")}
+          />
+          {isDesktop && (
+            <FilterDropdownPortal
+              open={openPanel === "rooms"}
+              anchorRef={roomsRef}
+              className="min-w-[320px]"
+            >
+              {roomsPanel}
+            </FilterDropdownPortal>
+          )}
+        </div>
+
+        <div className="relative shrink-0" ref={moreRef}>
+          <FilterPill
+            label={t.filters.more}
+            active={moreActive}
+            open={openPanel === "more"}
+            onClick={() => toggle("more")}
+          />
+          {isDesktop && (
+            <FilterDropdownPortal
+              open={openPanel === "more"}
+              anchorRef={moreRef}
+              className="min-w-[300px]"
+            >
+              {morePanel}
+            </FilterDropdownPortal>
+          )}
+        </div>
+
+        {activeTags.length > 0 && (
+          <button
+            type="button"
+            onClick={() => applyFilters(defaultFilters)}
+            className="shrink-0 text-xs font-medium text-slate-warm underline-offset-2 hover:text-charcoal hover:underline"
+          >
+            {t.filters.clear}
+          </button>
+        )}
       </div>
 
       {!isDesktop && openPanel && (

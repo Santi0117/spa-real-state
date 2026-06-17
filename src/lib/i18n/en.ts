@@ -387,5 +387,6 @@ export const en: Translations = {
     sortAreaDesc: "Area: high to low",
     areaSqm: "Area m²",
     allZones: "All zones",
+    selectOperationForPrice: "Choose sale or rent to filter by price.",
   },
 };

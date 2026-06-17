@@ -449,7 +449,17 @@ function matchesPrice(
   priceMax: number,
   status: PropertyStatus | "Todos"
 ): boolean {
-  const config = getPriceSliderConfig(status);
+  if (status === "Todos") {
+    const defaultConfig = getPriceSliderConfig("Todos");
+    const isDefaultRange =
+      priceMin <= defaultConfig.min && priceMax >= defaultConfig.max;
+    if (isDefaultRange) return true;
+  }
+
+  const config = getPriceSliderConfig(
+    status === "Todos" ? property.status : status
+  );
+
   if (property.price < priceMin) return false;
   if (priceMax >= config.max) return true;
   return property.price <= priceMax;
@@ -506,11 +516,15 @@ export function getActiveFilterTags(filters: PropertyFilters): ActiveFilterTag[]
     tags.push({ key: "status", label: filters.status });
   }
 
-  if (filters.priceMin > 0 || filters.priceMax < getPriceSliderConfig(filters.status).max) {
-    const cfg = getPriceSliderConfig(filters.status);
+  const priceConfig = getPriceSliderConfig(filters.status);
+  const priceActive =
+    filters.status !== "Todos" &&
+    (filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max);
+
+  if (priceActive) {
     tags.push({
       key: "priceMin",
-      label: `${cfg.format(filters.priceMin)} – ${cfg.format(filters.priceMax)}`,
+      label: `${priceConfig.format(filters.priceMin)} – ${priceConfig.format(filters.priceMax)}`,
     });
   }
 

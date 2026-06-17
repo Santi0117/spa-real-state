@@ -388,5 +388,6 @@ export const es: Translations = {
     sortAreaDesc: "Área: mayor a menor",
     areaSqm: "Área m²",
     allZones: "Todas",
+    selectOperationForPrice: "Elegí venta o alquiler para filtrar por precio.",
   },
 };

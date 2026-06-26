@@ -19,19 +19,20 @@ export default function Areas() {
           <p className="mx-auto mt-4 max-w-lg text-slate-warm">{t.areas.description}</p>
         </div>
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
           {areas.map((area, index) => (
             <a
               key={area.name}
               href="#listings"
-              className="group relative aspect-[3/4] overflow-hidden"
+              className="group relative aspect-[16/10] overflow-hidden bg-stone-200 sm:aspect-[5/4] lg:aspect-[3/4]"
             >
               <Image
                 src={area.image}
                 alt={t.areas.items[index].name}
                 fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 50vw, 25vw"
+                quality={92}
+                className="object-contain object-center transition duration-700 group-hover:scale-[1.02] max-lg:group-hover:scale-100 sm:object-cover sm:object-center"
+                sizes="(max-width: 639px) 100vw, (max-width: 1024px) 50vw, 320px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">

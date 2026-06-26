@@ -51,7 +51,7 @@ export const areas = [
   {
     name: "Cartago",
     description: "Viviendas con tradición y plusvalía",
-    image: "/properties/2.jpg",
+    image: "/properties/tejar/exterior.png",
     count: 18,
   },
   {

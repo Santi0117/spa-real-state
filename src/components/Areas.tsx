@@ -24,14 +24,14 @@ export default function Areas() {
             <a
               key={area.name}
               href="#listings"
-              className="group relative aspect-[16/10] overflow-hidden bg-stone-200 sm:aspect-[5/4] lg:aspect-[3/4]"
+              className="group relative aspect-[16/10] overflow-hidden sm:aspect-[5/4] lg:aspect-[3/4]"
             >
               <Image
                 src={area.image}
                 alt={t.areas.items[index].name}
                 fill
                 quality={92}
-                className="object-contain object-center transition duration-700 group-hover:scale-[1.02] max-lg:group-hover:scale-100 sm:object-cover sm:object-center"
+                className="object-cover object-center transition duration-700 group-hover:scale-[1.02] max-lg:group-hover:scale-100"
                 sizes="(max-width: 639px) 100vw, (max-width: 1024px) 50vw, 320px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/20 to-transparent" />

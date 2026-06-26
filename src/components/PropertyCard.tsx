@@ -37,21 +37,14 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const { t } = useTranslations();
 
-  const imageAspect = large
-    ? ""
-    : compact
-      ? "aspect-[4/3]"
-      : "aspect-[4/3]";
-
   const bodyPadding = compact ? "p-3 sm:p-3.5" : "p-4 lg:p-5";
   const titleClass = compact
-    ? "font-display mt-1 text-base font-medium leading-snug text-charcoal group-hover:text-gold sm:text-lg"
-    : "font-display mt-1 text-xl font-medium leading-snug text-charcoal group-hover:text-gold lg:text-[1.35rem]";
+    ? "font-display text-base font-medium leading-snug text-charcoal group-hover:text-gold sm:text-lg"
+    : "font-display text-xl font-medium leading-snug text-charcoal group-hover:text-gold lg:text-[1.35rem]";
   const priceClass = compact
-    ? "font-display text-lg font-semibold text-white sm:text-xl"
-    : "font-display text-2xl font-semibold text-white lg:text-3xl";
+    ? "font-display shrink-0 text-right text-lg font-semibold leading-tight text-gold sm:text-xl"
+    : "font-display shrink-0 text-right text-xl font-semibold leading-tight text-gold sm:text-2xl lg:text-[1.65rem]";
   const tagPadding = compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]";
-  const imagePadding = compact ? "p-3 pt-10" : "p-4 pt-12 lg:p-5 lg:pt-16";
   const statsClass = compact
     ? "mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-charcoal/8 pt-3 text-[10px] font-medium uppercase tracking-wide text-slate-warm"
     : "mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-charcoal/8 pt-4 text-[12px] font-medium uppercase tracking-wide text-slate-warm";
@@ -59,66 +52,35 @@ export default function PropertyCard({
   const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
   const typeLabel = translatePropertyType(property.type, t);
 
+  const tagsOverlay = (
+    <div className="pointer-events-none absolute right-0 top-0 z-10 flex gap-px">
+      {property.new && (
+        <span className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}>
+          {t.property.new}
+        </span>
+      )}
+      <span className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}>
+        {statusLabel}
+      </span>
+    </div>
+  );
+
   return (
-    <article className={`property-card group w-full ${large ? "lg:col-span-2" : ""}`}>
+    <article className="property-card group w-full min-w-0">
       <Link href={propertyHref(property.id)} className="block min-w-0">
-        <div className={`relative w-full min-w-0 overflow-hidden bg-stone-200 ${imageAspect}`}>
-          {large && property.images.length > 1 ? (
+        <div className="relative w-full min-w-0 overflow-hidden bg-stone-100">
+          {property.images.length > 1 ? (
             <PropertyCardGallery
               images={property.images}
               title={property.title}
-              large
-              overlay={
-                <>
-                  <div className="pointer-events-none absolute left-0 top-0 flex gap-px">
-                    {property.new && (
-                      <span
-                        className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}
-                      >
-                        {t.property.new}
-                      </span>
-                    )}
-                    <span
-                      className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}
-                    >
-                      {statusLabel}
-                    </span>
-                  </div>
-                  <div className="pointer-events-none absolute right-2 top-2 sm:right-3 sm:top-3">
-                    <p
-                      className={`rounded-sm bg-charcoal/85 px-2 py-1 font-display text-sm font-semibold text-white shadow-sm backdrop-blur-sm sm:px-3 sm:py-1.5 sm:text-lg lg:text-xl`}
-                    >
-                      {formatPrice(property.price, property.priceLabel)}
-                    </p>
-                  </div>
-                </>
-              }
+              large={large}
+              overlay={tagsOverlay}
             />
           ) : (
-            <>
-              <PropertyImage src={property.image} alt={property.title} />
-
-              <div className="pointer-events-none absolute left-0 top-0 flex gap-px">
-                {property.new && (
-                  <span
-                    className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}
-                  >
-                    {t.property.new}
-                  </span>
-                )}
-                <span
-                  className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}
-                >
-                  {statusLabel}
-                </span>
-              </div>
-
-              <div
-                className={`pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal/80 to-transparent ${imagePadding}`}
-              >
-                <p className={priceClass}>{formatPrice(property.price, property.priceLabel)}</p>
-              </div>
-            </>
+            <div className="relative">
+              <PropertyImage src={property.image} alt={property.title} large={large} />
+              {tagsOverlay}
+            </div>
           )}
         </div>
 
@@ -130,10 +92,18 @@ export default function PropertyCard({
           >
             {typeLabel} · {property.zone}
           </p>
-          <h3 className={titleClass}>{property.title}</h3>
-          <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
-            {property.location}
-          </p>
+
+          <div className="mt-1 flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <h3 className={titleClass}>{property.title}</h3>
+              <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
+                {property.location}
+              </p>
+            </div>
+            <p className={priceClass}>
+              {formatPrice(property.price, property.priceLabel, property.currency)}
+            </p>
+          </div>
 
           {showDescription && (
             <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-warm">

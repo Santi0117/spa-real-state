@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   mainFrameClass,
+  mainFrameStyle,
   thumbFrameClass,
   useImageOrientation,
 } from "./useImageOrientation";
@@ -15,14 +16,14 @@ type PropertyGalleryProps = {
 
 export default function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const [active, setActive] = useState(0);
-  const { register, getOrientation } = useImageOrientation();
+  const { register, getOrientation, getAspectRatio } = useImageOrientation();
   const main = images[active] ?? images[0];
-  const mainOrientation = getOrientation(main);
 
   return (
     <div className="min-w-0 max-w-full space-y-3">
       <div
-        className={`relative mx-auto w-full overflow-hidden bg-stone-100 ${mainFrameClass(mainOrientation, true)}`}
+        className={mainFrameClass(true)}
+        style={mainFrameStyle(getAspectRatio(main))}
       >
         <Image
           key={main}
@@ -35,12 +36,12 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
             const img = e.currentTarget;
             register(main, img.naturalWidth, img.naturalHeight);
           }}
-          className="object-cover object-bottom"
+          className="object-contain"
           sizes="(max-width: 1024px) 100vw, 66vw"
         />
       </div>
       {images.length > 1 && (
-        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-2 overflow-x-auto pb-1">
+        <div className="hide-scrollbar -mx-1 flex w-full min-w-0 max-w-full items-end gap-2 overflow-x-auto px-1 pb-1">
           {images.map((src, index) => {
             const orientation = getOrientation(src);
             return (
@@ -48,10 +49,10 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                 key={src}
                 type="button"
                 onClick={() => setActive(index)}
-                className={`relative shrink-0 overflow-hidden bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                className={`relative shrink-0 overflow-hidden rounded-sm bg-stone-100 transition ${thumbFrameClass(orientation)} ${
                   index === active
-                    ? "ring-2 ring-inset ring-gold"
-                    : "opacity-80 hover:opacity-100"
+                    ? "ring-2 ring-gold"
+                    : "opacity-75 hover:opacity-100"
                 }`}
                 aria-label={`Ver foto ${index + 1}`}
                 aria-current={index === active}
@@ -65,7 +66,7 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                     register(src, img.naturalWidth, img.naturalHeight);
                   }}
                   className="object-contain"
-                  sizes="120px"
+                  sizes="100px"
                 />
               </button>
             );

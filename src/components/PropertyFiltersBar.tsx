@@ -127,8 +127,8 @@ function PriceRangeSlider({
   const minId = useId();
   const maxId = useId();
 
-  const safeMin = Math.min(valueMin, valueMax - step);
-  const safeMax = Math.max(valueMax, valueMin + step);
+  const safeMin = Math.min(Math.max(valueMin, min), valueMax - step);
+  const safeMax = Math.max(Math.min(valueMax, max), safeMin + step);
   const minPercent = ((safeMin - min) / (max - min)) * 100;
   const maxPercent = ((safeMax - min) / (max - min)) * 100;
 
@@ -138,15 +138,16 @@ function PriceRangeSlider({
         <span className="font-medium text-charcoal">{formatValue(safeMin)}</span>
         <span className="text-slate-warm">—</span>
         <span className="font-medium text-charcoal">
-          {safeMax >= max ? `${formatValue(safeMax)}+` : formatValue(safeMax)}
+          {safeMax >= max ? `${formatValue(max)}+` : formatValue(safeMax)}
         </span>
       </div>
 
-      <div className="relative h-8 pt-3">
-        <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-charcoal/10" />
+      <div className="price-range-slider relative mx-1 h-10">
+        <div className="price-range-track" aria-hidden />
         <div
-          className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gold"
-          style={{ left: `${minPercent}%`, right: `${100 - maxPercent}%` }}
+          className="price-range-fill"
+          style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
+          aria-hidden
         />
         <input
           id={minId}
@@ -156,8 +157,11 @@ function PriceRangeSlider({
           step={step}
           value={safeMin}
           onChange={(e) => onChange(Number(e.target.value), safeMax)}
-          className="price-range-input"
+          className="price-range-input price-range-input-min"
           aria-label={minLabel}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={safeMin}
         />
         <input
           id={maxId}
@@ -167,9 +171,17 @@ function PriceRangeSlider({
           step={step}
           value={safeMax}
           onChange={(e) => onChange(safeMin, Number(e.target.value))}
-          className="price-range-input"
+          className="price-range-input price-range-input-max"
           aria-label={maxLabel}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={safeMax}
         />
+      </div>
+
+      <div className="flex justify-between text-[11px] text-slate-warm">
+        <span>{formatValue(min)}</span>
+        <span>{formatValue(max)}+</span>
       </div>
     </div>
   );
@@ -402,8 +414,7 @@ export default function PropertyFiltersBar({
       : typeLabels[filters.type as (typeof types)[number]];
 
   const priceActive =
-    filters.status !== "Todos" &&
-    (filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max);
+    filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max;
   const priceLabel = priceActive
     ? filters.priceMax >= priceConfig.max
       ? formatMessage(t.filters.fromPrice, { price: priceConfig.format(filters.priceMin) })
@@ -442,41 +453,43 @@ export default function PropertyFiltersBar({
     </>
   );
 
-  const pricePanel =
-    filters.status === "Todos" ? (
-      <p className="text-sm leading-relaxed text-slate-warm">{t.filters.selectOperationForPrice}</p>
-    ) : (
-      <>
-        <p className="filter-dropdown-title">{t.filters.priceRange}</p>
-        <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
-        <PriceRangeSlider
-          min={priceConfig.min}
-          max={priceConfig.max}
-          step={priceConfig.step}
-          valueMin={filters.priceMin}
-          valueMax={filters.priceMax}
-          formatValue={priceConfig.format}
-          minLabel={t.filters.minPrice}
-          maxLabel={t.filters.maxPrice}
-          onChange={(priceMin, priceMax) =>
-            applyFilters({ ...filters, priceMin, priceMax }, false)
-          }
-        />
-        <button
-          type="button"
-          className="mt-4 text-xs font-medium text-gold hover:underline"
-          onClick={() =>
-            applyFilters({
-              ...filters,
-              priceMin: priceConfig.min,
-              priceMax: priceConfig.max,
-            })
-          }
-        >
-          {t.filters.resetPrice}
-        </button>
-      </>
-    );
+  const pricePanel = (
+    <>
+      <p className="filter-dropdown-title">{t.filters.priceRange}</p>
+      {filters.status === "Todos" && (
+        <p className="mb-4 mt-2 text-xs leading-relaxed text-slate-warm">
+          {t.filters.selectOperationForPrice}
+        </p>
+      )}
+      <p className="mb-4 text-xs text-slate-warm">{priceConfig.hint}</p>
+      <PriceRangeSlider
+        min={priceConfig.min}
+        max={priceConfig.max}
+        step={priceConfig.step}
+        valueMin={filters.priceMin}
+        valueMax={filters.priceMax}
+        formatValue={priceConfig.format}
+        minLabel={t.filters.minPrice}
+        maxLabel={t.filters.maxPrice}
+        onChange={(priceMin, priceMax) =>
+          applyFilters({ ...filters, priceMin, priceMax }, false)
+        }
+      />
+      <button
+        type="button"
+        className="mt-4 text-xs font-medium text-gold hover:underline"
+        onClick={() =>
+          applyFilters({
+            ...filters,
+            priceMin: priceConfig.min,
+            priceMax: priceConfig.max,
+          })
+        }
+      >
+        {t.filters.resetPrice}
+      </button>
+    </>
+  );
 
   const roomsPanel = (
     <div className="space-y-5">

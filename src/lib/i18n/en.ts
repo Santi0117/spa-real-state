@@ -91,7 +91,7 @@ export const en: Translations = {
   },
   financeCard: {
     fixedRate: "Fixed rate",
-    downPayment: "Down payment ($)",
+    downPayment: "Down payment (₡)",
     minDownPayment: "* Down payment cannot be lower than {amount}",
     term: "Term",
     years: "{n} years",
@@ -323,8 +323,8 @@ export const en: Translations = {
         "Complete the form with your property details. We'll contact you for a valuation and sales plan.",
       location: "Where is the property located?",
       locationPlaceholder: "Province, canton, district or approximate address",
-      price: "Estimated price (USD or CRC)",
-      pricePlaceholder: "E.g. $350,000",
+      price: "Estimated price (₡)",
+      pricePlaceholder: "E.g. ₡35,000,000",
       negotiable: "Is the price negotiable?",
       negotiablePlaceholder:
         "Tell us if the price is negotiable, sale conditions or other important details…",

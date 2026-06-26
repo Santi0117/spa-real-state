@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   mainFrameClass,
+  mainFrameStyle,
   thumbFrameClass,
   useImageOrientation,
 } from "./useImageOrientation";
@@ -22,13 +23,15 @@ export default function PropertyCardGallery({
   overlay,
 }: PropertyCardGalleryProps) {
   const [active, setActive] = useState(0);
-  const { register, getOrientation } = useImageOrientation();
+  const { register, getOrientation, getAspectRatio } = useImageOrientation();
   const main = images[active] ?? images[0];
-  const mainOrientation = getOrientation(main);
 
   return (
-    <div className="w-full min-w-0 max-w-full overflow-hidden bg-stone-200">
-      <div className={`relative w-full overflow-hidden ${mainFrameClass(mainOrientation, large)}`}>
+    <div className="w-full min-w-0 max-w-full overflow-hidden bg-stone-100">
+      <div
+        className={`${mainFrameClass(large)} group`}
+        style={mainFrameStyle(getAspectRatio(main))}
+      >
         <Image
           key={main}
           src={main}
@@ -40,14 +43,14 @@ export default function PropertyCardGallery({
             const img = e.currentTarget;
             register(main, img.naturalWidth, img.naturalHeight);
           }}
-          className="object-cover object-bottom transition duration-700 group-hover:scale-[1.03] max-lg:group-hover:scale-100"
-          sizes="(max-width: 1024px) 100vw, 66vw"
+          className="object-contain"
+          sizes="(max-width: 1024px) 100vw, 50vw"
         />
         {overlay}
       </div>
 
       {images.length > 1 && (
-        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-1 overflow-x-auto border-t border-charcoal/8 bg-stone-100 p-1">
+        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-1 overflow-x-auto border-t border-charcoal/8 bg-stone-100 p-1.5">
           {images.map((src, index) => {
             const orientation = getOrientation(src);
             return (
@@ -59,9 +62,9 @@ export default function PropertyCardGallery({
                   e.stopPropagation();
                   setActive(index);
                 }}
-                className={`relative shrink-0 overflow-hidden bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                className={`relative shrink-0 overflow-hidden rounded-sm bg-stone-100 transition ${thumbFrameClass(orientation)} ${
                   index === active
-                    ? "ring-2 ring-inset ring-gold"
+                    ? "ring-2 ring-gold"
                     : "opacity-75 hover:opacity-100"
                 }`}
                 aria-label={`Ver foto ${index + 1}`}
@@ -75,7 +78,7 @@ export default function PropertyCardGallery({
                     const img = e.currentTarget;
                     register(src, img.naturalWidth, img.naturalHeight);
                   }}
-                  className="object-contain object-bottom"
+                  className="object-contain"
                   sizes="80px"
                 />
               </button>

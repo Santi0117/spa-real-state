@@ -39,7 +39,7 @@ export const vistaVerde: Condominium = {
   description:
     "Condominio residencial de baja densidad con calles internas, áreas verdes y lotes listos para construir o propiedades llave en mano. Seguridad 24/7, acceso controlado y vista al valle central.",
   image: "/properties/2.jpg",
-  priceFrom: 148000,
+  priceFrom: 76220000,
   tags: ["Seguridad 24/7", "Lotes", "Club house"],
   amenities: [
     "Garita y vigilancia 24/7",
@@ -48,14 +48,14 @@ export const vistaVerde: Condominium = {
     "Calles asfaltadas",
     "Casa club y parque infantil",
   ],
-  propertyIds: ["2", "4"],
+  propertyIds: [],
   lots: [
     {
       id: "lote-a1",
       label: "Lote A-1",
       corner: true,
       areaM2: 420,
-      price: 185000,
+      price: 95275000,
       status: "disponible",
       description: "Lote esquinero con vista abierta al valle. Ideal para casa de dos niveles.",
       features: ["Esquinero", "Vista", "420 m²"],
@@ -64,7 +64,7 @@ export const vistaVerde: Condominium = {
       id: "lote-a2",
       label: "Lote A-2",
       areaM2: 380,
-      price: 168000,
+      price: 86520000,
       status: "disponible",
       description: "Lote plano con acceso directo a calle principal interna.",
       features: ["Plano", "380 m²"],
@@ -73,7 +73,7 @@ export const vistaVerde: Condominium = {
       id: "lote-a3",
       label: "Lote A-3",
       areaM2: 410,
-      price: 178000,
+      price: 91670000,
       status: "reservado",
       description: "Reservado — lote con topografía suave y orientación este.",
       features: ["410 m²", "Reservado"],
@@ -82,7 +82,7 @@ export const vistaVerde: Condominium = {
       id: "lote-a4",
       label: "Lote A-4",
       areaM2: 450,
-      price: 195000,
+      price: 100425000,
       status: "disponible",
       description: "El lote más amplio de la fila A. Espacio para jardín y piscina.",
       features: ["450 m²", "Jardín amplio"],
@@ -91,17 +91,16 @@ export const vistaVerde: Condominium = {
       id: "lote-b1",
       label: "Lote B-1",
       areaM2: 360,
-      price: 155000,
+      price: 79825000,
       status: "vendido",
       description: "Vendido — casa en construcción.",
       features: ["360 m²", "Vendido"],
-      propertyId: "2",
     },
     {
       id: "lote-b2",
       label: "Lote B-2",
       areaM2: 370,
-      price: 162000,
+      price: 83430000,
       status: "disponible",
       description: "A pasos del parque central del condominio.",
       features: ["370 m²", "Cerca del parque"],
@@ -110,7 +109,7 @@ export const vistaVerde: Condominium = {
       id: "lote-b3",
       label: "Lote B-3",
       areaM2: 395,
-      price: 172000,
+      price: 88580000,
       status: "disponible",
       description: "Lote con servicios completos y permisos al día.",
       features: ["395 m²", "Servicios listos"],
@@ -119,17 +118,16 @@ export const vistaVerde: Condominium = {
       id: "lote-b4",
       label: "Lote B-4",
       areaM2: 430,
-      price: 188000,
+      price: 96820000,
       status: "disponible",
       description: "Residencia moderna terminada — lista para habitar.",
       features: ["430 m²", "Casa terminada"],
-      propertyId: "4",
     },
     {
       id: "lote-c1",
       label: "Lote C-1",
       areaM2: 340,
-      price: 148000,
+      price: 76220000,
       status: "disponible",
       description: "Lote en zona tranquila, ideal para primera vivienda.",
       features: ["340 m²"],
@@ -138,7 +136,7 @@ export const vistaVerde: Condominium = {
       id: "lote-c2",
       label: "Lote C-2",
       areaM2: 355,
-      price: 152000,
+      price: 78280000,
       status: "reservado",
       description: "Reservado — pendiente de firma.",
       features: ["355 m²", "Reservado"],
@@ -147,7 +145,7 @@ export const vistaVerde: Condominium = {
       id: "lote-c3",
       label: "Lote C-3",
       areaM2: 350,
-      price: 150000,
+      price: 77250000,
       status: "disponible",
       description: "Terreno con vista parcial al club house.",
       features: ["350 m²", "Vista club"],
@@ -156,7 +154,7 @@ export const vistaVerde: Condominium = {
       id: "lote-c4",
       label: "Lote C-4",
       areaM2: 365,
-      price: 158000,
+      price: 81370000,
       status: "disponible",
       description: "Último lote disponible en fila C con acceso rápido a la garita.",
       features: ["365 m²", "Acceso garita"],
@@ -180,13 +178,16 @@ export function getCondominiumProperties(condo: Condominium) {
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 }
 
-export function getLotCoverImage(lot: CondominiumLot, index: number): string {
+export function getLotCoverImage(
+  lot: CondominiumLot,
+  index: number,
+  condo?: Condominium
+): string {
   if (lot.propertyId) {
     const linked = getPropertyById(lot.propertyId);
     if (linked) return linked.image;
   }
-  const pool = [1, 3, 5, 6, 7, 8, 9];
-  return `/properties/${pool[index % pool.length]}.jpg`;
+  return condo?.image ?? "/properties/orosi/cover.png";
 }
 
 export function countAvailableLots(condo: Condominium): number {

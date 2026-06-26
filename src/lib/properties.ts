@@ -1,5 +1,6 @@
 export type PropertyType = "Casa" | "Apartamento" | "Terreno" | "Penthouse";
 export type PropertyStatus = "Venta" | "Alquiler";
+export type PropertyCurrency = "USD" | "CRC";
 
 export type Property = {
   id: string;
@@ -9,6 +10,7 @@ export type Property = {
   type: PropertyType;
   status: PropertyStatus;
   price: number;
+  currency?: PropertyCurrency;
   priceLabel?: string;
   beds: number;
   baths: number;
@@ -96,7 +98,8 @@ export const properties: Property[] = [
     zone: "Cartago",
     type: "Casa",
     status: "Alquiler",
-    price: 950,
+    price: 490_000,
+    currency: "CRC",
     priceLabel: "/mes",
     beds: 3,
     baths: 2,
@@ -104,12 +107,14 @@ export const properties: Property[] = [
     image: "/properties/orosi/cover.png",
     images: [
       "/properties/orosi/cover.png",
+      "/properties/orosi/gallery.png",
       "/properties/orosi/interior-dining.png",
+      "/properties/orosi/kitchen.png",
+      "/properties/orosi/stairs.png",
       "/properties/orosi/attic-bedroom.png",
       "/properties/orosi/bedroom.png",
       "/properties/orosi/bathroom.png",
       "/properties/orosi/garden.png",
-      "/properties/orosi/gallery.png",
     ],
     description:
       "Cabaña de madera en Orosí con piscina privada, rancho con asador y amplios jardines. Ideal para descanso en el valle de Orosí, con clima fresco, naturaleza y espacios interiores cómodos para familias o grupos.",
@@ -125,202 +130,114 @@ export const properties: Property[] = [
     tags: ["Piscina", "Cabaña"],
   },
   {
-    id: "2",
-    title: "Residencia de arquitectura moderna",
-    location: "Santa Ana, San José",
-    zone: "Santa Ana",
+    id: "10",
+    title: "Casa moderna en Tejar",
+    location: "Tejar, Cartago",
+    zone: "Cartago",
     type: "Casa",
     status: "Venta",
-    price: 620000,
-    beds: 5,
-    baths: 4,
-    area: 410,
-    image: "/properties/2.jpg",
-    images: ["/properties/2.jpg", "/properties/3.jpg", "/properties/4.jpg"],
-    description:
-      "Residencia de arquitectura moderna en Santa Ana con líneas limpias, domótica integrada y espacios sociales amplios. La propiedad combina iluminación natural, materiales de alta gama y zonas verdes privadas para vivir con confort todo el año.",
-    highlights: [
-      "Sistema smart home preinstalado",
-      "Jardín tropical con riego automático",
-      "Oficina o estudio independiente",
-      "Terraza cubierta para reuniones",
-      "A minutos de Lindora y Forum",
-    ],
-    featured: true,
-    tags: ["Jardín", "Smart home"],
-  },
-  {
-    id: "3",
-    title: "Casa minimalista con piscina",
-    location: "Escazú, San José",
-    zone: "Escazú",
-    type: "Casa",
-    status: "Venta",
-    price: 395000,
+    price: 59_800_000,
+    currency: "CRC",
     beds: 3,
-    baths: 2.5,
-    area: 245,
-    image: "/properties/3.jpg",
-    images: ["/properties/3.jpg", "/properties/1.jpg", "/properties/5.jpg"],
-    description:
-      "Casa minimalista en Escazú con diseño depurado, paleta neutra y piscina privada. Distribución eficiente en un solo nivel principal, habitaciones con closet walk-in y excelente ventilación cruzada.",
-    highlights: [
-      "Piscina climatizada",
-      "Diseño de un nivel con accesibilidad",
-      "Acabados importados en baños",
-      "Barbecue integrado",
-      "Cerca de City Place y comercios",
-    ],
-    featured: true,
-    tags: ["Piscina"],
-  },
-  {
-    id: "4",
-    title: "Penthouse en condominio exclusivo",
-    location: "Santa Ana, San José",
-    zone: "Santa Ana",
-    type: "Penthouse",
-    status: "Venta",
-    price: 750000,
-    beds: 4,
-    baths: 3,
-    area: 280,
-    image: "/properties/4.jpg",
-    images: ["/properties/4.jpg", "/properties/5.jpg", "/properties/6.jpg"],
-    description:
-      "Penthouse en condominio exclusivo de Santa Ana con terraza privada, acabados de lujo y vista despejada. Incluye áreas sociales del edificio, estacionamiento asignado y opción de ingreso amueblado según negociación.",
-    highlights: [
-      "Terraza panorámica privada",
-      "Cocina gourmet equipada",
-      "Ascensor directo al nivel",
-      "Amenidades: gym y salón social",
-      "Listo para ocupar",
-    ],
-    featured: true,
-    tags: ["Terraza", "Amueblado"],
-  },
-  {
-    id: "5",
-    title: "Apartamento de lujo amueblado",
-    location: "Curridabat, San José",
-    zone: "Curridabat",
-    type: "Apartamento",
-    status: "Alquiler",
-    price: 2200,
-    priceLabel: "/mes",
-    beds: 2,
     baths: 2,
-    area: 120,
-    image: "/properties/5.jpg",
-    images: ["/properties/5.jpg", "/properties/4.jpg", "/properties/9.jpg"],
-    description:
-      "Apartamento de lujo amueblado en Curridabat, pensado para profesionales o parejas que buscan mudanza inmediata. Incluye electrodomésticos premium, balcón con vista y acceso a gimnasio y piscina del condominio.",
-    highlights: [
-      "Completamente amueblado",
-      "Contrato de alquiler flexible",
-      "Gimnasio y piscina del edificio",
-      "Seguridad y parqueo visitas",
-      "Cerca de UCR y Multiplaza del Este",
+    area: 170,
+    image: "/properties/tejar/exterior.png",
+    images: [
+      "/properties/tejar/exterior.png",
+      "/properties/tejar/living-kitchen.png",
+      "/properties/tejar/hallway.png",
+      "/properties/tejar/bedroom.png",
+      "/properties/tejar/bedroom-2.png",
+      "/properties/tejar/bathroom.png",
+      "/properties/tejar/bathroom-2.png",
     ],
-    tags: ["Amueblado", "Gimnasio"],
-  },
-  {
-    id: "6",
-    title: "Casa colonial renovada",
-    location: "Heredia Centro",
-    zone: "Heredia",
-    type: "Casa",
-    status: "Venta",
-    price: 310000,
-    beds: 4,
-    baths: 3,
-    area: 290,
-    image: "/properties/6.jpg",
-    images: ["/properties/6.jpg", "/properties/8.jpg", "/properties/2.jpg"],
     description:
-      "Casa colonial renovada en Heredia Centro que conserva fachada clásica con interiores actualizados. Patio interior, amplios techos y madera recuperada crean un ambiente cálido sin sacrificar funcionalidad moderna.",
+      "Casa moderna de una planta en Tejar, Cartago, con acabados contemporáneos y distribución funcional. Sala-comedor integrada con cocina, pisos de cerámica de alto brillo, ventanas amplias y dos baños completos. Incluye área de parqueo techado al frente.",
     highlights: [
-      "Renovación integral 2023",
-      "Jardín interior y porche",
-      "Estacionamiento techado para 3 autos",
-      "Cerca del centro histórico",
-      "Potencial para home office",
+      "Diseño moderno de una planta",
+      "Cocina con barra y topes de granito",
+      "Pisos de cerámica pulida",
+      "Parqueo techado al frente",
+      "Ubicación en Tejar, Cartago",
     ],
-    tags: ["Jardín", "Estacionamiento"],
-  },
-  {
-    id: "7",
-    title: "Villa frente al océano",
-    location: "Jacó, Puntarenas",
-    zone: "Jacó",
-    type: "Casa",
-    status: "Venta",
-    price: 890000,
-    beds: 5,
-    baths: 4.5,
-    area: 380,
-    image: "/properties/7.jpg",
-    images: ["/properties/7.jpg", "/properties/6.jpg", "/properties/3.jpg"],
-    description:
-      "Villa frente al océano en Jacó con acceso caminable a la playa, piscina infinita y amplias terrazas para entretenimiento. Propiedad de alto perfil para retiro, segunda vivienda o renta vacacional premium.",
-    highlights: [
-      "Vista y cercanía al Pacífico",
-      "Piscina infinita con deck",
-      "Suite principal con jacuzzi",
-      "Área BBQ y rancho",
-      "Gestión de alquiler disponible",
-    ],
+    featured: true,
     new: true,
-    tags: ["Playa", "Piscina infinita"],
+    tags: ["Moderna", "Parqueo"],
   },
   {
-    id: "8",
-    title: "Casa familiar en condominio",
-    location: "Heredia, San Rafael",
-    zone: "Heredia",
+    id: "11",
+    title: "Cabaña rústica en Palo Verde",
+    location: "Palo Verde, San Isidro, El Guarco",
+    zone: "Cartago",
     type: "Casa",
     status: "Venta",
-    price: 275000,
-    beds: 3,
+    price: 60_000_000,
+    currency: "CRC",
+    beds: 4,
     baths: 2,
-    area: 195,
-    image: "/properties/8.jpg",
-    images: ["/properties/8.jpg", "/properties/6.jpg", "/properties/1.jpg"],
-    description:
-      "Casa familiar en condominio cerrado de Heredia con áreas verdes comunes, calles tranquilas y excelente relación precio–espacio. Distribución clásica con sala, comedor, cocina independiente y cuarto de lavandería.",
-    highlights: [
-      "Seguridad 24/7 y garita",
-      "Parque y áreas infantiles",
-      "Cuota de mantenimiento accesible",
-      "Colegios y supermercados cercanos",
-      "Ideal primera vivienda",
+    area: 180,
+    image: "/properties/palo-verde/cover.png",
+    images: [
+      "/properties/palo-verde/cover.png",
+      "/properties/palo-verde/living-fireplace.png",
+      "/properties/palo-verde/living.png",
+      "/properties/palo-verde/dining.png",
+      "/properties/palo-verde/kitchen.png",
+      "/properties/palo-verde/bedroom.png",
+      "/properties/palo-verde/bedroom-bunk.png",
+      "/properties/palo-verde/bedroom-bunk-2.png",
+      "/properties/palo-verde/bathroom.png",
     ],
-    tags: ["Seguridad 24/7"],
+    description:
+      "Cabaña de madera en Palo Verde, San Isidro, con estilo rústico y entorno natural. Dos plantas con deck de madera, chimenea de piedra en la sala, cocina equipada, varias habitaciones con literas y baño con acabados en madera. Ideal para familia o retiro en zona verde del Guarco.",
+    highlights: [
+      "Construcción rústica en madera",
+      "Chimenea de piedra en sala",
+      "Deck y mirador al bosque",
+      "Varias habitaciones y literas",
+      "Entorno natural en El Guarco",
+    ],
+    featured: true,
+    new: true,
+    tags: ["Cabaña", "Chimenea"],
   },
   {
-    id: "9",
-    title: "Apartamento con vista panorámica",
-    location: "Escazú, San José",
-    zone: "Escazú",
-    type: "Apartamento",
-    status: "Alquiler",
-    price: 1800,
-    priceLabel: "/mes",
-    beds: 2,
+    id: "12",
+    title: "Casa moderna en Villa Bonita",
+    location: "Paraíso, Villa Bonita",
+    zone: "Cartago",
+    type: "Casa",
+    status: "Venta",
+    price: 72_000_000,
+    currency: "CRC",
+    beds: 3,
     baths: 2,
-    area: 95,
-    image: "/properties/9.jpg",
-    images: ["/properties/9.jpg", "/properties/5.jpg", "/properties/1.jpg"],
-    description:
-      "Apartamento con vista panorámica en Escazú, pet friendly y diseño contemporáneo. Piso alto, poca incidencia de ruido y excelente conectividad hacia Autopista Próspero y zonas corporativas.",
-    highlights: [
-      "Vista abierta al oeste",
-      "Política pet friendly",
-      "Balcón con barandas de vidrio",
-      "Dos parqueos asignados",
-      "Mantenimiento incluye agua",
+    area: 162,
+    image: "/properties/villa-bonita/garage.png",
+    images: [
+      "/properties/villa-bonita/garage.png",
+      "/properties/villa-bonita/exterior.png",
+      "/properties/villa-bonita/cover-flyer.png",
+      "/properties/villa-bonita/kitchen.png",
+      "/properties/villa-bonita/kitchen-2.png",
+      "/properties/villa-bonita/bedroom.png",
+      "/properties/villa-bonita/bedroom-2.png",
+      "/properties/villa-bonita/bedroom-3.png",
+      "/properties/villa-bonita/bedroom-4.png",
+      "/properties/villa-bonita/bathroom.png",
     ],
-    tags: ["Vista", "Pet friendly"],
+    description:
+      "Casa moderna de una planta en Paraíso, Villa Bonita, con fachada contemporánea, garaje para dos vehículos y acabados nuevos. Cocina con muebles de madera oscura, pisos de cerámica pulida, tres habitaciones y dos baños completos con ducha de vidrio.",
+    highlights: [
+      "Garaje para 2 vehículos",
+      "Fachada moderna con piedra y rejas",
+      "Cocina con barra desayunadora",
+      "Pisos de cerámica de alto brillo",
+      "Ubicación en Paraíso, Cartago",
+    ],
+    featured: true,
+    new: true,
+    tags: ["Moderna", "Garaje"],
   },
 ];
 
@@ -345,12 +262,17 @@ export const defaultFilters: PropertyFilters = {
   type: "Todos",
   status: "Todos",
   priceMin: 0,
-  priceMax: 400_000,
+  priceMax: 80_000_000,
   bedsMin: "any",
   bathsMin: "any",
   areaMin: "any",
   sort: "newest",
 };
+
+export function formatColones(amount: number, suffix = ""): string {
+  const rounded = Math.round(amount);
+  return `₡${rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}${suffix}`;
+}
 
 export type PriceSliderConfig = {
   min: number;
@@ -364,23 +286,26 @@ export function getPriceSliderConfig(status: PropertyStatus | "Todos"): PriceSli
   if (status === "Alquiler") {
     return {
       min: 0,
-      max: 5_000,
-      step: 100,
-      hint: "Precio mensual en USD",
-      format: (v) => `$${v.toLocaleString("en-US")}/mes`,
+      max: 2_000_000,
+      step: 25_000,
+      hint: "Precio mensual en colones",
+      format: (v) => formatColones(v, "/mes"),
     };
   }
 
   return {
     min: 0,
-    max: 400_000,
-    step: 10_000,
-    hint: "Precio de venta en USD",
-    format: (v) => `$${v.toLocaleString("en-US")}`,
+    max: 80_000_000,
+    step: 500_000,
+    hint:
+      status === "Todos"
+        ? "Precio de venta en colones (elegí Alquiler en Operación para rentas)"
+        : "Precio de venta en colones",
+    format: (v) => formatColones(v),
   };
 }
 
-/** Rangos de precio según operación (venta en USD, alquiler USD/mes) */
+/** Rangos de precio según operación (colones) */
 export type PriceRangeOption = {
   value: string;
   label: string;
@@ -390,24 +315,23 @@ export type PriceRangeOption = {
 export const priceRanges = {
   sale: [
     { value: "any", label: "Cualquier precio", shortLabel: "Todos" },
-    { value: "0-300000", label: "Hasta $300,000", shortLabel: "< $300k" },
-    { value: "300000-500000", label: "$300k – $500k", shortLabel: "$300–500k" },
-    { value: "500000-750000", label: "$500k – $750k", shortLabel: "$500–750k" },
-    { value: "750000+", label: "Más de $750,000", shortLabel: "$750k+" },
+    { value: "0-40000000", label: "Hasta ₡40 millones", shortLabel: "< ₡40M" },
+    { value: "40000000-60000000", label: "₡40M – ₡60M", shortLabel: "₡40–60M" },
+    { value: "60000000-80000000", label: "₡60M – ₡80M", shortLabel: "₡60–80M" },
+    { value: "80000000+", label: "Más de ₡80 millones", shortLabel: "₡80M+" },
   ] satisfies PriceRangeOption[],
   rent: [
     { value: "any", label: "Cualquier precio", shortLabel: "Todos" },
-    { value: "0-1500", label: "Hasta $1,500/mes", shortLabel: "< $1.5k" },
-    { value: "1500-2500", label: "$1,500 – $2,500/mes", shortLabel: "$1.5–2.5k" },
-    { value: "2500+", label: "Más de $2,500/mes", shortLabel: "$2.5k+" },
+    { value: "0-500000", label: "Hasta ₡500.000/mes", shortLabel: "< ₡500k" },
+    { value: "500000-1000000", label: "₡500.000 – ₡1M/mes", shortLabel: "₡500k–1M" },
+    { value: "1000000+", label: "Más de ₡1M/mes", shortLabel: "₡1M+" },
   ] satisfies PriceRangeOption[],
   all: [
     { value: "any", label: "Cualquier precio", shortLabel: "Todos" },
-    { value: "sale-0-400000", label: "Venta hasta $400k", shortLabel: "Venta < $400k" },
-    { value: "sale-400000-750000", label: "Venta $400k – $750k", shortLabel: "Venta $400–750k" },
-    { value: "sale-750000+", label: "Venta más de $750k", shortLabel: "Venta $750k+" },
-    { value: "rent-0-2000", label: "Alquiler hasta $2k/mes", shortLabel: "Alq. < $2k" },
-    { value: "rent-2000+", label: "Alquiler más de $2k/mes", shortLabel: "Alq. $2k+" },
+    { value: "sale-0-60000000", label: "Venta hasta ₡60M", shortLabel: "Venta < ₡60M" },
+    { value: "sale-60000000+", label: "Venta más de ₡60M", shortLabel: "Venta ₡60M+" },
+    { value: "rent-0-750000", label: "Alquiler hasta ₡750k/mes", shortLabel: "Alq. < ₡750k" },
+    { value: "rent-750000+", label: "Alquiler más de ₡750k/mes", shortLabel: "Alq. ₡750k+" },
   ] satisfies PriceRangeOption[],
 } as const;
 
@@ -443,6 +367,16 @@ export const sortOptions: { value: SortOption; label: string }[] = [
   { value: "area-desc", label: "Área: mayor a menor" },
 ];
 
+/** Normaliza el precio de una propiedad a colones. */
+const CRC_PER_USD = 515;
+
+export function getPropertyPriceAmount(property: Property): number {
+  if (property.currency === "USD") {
+    return Math.round(property.price * CRC_PER_USD);
+  }
+  return property.price;
+}
+
 function matchesPrice(
   property: Property,
   priceMin: number,
@@ -460,9 +394,11 @@ function matchesPrice(
     status === "Todos" ? property.status : status
   );
 
-  if (property.price < priceMin) return false;
+  const comparablePrice = getPropertyPriceAmount(property);
+
+  if (comparablePrice < priceMin) return false;
   if (priceMax >= config.max) return true;
-  return property.price <= priceMax;
+  return comparablePrice <= priceMax;
 }
 
 export function filterProperties(
@@ -482,10 +418,14 @@ export function filterProperties(
 
   switch (filters.sort) {
     case "price-asc":
-      result = [...result].sort((a, b) => a.price - b.price);
+      result = [...result].sort(
+        (a, b) => getPropertyPriceAmount(a) - getPropertyPriceAmount(b)
+      );
       break;
     case "price-desc":
-      result = [...result].sort((a, b) => b.price - a.price);
+      result = [...result].sort(
+        (a, b) => getPropertyPriceAmount(b) - getPropertyPriceAmount(a)
+      );
       break;
     case "area-desc":
       result = [...result].sort((a, b) => b.area - a.area);
@@ -518,8 +458,7 @@ export function getActiveFilterTags(filters: PropertyFilters): ActiveFilterTag[]
 
   const priceConfig = getPriceSliderConfig(filters.status);
   const priceActive =
-    filters.status !== "Todos" &&
-    (filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max);
+    filters.priceMin > priceConfig.min || filters.priceMax < priceConfig.max;
 
   if (priceActive) {
     tags.push({
@@ -559,9 +498,16 @@ export function getActiveFilterTags(filters: PropertyFilters): ActiveFilterTag[]
   return tags;
 }
 
-export function formatPrice(amount: number, label?: string): string {
-  const formatted = `$${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-  return label ? `${formatted}${label}` : formatted;
+export function formatPrice(
+  amount: number,
+  label?: string,
+  currency: PropertyCurrency = "CRC"
+): string {
+  if (currency === "USD") {
+    const formatted = `$${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    return label ? `${formatted}${label}` : formatted;
+  }
+  return formatColones(amount, label ?? "");
 }
 
 export function formatArea(sqm: number): string {

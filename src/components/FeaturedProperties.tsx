@@ -22,9 +22,9 @@ export default function FeaturedProperties() {
           </a>
         </div>
 
-        <div className="mt-12 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          {featuredProperties.map((property, i) => (
-            <PropertyCard key={property.id} property={property} large={i === 0} />
+        <div className="mt-12 grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-8">
+          {featuredProperties.map((property) => (
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       </div>

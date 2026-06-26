@@ -92,7 +92,7 @@ export const pt: Translations = {
   },
   financeCard: {
     fixedRate: "Taxa fixa",
-    downPayment: "Entrada ($)",
+    downPayment: "Entrada (₡)",
     minDownPayment: "* A entrada nao pode ser menor que {amount}",
     term: "Prazo",
     years: "{n} anos",
@@ -325,8 +325,8 @@ export const pt: Translations = {
         "Preencha o formulario com os dados da propriedade. Entraremos em contato para avaliacao e plano de venda.",
       location: "Onde esta localizada a propriedade?",
       locationPlaceholder: "Provincia, cantao, distrito ou endereco aproximado",
-      price: "Preco estimado (USD ou CRC)",
-      pricePlaceholder: "Ex. $350.000",
+      price: "Preco estimado (₡)",
+      pricePlaceholder: "Ex. ₡35.000.000",
       negotiable: "Preco negociavel?",
       negotiablePlaceholder:
         "Conte se o preco e negociavel, condicoes de venda ou outros detalhes importantes…",

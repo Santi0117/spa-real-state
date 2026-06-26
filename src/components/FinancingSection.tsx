@@ -7,7 +7,7 @@ import FinanceLenderCard from "@/components/forms/FinanceLenderCard";
 import PropertyVisitPicker from "@/components/forms/PropertyVisitPicker";
 import { useTranslations } from "@/components/LanguageProvider";
 import { financingLenders, minDownPayment } from "@/lib/financing";
-import { formatPrice, getPropertyById, resolvePropertySelection } from "@/lib/properties";
+import { formatPrice, getPropertyById, getPropertyPriceAmount, resolvePropertySelection } from "@/lib/properties";
 import { site } from "@/lib/site";
 import { agendarVisitaHref } from "@/lib/visit-scheduling";
 
@@ -51,7 +51,9 @@ export default function FinancingSection() {
     });
   }, [searchParams]);
 
-  const propertyPrice = selectedProperty?.price ?? 0;
+  const propertyPrice = selectedProperty
+    ? getPropertyPriceAmount(selectedProperty)
+    : 0;
   const defaultDownPayment =
     propertyPrice > 0 ? minDownPayment(propertyPrice) : 0;
 
@@ -119,7 +121,7 @@ export default function FinancingSection() {
                 </button>
               </div>
               <p className="font-display text-2xl font-semibold text-gold sm:text-3xl">
-                {formatPrice(propertyPrice)}
+                {formatPrice(propertyPrice, selectedProperty.priceLabel)}
               </p>
             </div>
 

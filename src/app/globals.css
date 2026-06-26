@@ -81,20 +81,77 @@
     @apply z-[120] min-w-[240px] rounded-2xl border border-charcoal/10 bg-white p-4 shadow-xl shadow-black/10;
   }
 
+  .filter-dropdown-portal-wide {
+    @apply min-w-[300px];
+  }
+
   .filter-dropdown-title {
     @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-gold;
   }
 
+  .price-range-slider {
+    touch-action: none;
+  }
+
+  .price-range-track {
+    @apply absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-charcoal/10;
+  }
+
+  .price-range-fill {
+    @apply absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gold;
+  }
+
   .price-range-input {
-    @apply pointer-events-auto absolute inset-x-0 top-0 h-8 w-full cursor-pointer appearance-none bg-transparent;
+    @apply absolute inset-x-0 top-0 m-0 h-10 w-full appearance-none bg-transparent;
+    pointer-events: none;
+  }
+
+  .price-range-input::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+    border: none;
+  }
+
+  .price-range-input::-moz-range-track {
+    height: 6px;
+    background: transparent;
+    border: none;
   }
 
   .price-range-input::-webkit-slider-thumb {
-    @apply pointer-events-auto h-5 w-5 cursor-grab appearance-none rounded-full border-2 border-white bg-gold shadow-md;
+    -webkit-appearance: none;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+    margin-top: -7px;
+    height: 20px;
+    width: 20px;
+    cursor: grab;
+    border-radius: 9999px;
+    border: 2px solid white;
+    background-color: var(--color-gold);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.15);
   }
 
   .price-range-input::-moz-range-thumb {
-    @apply pointer-events-auto h-5 w-5 cursor-grab rounded-full border-2 border-white bg-gold shadow-md;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+    height: 20px;
+    width: 20px;
+    cursor: grab;
+    border-radius: 9999px;
+    border: 2px solid white;
+    background-color: var(--color-gold);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.15);
+  }
+
+  .price-range-input-min {
+    z-index: 3;
+  }
+
+  .price-range-input-max {
+    z-index: 4;
   }
 
   .hide-scrollbar {

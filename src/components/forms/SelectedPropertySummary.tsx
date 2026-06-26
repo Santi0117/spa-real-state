@@ -58,7 +58,7 @@ export default function SelectedPropertySummary({
             <>
               <p className="mt-1 text-xs text-slate-warm">{property.location}</p>
               <p className="mt-1 text-xs font-semibold text-gold">
-                {formatPrice(property.price, property.priceLabel)}
+                {formatPrice(property.price, property.priceLabel, property.currency)}
               </p>
             </>
           ) : null}

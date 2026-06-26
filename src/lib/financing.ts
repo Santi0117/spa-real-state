@@ -22,7 +22,7 @@ export const financingLenders: FinancingLender[] = [
     shortName: "BAC",
     logo: "/banks/bac.svg",
     fixedRate: 7.8,
-    monthlyInsurance: 45,
+    monthlyInsurance: 23_000,
     featured: true,
   },
   {
@@ -31,7 +31,7 @@ export const financingLenders: FinancingLender[] = [
     shortName: "BN",
     logo: "/banks/bn.png",
     fixedRate: 8.5,
-    monthlyInsurance: 40,
+    monthlyInsurance: 21_000,
   },
   {
     id: "davivienda",
@@ -44,9 +44,9 @@ export const financingLenders: FinancingLender[] = [
     id: "mucap",
     name: "MUCAP",
     shortName: "MUCAP",
-    logo: "/banks/mucap.svg",
+    logo: "/banks/mucap.png",
     fixedRate: 8.75,
-    monthlyInsurance: 35,
+    monthlyInsurance: 18_000,
   },
   {
     id: "bcr",
@@ -54,7 +54,7 @@ export const financingLenders: FinancingLender[] = [
     shortName: "BCR",
     logo: "/banks/bcr.png",
     fixedRate: 7.95,
-    monthlyInsurance: 38,
+    monthlyInsurance: 20_000,
   },
   {
     id: "scotia",
@@ -62,7 +62,7 @@ export const financingLenders: FinancingLender[] = [
     shortName: "Scotiabank",
     logo: "/banks/scotia.svg",
     fixedRate: 8.25,
-    monthlyInsurance: 42,
+    monthlyInsurance: 22_000,
   },
 ];
 
@@ -113,13 +113,12 @@ export function calculateMonthlyPayment(
 }
 
 export function formatFinanceAmount(amount: number): string {
-  return `$${amount
-    .toFixed(2)
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  const rounded = Math.round(amount);
+  return `₡${rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
 }
 
 export function parseCurrencyInput(value: string): number {
-  const cleaned = value.replace(/[^0-9.]/g, "");
-  const parsed = Number.parseFloat(cleaned);
+  const cleaned = value.replace(/[^\d]/g, "");
+  const parsed = Number.parseInt(cleaned, 10);
   return Number.isFinite(parsed) ? parsed : 0;
 }

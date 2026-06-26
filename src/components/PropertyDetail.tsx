@@ -66,7 +66,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           </h1>
           <p className="mt-2 text-lg text-slate-warm">{property.location}</p>
           <p className="font-display mt-4 text-3xl font-semibold text-gold md:text-4xl">
-            {formatPrice(property.price, property.priceLabel)}
+            {formatPrice(property.price, property.priceLabel, property.currency)}
           </p>
 
           <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-charcoal/8 py-6 sm:grid-cols-4">

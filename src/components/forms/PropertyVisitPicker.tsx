@@ -94,7 +94,7 @@ export default function PropertyVisitPicker({
                 {property.title}
               </p>
               <p className="mt-0.5 text-[9px] font-semibold text-gold">
-                {formatPrice(property.price, property.priceLabel)}
+                {formatPrice(property.price, property.priceLabel, property.currency)}
               </p>
             </button>
           );

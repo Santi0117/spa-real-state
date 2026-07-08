@@ -25,7 +25,13 @@ alter table public.chat_messages enable row level security;
 create table if not exists public.form_submissions (
   id uuid primary key default gen_random_uuid(),
   form_type text not null check (
-    form_type in ('contact', 'schedule_visit', 'sell_property', 'build_house')
+    form_type in (
+      'contact',
+      'schedule_visit',
+      'schedule_reservation',
+      'sell_property',
+      'build_house'
+    )
   ),
   name text,
   email text,

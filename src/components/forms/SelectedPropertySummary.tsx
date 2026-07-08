@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { formatPrice, getPropertyById, type Property } from "@/lib/properties";
+import { formatPropertyPrice, getPropertyById, type Property } from "@/lib/properties";
 import { useTranslations } from "@/components/LanguageProvider";
 import { useImageOrientation } from "@/components/useImageOrientation";
 
@@ -9,6 +9,7 @@ type SelectedPropertySummaryProps = {
   property?: Property;
   propertyId?: string;
   title: string;
+  summaryLabel?: string;
   onChange?: () => void;
 };
 
@@ -16,6 +17,7 @@ export default function SelectedPropertySummary({
   property: propertyProp,
   propertyId,
   title,
+  summaryLabel,
   onChange,
 }: SelectedPropertySummaryProps) {
   const { t } = useTranslations();
@@ -28,7 +30,7 @@ export default function SelectedPropertySummary({
   return (
     <div className="rounded-sm border border-gold/30 bg-gold/5 p-4">
       <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-        {t.forms.selectedProperty.label}
+        {summaryLabel ?? t.forms.selectedProperty.label}
       </p>
       <div className="mt-3 flex gap-4">
         {property ? (
@@ -58,7 +60,7 @@ export default function SelectedPropertySummary({
             <>
               <p className="mt-1 text-xs text-slate-warm">{property.location}</p>
               <p className="mt-1 text-xs font-semibold text-gold">
-                {formatPrice(property.price, property.priceLabel, property.currency)}
+                {formatPropertyPrice(property)}
               </p>
             </>
           ) : null}

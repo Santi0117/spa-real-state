@@ -5,6 +5,7 @@ import { saveFormSubmission } from "@/lib/leads-db";
 const VALID_FORM_TYPES: LeadFormType[] = [
   "contact",
   "schedule_visit",
+  "schedule_reservation",
   "sell_property",
   "build_house",
 ];
@@ -83,6 +84,17 @@ function buildMessage(
     add("ID propiedad", pick(payload, ["propertyId"]));
     add("Fecha", pick(payload, ["date", "fecha"]));
     add("Hora", pick(payload, ["time", "hora"]));
+    add("Mensaje", pick(payload, ["message", "mensaje"]));
+  } else if (formType === "schedule_reservation") {
+    add("Propiedad", pick(payload, ["property", "propiedad"]));
+    add("ID propiedad", pick(payload, ["propertyId"]));
+    add("Entrada", pick(payload, ["checkIn", "entrada"]));
+    add("Salida", pick(payload, ["checkOut", "salida"]));
+    add("Noches / días", pick(payload, ["nights", "noches"]));
+    const rate = pick(payload, ["rateType", "tarifa"]);
+    if (rate === "day") add("Tarifa", "Por día");
+    else if (rate === "night") add("Tarifa", "Por noche");
+    else add("Tarifa", rate);
     add("Mensaje", pick(payload, ["message", "mensaje"]));
   } else if (formType === "sell_property") {
     add("Ubicación", pick(payload, ["location", "ubicacion"]));

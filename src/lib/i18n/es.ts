@@ -12,6 +12,8 @@ export const es: Translations = {
   cta: {
     schedule: "Agendar visita",
     scheduleShort: "Agendar",
+    scheduleReservation: "Agendar reserva",
+    scheduleReservationShort: "Reservar",
     build: "Construir tu casa",
     buildShort: "Construir",
     sell: "Vender tu casa",
@@ -231,6 +233,7 @@ export const es: Translations = {
     features: "Características",
     tags: "Etiquetas",
     scheduleVisitProperty: "Agendar visita a esta propiedad",
+    scheduleReservationProperty: "Agendar reserva en esta propiedad",
   },
   propertyVisit: {
     label: "Visita presencial",
@@ -238,6 +241,11 @@ export const es: Translations = {
     description:
       "Coordiná un recorrido de {title} con un asesor de Jopa. Elegí día y horario en el formulario.",
     scheduleVisitProperty: "Agendar visita a esta propiedad",
+    reservationLabel: "Reserva",
+    reservationTitle: "Agendar reserva",
+    reservationDescription:
+      "Reservá {title} por día o por noche. Elegí las fechas de entrada y salida en el calendario.",
+    scheduleReservationProperty: "Agendar reserva en esta propiedad",
     viewMore: "Ver más propiedades",
   },
   assistant: {
@@ -285,9 +293,33 @@ export const es: Translations = {
         "Estás agendando una visita para esta propiedad. Elegí el día y horario que más te convenga; un asesor te confirmará la cita.",
       confirm: "Confirmar visita",
     },
+    scheduleReservation: {
+      title: "Agendar reserva",
+      titleWithProperty: "Agendar reserva — {property}",
+      description:
+        "Elegí la propiedad y las fechas de tu estadía. Un asesor confirmará disponibilidad y tarifa.",
+      descriptionWithProperty:
+        "Estás reservando esta propiedad. Elegí si preferís tarifa por día o por noche y marcá entrada y salida en el calendario.",
+      confirm: "Confirmar reserva",
+    },
     selectedProperty: {
       label: "Visita para esta propiedad",
+      reservationLabel: "Reserva para esta propiedad",
       chooseOther: "Elegir otra propiedad",
+    },
+    reservation: {
+      rateTypeLabel: "Tipo de tarifa",
+      perDay: "Por día",
+      perNight: "Por noche",
+      pickDates: "Elegí fechas de entrada y salida",
+      checkIn: "Entrada",
+      checkOut: "Salida",
+      selectCheckIn: "Seleccioná el día de entrada en el calendario.",
+      selectCheckout: "Ahora elegí el día de salida.",
+      staySummary: "{count} {unit}",
+      dayUnit: "días",
+      nightUnit: "noches",
+      estimatedTotal: "Total estimado: {total}",
     },
     calendar: {
       pickDayTime: "Elegí día y horario (8:00 a.m. – 4:00 p.m.)",

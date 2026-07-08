@@ -12,6 +12,8 @@ export type Translations = {
   cta: {
     schedule: string;
     scheduleShort: string;
+    scheduleReservation: string;
+    scheduleReservationShort: string;
     build: string;
     buildShort: string;
     sell: string;
@@ -181,12 +183,17 @@ export type Translations = {
     features: string;
     tags: string;
     scheduleVisitProperty: string;
+    scheduleReservationProperty: string;
   };
   propertyVisit: {
     label: string;
     title: string;
     description: string;
     scheduleVisitProperty: string;
+    reservationLabel: string;
+    reservationTitle: string;
+    reservationDescription: string;
+    scheduleReservationProperty: string;
     viewMore: string;
   };
   assistant: {
@@ -223,9 +230,31 @@ export type Translations = {
       descriptionWithProperty: string;
       confirm: string;
     };
+    scheduleReservation: {
+      title: string;
+      titleWithProperty: string;
+      description: string;
+      descriptionWithProperty: string;
+      confirm: string;
+    };
     selectedProperty: {
       label: string;
+      reservationLabel: string;
       chooseOther: string;
+    };
+    reservation: {
+      rateTypeLabel: string;
+      perDay: string;
+      perNight: string;
+      pickDates: string;
+      checkIn: string;
+      checkOut: string;
+      selectCheckIn: string;
+      selectCheckout: string;
+      staySummary: string;
+      dayUnit: string;
+      nightUnit: string;
+      estimatedTotal: string;
     };
     calendar: {
       pickDayTime: string;

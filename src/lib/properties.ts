@@ -2,6 +2,11 @@ export type PropertyType = "Casa" | "Apartamento" | "Terreno" | "Penthouse";
 export type PropertyStatus = "Venta" | "Alquiler";
 export type PropertyCurrency = "USD" | "CRC";
 
+export type RentalRates = {
+  perDay: number;
+  perNight: number;
+};
+
 export type Property = {
   id: string;
   title: string;
@@ -12,6 +17,8 @@ export type Property = {
   price: number;
   currency?: PropertyCurrency;
   priceLabel?: string;
+  /** Tarifas por día y noche (alquiler corto, ej. cabaña). */
+  rentalRates?: RentalRates;
   beds: number;
   baths: number;
   area: number;
@@ -98,9 +105,13 @@ export const properties: Property[] = [
     zone: "Cartago",
     type: "Casa",
     status: "Alquiler",
-    price: 490_000,
+    price: 220_000,
     currency: "CRC",
-    priceLabel: "/mes",
+    priceLabel: "/noche",
+    rentalRates: {
+      perDay: 180_000,
+      perNight: 220_000,
+    },
     beds: 3,
     baths: 2,
     area: 280,
@@ -511,6 +522,19 @@ export function formatPrice(
     return label ? `${formatted}${label}` : formatted;
   }
   return formatColones(amount, label ?? "");
+}
+
+/** Alquiler corto con tarifa diaria y nocturna (ej. cabaña en Orosí). */
+export function isReservationProperty(property: Property): boolean {
+  return property.status === "Alquiler" && Boolean(property.rentalRates);
+}
+
+export function formatPropertyPrice(property: Property): string {
+  if (property.rentalRates) {
+    const { perDay, perNight } = property.rentalRates;
+    return `${formatColones(perDay, "/día")} · ${formatColones(perNight, "/noche")}`;
+  }
+  return formatPrice(property.price, property.priceLabel, property.currency);
 }
 
 export function formatArea(sqm: number): string {

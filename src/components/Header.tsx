@@ -7,12 +7,15 @@ import BrandLogo from "@/components/BrandLogo";
 import LanguageFlags from "@/components/LanguageFlags";
 import { useTranslations } from "@/components/LanguageProvider";
 import { navLinks, ctaButtons } from "@/lib/nav";
-import { agendarVisitaHref, propertyIdFromPathname } from "@/lib/visit-scheduling";
+import { propertyIdFromPathname, schedulingHrefById } from "@/lib/visit-scheduling";
+import { getPropertyById, isReservationProperty } from "@/lib/properties";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const currentPropertyId = propertyIdFromPathname(pathname);
+  const currentProperty = currentPropertyId ? getPropertyById(currentPropertyId) : undefined;
+  const isReservation = currentProperty ? isReservationProperty(currentProperty) : false;
   const { t } = useTranslations();
 
   const navLabels: Record<(typeof navLinks)[number]["key"], string> = {
@@ -25,14 +28,17 @@ export default function Header() {
   };
 
   const ctaLabels: Record<(typeof ctaButtons)[number]["key"], { label: string; short: string }> = {
-    schedule: { label: t.cta.schedule, short: t.cta.scheduleShort },
+    schedule: {
+      label: isReservation ? t.cta.scheduleReservation : t.cta.schedule,
+      short: isReservation ? t.cta.scheduleReservationShort : t.cta.scheduleShort,
+    },
     build: { label: t.cta.build, short: t.cta.buildShort },
     sell: { label: t.cta.sell, short: t.cta.sellShort },
   };
 
   function ctaHref(href: string) {
     if (href === "/agendar-visita" && currentPropertyId) {
-      return agendarVisitaHref({ propertyId: currentPropertyId });
+      return schedulingHrefById(currentPropertyId);
     }
     return href;
   }

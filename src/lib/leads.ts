@@ -1,6 +1,7 @@
 export type LeadFormType =
   | "contact"
   | "schedule_visit"
+  | "schedule_reservation"
   | "sell_property"
   | "build_house";
 

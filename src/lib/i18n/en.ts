@@ -12,6 +12,8 @@ export const en: Translations = {
   cta: {
     schedule: "Schedule visit",
     scheduleShort: "Schedule",
+    scheduleReservation: "Book stay",
+    scheduleReservationShort: "Book",
     build: "Build your home",
     buildShort: "Build",
     sell: "Sell your home",
@@ -230,6 +232,7 @@ export const en: Translations = {
     features: "Features",
     tags: "Tags",
     scheduleVisitProperty: "Schedule visit for this property",
+    scheduleReservationProperty: "Book this property",
   },
   propertyVisit: {
     label: "In-person visit",
@@ -237,6 +240,11 @@ export const en: Translations = {
     description:
       "Arrange a tour of {title} with a Jopa advisor. Choose day and time in the form.",
     scheduleVisitProperty: "Schedule visit for this property",
+    reservationLabel: "Booking",
+    reservationTitle: "Book your stay",
+    reservationDescription:
+      "Book {title} by day or by night. Pick check-in and check-out dates on the calendar.",
+    scheduleReservationProperty: "Book this property",
     viewMore: "View more properties",
   },
   assistant: {
@@ -284,9 +292,33 @@ export const en: Translations = {
         "You are scheduling a visit for this property. Choose the day and time that work best; an advisor will confirm.",
       confirm: "Confirm visit",
     },
+    scheduleReservation: {
+      title: "Book your stay",
+      titleWithProperty: "Book stay — {property}",
+      description:
+        "Choose the property and your stay dates. An advisor will confirm availability and rate.",
+      descriptionWithProperty:
+        "You are booking this property. Choose day or night rate and mark check-in and check-out on the calendar.",
+      confirm: "Confirm booking",
+    },
     selectedProperty: {
       label: "Visit for this property",
+      reservationLabel: "Booking for this property",
       chooseOther: "Choose another property",
+    },
+    reservation: {
+      rateTypeLabel: "Rate type",
+      perDay: "Per day",
+      perNight: "Per night",
+      pickDates: "Choose check-in and check-out dates",
+      checkIn: "Check-in",
+      checkOut: "Check-out",
+      selectCheckIn: "Select your check-in day on the calendar.",
+      selectCheckout: "Now select your check-out day.",
+      staySummary: "{count} {unit}",
+      dayUnit: "days",
+      nightUnit: "nights",
+      estimatedTotal: "Estimated total: {total}",
     },
     calendar: {
       pickDayTime: "Choose day and time (8:00 a.m. – 4:00 p.m.)",

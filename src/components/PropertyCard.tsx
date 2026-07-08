@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { formatArea, formatPrice, propertyHref, type Property } from "@/lib/properties";
+import { formatArea, formatPropertyPrice, propertyHref, type Property } from "@/lib/properties";
 import { useTranslations } from "@/components/LanguageProvider";
 import { formatMessage, type Translations } from "@/lib/i18n";
 import PropertyImage from "./PropertyImage";
@@ -101,7 +101,7 @@ export default function PropertyCard({
               </p>
             </div>
             <p className={priceClass}>
-              {formatPrice(property.price, property.priceLabel, property.currency)}
+              {formatPropertyPrice(property)}
             </p>
           </div>
 

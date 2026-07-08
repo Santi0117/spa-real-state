@@ -7,11 +7,12 @@ import PropertyVisitCta from "./PropertyVisitCta";
 import { useTranslations } from "@/components/LanguageProvider";
 import {
   formatArea,
-  formatPrice,
+  formatPropertyPrice,
+  isReservationProperty,
   type Property,
 } from "@/lib/properties";
 import { type Translations } from "@/lib/i18n";
-import { agendarVisitaHref, financiarHref } from "@/lib/visit-scheduling";
+import { financiarHref, schedulingHref } from "@/lib/visit-scheduling";
 
 type PropertyDetailProps = {
   property: Property;
@@ -34,7 +35,8 @@ function translatePropertyType(type: Property["type"], t: Translations) {
 
 export default function PropertyDetail({ property }: PropertyDetailProps) {
   const { t } = useTranslations();
-  const visitHref = agendarVisitaHref({ propertyId: property.id });
+  const reservation = isReservationProperty(property);
+  const scheduleHref = schedulingHref(property);
   const financeHref = financiarHref({ propertyId: property.id });
   const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
   const typeLabel = translatePropertyType(property.type, t);
@@ -66,7 +68,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           </h1>
           <p className="mt-2 text-lg text-slate-warm">{property.location}</p>
           <p className="font-display mt-4 text-3xl font-semibold text-gold md:text-4xl">
-            {formatPrice(property.price, property.priceLabel, property.currency)}
+            {formatPropertyPrice(property)}
           </p>
 
           <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-charcoal/8 py-6 sm:grid-cols-4">
@@ -133,12 +135,16 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           )}
 
           <div className="mt-10 space-y-3 border-t border-charcoal/8 pt-8 lg:hidden">
-            <Link href={visitHref} className="btn-gold w-full justify-center rounded-sm">
-              {t.propertyDetail.scheduleVisitProperty}
+            <Link href={scheduleHref} className="btn-gold w-full justify-center rounded-sm">
+              {reservation
+                ? t.propertyDetail.scheduleReservationProperty
+                : t.propertyDetail.scheduleVisitProperty}
             </Link>
-            <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
-              {t.common.finance}
-            </Link>
+            {!reservation ? (
+              <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
+                {t.common.finance}
+              </Link>
+            ) : null}
           </div>
         </div>
 

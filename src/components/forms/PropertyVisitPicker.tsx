@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import {
-  formatPrice,
+  formatPropertyPrice,
   getCatalogProperties,
   type Property,
 } from "@/lib/properties";
@@ -94,7 +94,7 @@ export default function PropertyVisitPicker({
                 {property.title}
               </p>
               <p className="mt-0.5 text-[9px] font-semibold text-gold">
-                {formatPrice(property.price, property.priceLabel, property.currency)}
+                {formatPropertyPrice(property)}
               </p>
             </button>
           );

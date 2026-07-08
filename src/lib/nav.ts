@@ -1,4 +1,6 @@
-export const navLinks = [
+import { CONDOMINIUMS_VISIBLE } from "./condominiums";
+
+const allNavLinks = [
   { href: "/#destacadas", key: "properties" as const },
   { href: "/condominios/vista-verde", key: "condominium" as const },
   { href: "/#zonas", key: "zones" as const },
@@ -6,6 +8,10 @@ export const navLinks = [
   { href: "/#nosotros", key: "about" as const },
   { href: "/#contacto", key: "contact" as const },
 ] as const;
+
+export const navLinks = allNavLinks.filter(
+  (link) => CONDOMINIUMS_VISIBLE || link.key !== "condominium"
+);
 
 export const ctaButtons = [
   { href: "/agendar-visita", key: "schedule" as const },

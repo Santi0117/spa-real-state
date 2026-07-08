@@ -7,7 +7,7 @@ import PropertyCard from "./PropertyCard";
 import PropertyFiltersBar from "./PropertyFiltersBar";
 import { useTranslations } from "@/components/LanguageProvider";
 import { buildCatalogHref, filtersFromSearchParams } from "@/lib/catalog-filters";
-import { condominiums } from "@/lib/condominiums";
+import { getVisibleCondominiums } from "@/lib/condominiums";
 import {
   filterProperties,
   properties,
@@ -71,7 +71,7 @@ export default function PropertyGrid() {
         />
 
         <div className="relative z-0 mt-12 grid min-w-0 grid-cols-1 gap-6 overflow-hidden sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {condominiums.map((condo) => (
+          {getVisibleCondominiums().map((condo) => (
             <CondominiumListingCard key={condo.id} condominium={condo} />
           ))}
           {filtered.map((property) => (

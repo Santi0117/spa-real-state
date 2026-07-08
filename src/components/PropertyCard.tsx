@@ -51,6 +51,7 @@ export default function PropertyCard({
 
   const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
   const typeLabel = translatePropertyType(property.type, t);
+  const hasDualRate = Boolean(property.rentalRates);
 
   const tagsOverlay = (
     <div className="pointer-events-none absolute right-0 top-0 z-10 flex gap-px">
@@ -93,16 +94,28 @@ export default function PropertyCard({
             {typeLabel} · {property.zone}
           </p>
 
-          <div className="mt-1 flex items-start justify-between gap-3">
-            <div className="min-w-0 flex-1">
-              <h3 className={titleClass}>{property.title}</h3>
-              <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
-                {property.location}
-              </p>
-            </div>
-            <p className={priceClass}>
-              {formatPropertyPrice(property)}
-            </p>
+          <div className={`mt-1 ${hasDualRate ? "space-y-2" : ""}`}>
+            {hasDualRate ? (
+              <>
+                <h3 className={titleClass}>{property.title}</h3>
+                <p className="font-display text-base font-semibold leading-snug text-gold sm:text-lg">
+                  {formatPropertyPrice(property)}
+                </p>
+                <p className={`text-slate-warm ${compact ? "text-xs" : "text-sm"}`}>
+                  {property.location}
+                </p>
+              </>
+            ) : (
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <h3 className={titleClass}>{property.title}</h3>
+                  <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
+                    {property.location}
+                  </p>
+                </div>
+                <p className={priceClass}>{formatPropertyPrice(property)}</p>
+              </div>
+            )}
           </div>
 
           {showDescription && (

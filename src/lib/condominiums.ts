@@ -164,6 +164,13 @@ export const vistaVerde: Condominium = {
 
 export const condominiums: Condominium[] = [vistaVerde];
 
+/** Ocultar en catálogo y navegación sin borrar datos (activar cuando haya uno listo). */
+export const CONDOMINIUMS_VISIBLE = false;
+
+export function getVisibleCondominiums(): Condominium[] {
+  return CONDOMINIUMS_VISIBLE ? condominiums : [];
+}
+
 export function getCondominiumBySlug(slug: string): Condominium | undefined {
   return condominiums.find((c) => c.slug === slug);
 }

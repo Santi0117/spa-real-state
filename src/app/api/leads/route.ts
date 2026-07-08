@@ -64,6 +64,48 @@ function pick(payload: Record<string, string>, keys: string[]): string | null {
   return null;
 }
 
+/**
+ * Construye un resumen legible con TODOS los datos relevantes de cada
+ * formulario, para que la columna `message` en Supabase muestre la
+ * información completa (casa, fecha, hora, ubicación, presupuesto, etc.).
+ */
+function buildMessage(
+  formType: LeadFormType,
+  payload: Record<string, string>
+): string | null {
+  const lines: string[] = [];
+  const add = (label: string, value: string | null) => {
+    if (value) lines.push(`${label}: ${value}`);
+  };
+
+  if (formType === "schedule_visit") {
+    add("Propiedad", pick(payload, ["property", "propiedad"]));
+    add("ID propiedad", pick(payload, ["propertyId"]));
+    add("Fecha", pick(payload, ["date", "fecha"]));
+    add("Hora", pick(payload, ["time", "hora"]));
+    add("Mensaje", pick(payload, ["message", "mensaje"]));
+  } else if (formType === "sell_property") {
+    add("Ubicación", pick(payload, ["location", "ubicacion"]));
+    add("Precio estimado", pick(payload, ["price", "precio"]));
+    add("Negociable / detalles", pick(payload, ["negotiable", "negociable"]));
+    add("Mensaje", pick(payload, ["message", "mensaje"]));
+  } else if (formType === "build_house") {
+    const hasLot = pick(payload, ["hasLot"]);
+    add("¿Tiene lote?", hasLot === "si" ? "Sí" : hasLot === "no" ? "No" : hasLot);
+    add(
+      "Quiere ayuda para buscar lote",
+      pick(payload, ["findLot"]) ? "Sí" : null
+    );
+    add("Presupuesto", pick(payload, ["budget", "presupuesto"]));
+    add("Mensaje", pick(payload, ["message", "mensaje"]));
+  } else {
+    add("Interés", pick(payload, ["interest", "interes"]));
+    add("Mensaje", pick(payload, ["message", "mensaje"]));
+  }
+
+  return lines.length > 0 ? lines.join("\n") : null;
+}
+
 export async function POST(request: Request) {
   try {
     const clientId = getClientId(request);
@@ -108,7 +150,7 @@ export async function POST(request: Request) {
       name,
       email: pick(payload, ["email", "correo"]),
       phone: pick(payload, ["phone", "telefono", "tel"]),
-      message: pick(payload, ["message", "mensaje", "negotiable", "budget"]),
+      message: buildMessage(formType, payload),
       payload,
       locale,
     });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import CondominiumListingCard from "./CondominiumListingCard";
 import PropertyCard from "./PropertyCard";
@@ -26,11 +26,31 @@ export default function PropertyGrid() {
     setFilters(filtersFromSearchParams(searchParams));
   }, [searchParams]);
 
+  const pendingHrefRef = useRef<string | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
   const filtered = filterProperties(properties, filters);
 
   function handleFilterChange(next: PropertyFilters) {
     setFilters(next);
-    router.replace(buildCatalogHref(next), { scroll: false });
+
+    // Debounce the URL sync. Dragging the price slider fires many change
+    // events per second, and calling router.replace() (history.replaceState)
+    // that often makes mobile Safari throw a SecurityError and crash the page.
+    pendingHrefRef.current = buildCatalogHref(next);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (pendingHrefRef.current) {
+        router.replace(pendingHrefRef.current, { scroll: false });
+        pendingHrefRef.current = null;
+      }
+    }, 300);
   }
 
   return (

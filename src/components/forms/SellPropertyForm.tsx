@@ -3,21 +3,36 @@
 import { useState } from "react";
 import FormSuccess from "./FormSuccess";
 import { useTranslations } from "@/components/LanguageProvider";
+import { submitLead } from "@/lib/leads";
 
 export default function SellPropertyForm() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (submitting) return;
+
+    const payload = Object.fromEntries(new FormData(e.currentTarget));
+    setSubmitting(true);
+    setError(false);
+
+    const ok = await submitLead({ formType: "sell_property", payload, locale });
+
+    setSubmitting(false);
+    if (ok) {
+      setSent(true);
+    } else {
+      setError(true);
+    }
+  }
 
   if (sent) return <FormSuccess />;
 
   return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSent(true);
-      }}
-    >
+    <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="firstName" className="mb-1.5 block text-sm font-medium text-charcoal/80">
@@ -81,8 +96,13 @@ export default function SellPropertyForm() {
           placeholder={t.forms.sellProperty.negotiablePlaceholder}
         />
       </div>
-      <button type="submit" className="btn-gold w-full justify-center rounded-sm">
-        {t.forms.sellProperty.submit}
+      {error && <p className="text-sm text-red-600">{t.forms.errorMessage}</p>}
+      <button
+        type="submit"
+        disabled={submitting}
+        className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {submitting ? t.forms.submitting : t.forms.sellProperty.submit}
       </button>
     </form>
   );

@@ -135,6 +135,8 @@ export type Translations = {
     message: string;
     messagePlaceholder: string;
     submit: string;
+    submitting: string;
+    errorMessage: string;
     successTitle: string;
     successMessage: string;
     buy: string;
@@ -209,6 +211,8 @@ export type Translations = {
     termsPrefix: string;
     termsLink: string;
     termsSuffix: string;
+    submitting: string;
+    errorMessage: string;
     successTitle: string;
     successMessage: string;
     selectPropertyHint: string;

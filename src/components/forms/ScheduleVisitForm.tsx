@@ -7,6 +7,7 @@ import PropertyVisitPicker from "./PropertyVisitPicker";
 import SelectedPropertySummary from "./SelectedPropertySummary";
 import VisitCalendar from "./VisitCalendar";
 import { useTranslations } from "@/components/LanguageProvider";
+import { submitLead } from "@/lib/leads";
 import {
   getPropertyById,
   resolvePropertySelection,
@@ -40,13 +41,15 @@ export default function ScheduleVisitForm({
   propertyName: initialName,
   propertyId: initialId,
 }: ScheduleVisitFormProps) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const prefill = useMemo(
     () => resolvePrefill(initialId, initialName),
     [initialId, initialName]
   );
 
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedId, setSelectedId] = useState(prefill.id);
@@ -69,6 +72,31 @@ export default function ScheduleVisitForm({
     selectedDate && selectedTime && selectedTitle && acceptedTerms
   );
 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!canSubmit || submitting) return;
+
+    const payload = {
+      ...Object.fromEntries(new FormData(e.currentTarget)),
+      property: selectedTitle,
+      propertyId: selectedId,
+      date: selectedDate,
+      time: selectedTime,
+    };
+
+    setSubmitting(true);
+    setError(false);
+
+    const ok = await submitLead({ formType: "schedule_visit", payload, locale });
+
+    setSubmitting(false);
+    if (ok) {
+      setSent(true);
+    } else {
+      setError(true);
+    }
+  }
+
   if (sent) return <FormSuccess />;
 
   function handlePropertySelect(id: string, _title: string) {
@@ -78,14 +106,7 @@ export default function ScheduleVisitForm({
   }
 
   return (
-    <form
-      className="space-y-5"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!canSubmit) return;
-        setSent(true);
-      }}
-    >
+    <form className="space-y-5" onSubmit={handleSubmit}>
       {showPicker ? (
         <PropertyVisitPicker selectedId={selectedId} onSelect={handlePropertySelect} />
       ) : selectedTitle ? (
@@ -159,12 +180,14 @@ export default function ScheduleVisitForm({
         </span>
       </label>
 
+      {error && <p className="text-sm text-red-600">{t.forms.errorMessage}</p>}
+
       <button
         type="submit"
-        disabled={!canSubmit}
+        disabled={!canSubmit || submitting}
         className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {t.forms.scheduleVisit.confirm}
+        {submitting ? t.forms.submitting : t.forms.scheduleVisit.confirm}
       </button>
     </form>
   );

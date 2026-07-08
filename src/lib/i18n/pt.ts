@@ -183,6 +183,9 @@ export const pt: Translations = {
     message: "Mensagem",
     messagePlaceholder: "Regiao, orcamento, quartos...",
     submit: "Enviar consulta",
+    submitting: "Enviando...",
+    errorMessage:
+      "Nao foi possivel enviar sua consulta. Tente novamente ou fale conosco no WhatsApp.",
     successTitle: "Pronto!",
     successMessage:
       "Entraremos em contato muito em breve. Obrigado por confiar na Jopa.",
@@ -267,6 +270,9 @@ export const pt: Translations = {
     termsPrefix: "Aceito os",
     termsLink: "termos e condicoes",
     termsSuffix: "da Jopa Real Estate.",
+    submitting: "Enviando...",
+    errorMessage:
+      "Nao foi possivel enviar o formulario. Tente novamente ou fale conosco no WhatsApp.",
     successTitle: "Recebido!",
     successMessage:
       "Um consultor Jopa entrara em contato em breve. Obrigado pela confianca.",

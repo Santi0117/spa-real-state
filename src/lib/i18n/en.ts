@@ -182,6 +182,9 @@ export const en: Translations = {
     message: "Message",
     messagePlaceholder: "Area, budget, bedrooms...",
     submit: "Send inquiry",
+    submitting: "Sending...",
+    errorMessage:
+      "We couldn't send your inquiry. Please try again or message us on WhatsApp.",
     successTitle: "Done!",
     successMessage: "We will contact you very soon. Thank you for trusting Jopa.",
     buy: "Buying a property",
@@ -265,6 +268,9 @@ export const en: Translations = {
     termsPrefix: "I accept the",
     termsLink: "terms and conditions",
     termsSuffix: "of Jopa Real Estate.",
+    submitting: "Sending...",
+    errorMessage:
+      "We couldn't send the form. Please try again or message us on WhatsApp.",
     successTitle: "Received!",
     successMessage:
       "A Jopa advisor will contact you very soon. Thank you for trusting us.",

@@ -4,15 +4,31 @@ import { useState } from "react";
 import OfficeAddress from "@/components/OfficeAddress";
 import SocialLinks from "@/components/SocialLinks";
 import { useTranslations } from "@/components/LanguageProvider";
+import { submitLead } from "@/lib/leads";
 import { site } from "@/lib/site";
 
 export default function Contact() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
+    if (submitting) return;
+
+    const payload = Object.fromEntries(new FormData(e.currentTarget));
+    setSubmitting(true);
+    setError(false);
+
+    const ok = await submitLead({ formType: "contact", payload, locale });
+
+    setSubmitting(false);
+    if (ok) {
+      setSent(true);
+    } else {
+      setError(true);
+    }
   }
 
   return (
@@ -112,8 +128,15 @@ export default function Contact() {
                     placeholder={t.contact.messagePlaceholder}
                   />
                 </div>
-                <button type="submit" className="btn-gold w-full justify-center rounded-sm">
-                  {t.contact.submit}
+                {error && (
+                  <p className="text-sm text-red-600">{t.contact.errorMessage}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {submitting ? t.contact.submitting : t.contact.submit}
                 </button>
               </form>
             )}

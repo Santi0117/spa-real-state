@@ -60,7 +60,7 @@ export default function PropertyVisitPicker({
               } ${isSelected ? "opacity-100" : "opacity-85 hover:opacity-100"}`}
             >
               <div
-                className={`relative overflow-hidden rounded-sm border-2 bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                className={`relative overflow-hidden rounded-sm border-2 bg-sand transition ${thumbFrameClass(orientation)} ${
                   isSelected
                     ? "border-gold shadow-md shadow-gold/20"
                     : "border-charcoal/10 hover:border-gold/40"

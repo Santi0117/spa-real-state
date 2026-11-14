@@ -48,45 +48,54 @@ export default function SearchBar() {
 
   return (
     <form
-      className="mx-auto w-full max-w-4xl rounded-sm bg-white p-2 shadow-2xl shadow-black/20 sm:p-3"
+      className="w-full rounded-3xl bg-white px-5 py-4 shadow-2xl shadow-navy/30 sm:px-6 lg:rounded-full lg:py-3 lg:pl-7 lg:pr-3"
       onSubmit={handleSubmit}
     >
-      <div className="grid gap-2 sm:grid-cols-4">
-        <div className="sm:col-span-1">
-          <label htmlFor="search-type" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+      <div className="grid items-end gap-4 sm:grid-cols-3 lg:grid-cols-[auto_1fr_1fr_1fr_auto] lg:gap-6">
+        <svg
+          className="hidden h-5 w-5 self-center text-gold lg:block"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          aria-hidden
+        >
+          <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" />
+          <circle cx="12" cy="9.5" r="2.5" />
+        </svg>
+        <div>
+          <label htmlFor="search-type" className="field-label">
             {t.search.type}
           </label>
-          <select id="search-type" name="type" defaultValue="Todos" className="input-field rounded-sm">
+          <select id="search-type" name="type" defaultValue="Todos" className="input-field font-medium">
             {types.map((item) => (
               <option key={item.value} value={item.value}>{item.label}</option>
             ))}
           </select>
         </div>
-        <div className="sm:col-span-1">
-          <label htmlFor="search-zone" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+        <div>
+          <label htmlFor="search-zone" className="field-label">
             {t.search.zone}
           </label>
-          <select id="search-zone" name="zone" defaultValue="Todas" className="input-field rounded-sm">
+          <select id="search-zone" name="zone" defaultValue="Todas" className="input-field font-medium">
             {zones.map((z) => (
               <option key={z} value={z}>{z === "Todas" ? t.search.allZones : z}</option>
             ))}
           </select>
         </div>
-        <div className="sm:col-span-1">
-          <label htmlFor="search-status" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+        <div>
+          <label htmlFor="search-status" className="field-label">
             {t.search.operation}
           </label>
-          <select id="search-status" name="status" defaultValue="Todos" className="input-field rounded-sm">
+          <select id="search-status" name="status" defaultValue="Todos" className="input-field font-medium">
             <option value="Venta">{t.search.sale}</option>
             <option value="Alquiler">{t.search.rent}</option>
             <option value="Todos">{t.search.both}</option>
           </select>
         </div>
-        <div className="flex items-end sm:col-span-1">
-          <button type="submit" className="btn-gold w-full justify-center rounded-sm py-3.5">
-            {t.search.search}
-          </button>
-        </div>
+        <button type="submit" className="btn-navy w-full justify-center px-12 sm:col-span-3 lg:col-span-1 lg:w-auto">
+          {t.search.search}
+        </button>
       </div>
     </form>
   );

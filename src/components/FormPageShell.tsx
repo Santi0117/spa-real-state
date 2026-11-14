@@ -31,7 +31,7 @@ export default function FormPageShell({
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-cream pt-24 pb-20 md:pt-28">
+      <main className="min-h-screen bg-sand pt-28 pb-20 md:pt-32">
         <div
           className={`mx-auto px-4 sm:px-6 ${
             wide ? "max-w-6xl" : "max-w-2xl"
@@ -45,14 +45,14 @@ export default function FormPageShell({
           ) : (
             <p className="section-label mt-8">{t.common.formLabel}</p>
           )}
-          <h1 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
+          <h1 className="font-display mt-4 text-4xl font-normal tracking-tight text-navy md:text-6xl">
             {title}
           </h1>
           <p className="mt-4 text-sm leading-relaxed text-slate-warm">{description}</p>
           {unboxed ? (
             <div className="mt-10">{children}</div>
           ) : (
-            <div className="mt-10 border border-charcoal/8 bg-white p-6 shadow-sm md:p-8">{children}</div>
+            <div className="mt-10 rounded-2xl bg-white p-6 shadow-sm shadow-navy/5 md:p-10">{children}</div>
           )}
         </div>
       </main>

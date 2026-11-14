@@ -36,7 +36,7 @@ export default async function CondominiumPage({ params }: PageProps) {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-cream pb-20 pt-24 md:pt-28">
+      <main className="min-h-screen bg-cream pb-20 pt-28 md:pt-32">
         <CondominiumDetail condominium={condominium} />
       </main>
       <Footer />

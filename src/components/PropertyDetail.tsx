@@ -6,6 +6,7 @@ import PropertyGallery from "./PropertyGallery";
 import PropertyVisitCta from "./PropertyVisitCta";
 import { useTranslations } from "@/components/LanguageProvider";
 import {
+  canFinance,
   formatArea,
   formatPropertyPrice,
   isReservationProperty,
@@ -38,6 +39,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
   const reservation = isReservationProperty(property);
   const scheduleHref = schedulingHref(property);
   const financeHref = financiarHref({ propertyId: property.id });
+  const financeable = canFinance(property);
   const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
   const typeLabel = translatePropertyType(property.type, t);
 
@@ -51,51 +53,53 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
 
           <div className="mt-8 flex flex-wrap items-center gap-2">
             {property.new && (
-              <span className="bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              <span className="bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-navy">
                 {t.property.new}
               </span>
             )}
-            <span className="bg-charcoal px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            <span className="bg-navy px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
               {statusLabel}
             </span>
-            <span className="border border-charcoal/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-charcoal">
+            <span className="rounded-full border border-navy/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-navy">
               {typeLabel}
             </span>
           </div>
 
-          <h1 className="font-display mt-4 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
+          <h1 className="font-display mt-4 text-4xl font-normal tracking-tight text-navy md:text-6xl">
             {property.title}
           </h1>
           <p className="mt-2 text-lg text-slate-warm">{property.location}</p>
-          <p className="font-display mt-4 text-3xl font-semibold text-gold md:text-4xl">
+          <p className="mt-5 text-2xl font-bold text-navy md:text-3xl">
             {formatPropertyPrice(property)}
           </p>
 
-          <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-charcoal/8 py-6 sm:grid-cols-4">
+          <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-navy/15 py-6 sm:grid-cols-4">
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
                 {t.propertyDetail.zone}
               </dt>
-              <dd className="mt-1 font-medium text-charcoal">{property.zone}</dd>
+              <dd className="font-display mt-1 text-xl text-navy">{property.zone}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
                 {t.propertyDetail.bedrooms}
               </dt>
-              <dd className="mt-1 font-medium text-charcoal">{property.beds}</dd>
+              <dd className="font-display mt-1 text-xl text-navy">{property.beds}</dd>
             </div>
             <div>
               <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
                 {t.propertyDetail.bathrooms}
               </dt>
-              <dd className="mt-1 font-medium text-charcoal">{property.baths}</dd>
+              <dd className="font-display mt-1 text-xl text-navy">{property.baths}</dd>
             </div>
-            <div>
-              <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
-                {t.propertyDetail.area}
-              </dt>
-              <dd className="mt-1 font-medium text-charcoal">{formatArea(property.area)}</dd>
-            </div>
+            {property.area ? (
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+                  {t.propertyDetail.area}
+                </dt>
+                <dd className="font-display mt-1 text-xl text-navy">{formatArea(property.area)}</dd>
+              </div>
+            ) : null}
           </dl>
 
           <section className="mt-10">
@@ -125,7 +129,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
                 {property.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="border border-charcoal/10 bg-white px-3 py-1 text-[11px] uppercase tracking-wide text-slate-warm"
+                    className="rounded-full border border-navy/30 px-3 py-1 text-xs text-navy/80"
                   >
                     {tag}
                   </span>
@@ -134,14 +138,14 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
             </section>
           )}
 
-          <div className="mt-10 space-y-3 border-t border-charcoal/8 pt-8 lg:hidden">
-            <Link href={scheduleHref} className="btn-gold w-full justify-center rounded-sm">
+          <div className="mt-10 space-y-3 border-t border-navy/15 pt-8 lg:hidden">
+            <Link href={scheduleHref} className="btn-gold w-full justify-center">
               {reservation
                 ? t.propertyDetail.scheduleReservationProperty
                 : t.propertyDetail.scheduleVisitProperty}
             </Link>
-            {!reservation ? (
-              <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
+            {financeable ? (
+              <Link href={financeHref} className="btn-navy w-full justify-center">
                 {t.common.finance}
               </Link>
             ) : null}

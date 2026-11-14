@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Property } from "@/lib/properties";
-import { isReservationProperty } from "@/lib/properties";
+import { canFinance, isReservationProperty } from "@/lib/properties";
 import { useTranslations } from "@/components/LanguageProvider";
 import { formatMessage } from "@/lib/i18n";
 import { financiarHref, schedulingHref } from "@/lib/visit-scheduling";
@@ -20,12 +20,12 @@ export default function PropertyVisitCta({ property, className = "" }: PropertyV
 
   return (
     <div
-      className={`border border-charcoal/8 bg-white p-6 shadow-sm md:p-8 ${className}`}
+      className={`rounded-2xl border-t-2 border-gold bg-white p-6 shadow-sm shadow-navy/5 md:p-8 ${className}`}
     >
       <p className="section-label">
         {reservation ? t.propertyVisit.reservationLabel : t.propertyVisit.label}
       </p>
-      <h2 className="font-display mt-2 text-2xl font-medium text-charcoal">
+      <h2 className="font-display mt-3 text-2xl font-normal text-navy">
         {reservation ? t.propertyVisit.reservationTitle : t.propertyVisit.title}
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-slate-warm">
@@ -35,13 +35,13 @@ export default function PropertyVisitCta({ property, className = "" }: PropertyV
         )}
       </p>
       <div className="mt-6 space-y-3">
-        <Link href={scheduleHref} className="btn-gold w-full justify-center rounded-sm">
+        <Link href={scheduleHref} className="btn-gold w-full justify-center">
           {reservation
             ? t.propertyVisit.scheduleReservationProperty
             : t.propertyVisit.scheduleVisitProperty}
         </Link>
-        {!reservation ? (
-          <Link href={financeHref} className="btn-gold w-full justify-center rounded-sm">
+        {canFinance(property) ? (
+          <Link href={financeHref} className="btn-navy w-full justify-center">
             {t.common.finance}
           </Link>
         ) : null}

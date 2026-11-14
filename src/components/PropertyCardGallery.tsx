@@ -27,7 +27,7 @@ export default function PropertyCardGallery({
   const main = images[active] ?? images[0];
 
   return (
-    <div className="w-full min-w-0 max-w-full overflow-hidden bg-stone-100">
+    <div className="w-full min-w-0 max-w-full overflow-hidden bg-white">
       <div
         className={`${mainFrameClass(large)} group`}
         style={mainFrameStyle(getAspectRatio(main))}
@@ -50,7 +50,7 @@ export default function PropertyCardGallery({
       </div>
 
       {images.length > 1 && (
-        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-1 overflow-x-auto border-t border-charcoal/8 bg-stone-100 p-1.5">
+        <div className="hide-scrollbar flex w-full min-w-0 max-w-full items-end gap-1 overflow-x-auto border-t border-navy/8 bg-white p-1.5">
           {images.map((src, index) => {
             const orientation = getOrientation(src);
             return (
@@ -62,7 +62,7 @@ export default function PropertyCardGallery({
                   e.stopPropagation();
                   setActive(index);
                 }}
-                className={`relative shrink-0 overflow-hidden rounded-sm bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                className={`relative shrink-0 overflow-hidden rounded-sm bg-sand transition ${thumbFrameClass(orientation)} ${
                   index === active
                     ? "ring-2 ring-gold"
                     : "opacity-75 hover:opacity-100"

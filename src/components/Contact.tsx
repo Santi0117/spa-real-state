@@ -32,83 +32,87 @@ export default function Contact() {
   }
 
   return (
-    <section id="contacto" className="py-20 md:py-28">
+    <section id="contacto" className="bg-sand py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <p className="section-label">{t.contact.label}</p>
-            <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
+            <h2 className="font-display mt-4 text-4xl font-normal tracking-tight text-navy md:text-6xl">
               {t.contact.title}
             </h2>
             <p className="mt-5 max-w-md leading-relaxed text-slate-warm">
               {t.contact.description}
             </p>
 
-            <div className="mt-10 space-y-5">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+            <dl className="mt-10 border-t-2 border-navy">
+              <div className="grid gap-1 border-b border-navy/10 py-5 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-warm">
                   {t.contact.phone}
-                </p>
-                <a href={`tel:${site.phoneTel}`} className="mt-1 block text-lg text-charcoal hover:text-gold">
-                  {site.phone}
-                </a>
+                </dt>
+                <dd>
+                  <a href={`tel:${site.phoneTel}`} className="font-display text-xl text-navy hover:text-gold">
+                    {site.phone}
+                  </a>
+                </dd>
               </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+              <div className="grid gap-1 border-b border-navy/10 py-5 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-warm">
                   {t.contact.email}
-                </p>
-                <a href={`mailto:${site.email}`} className="mt-1 block text-lg text-charcoal hover:text-gold">
-                  {site.email}
-                </a>
+                </dt>
+                <dd>
+                  <a href={`mailto:${site.email}`} className="font-display break-all text-xl text-navy hover:text-gold">
+                    {site.email}
+                  </a>
+                </dd>
               </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-warm">
+              <div className="grid gap-1 py-5 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-warm">
                   {t.contact.offices}
-                </p>
-                <div className="mt-1 text-lg text-charcoal">
-                  <OfficeAddress addressClassName="text-charcoal" />
-                </div>
-                <SocialLinks
-                  className="mt-4 flex items-center gap-4"
-                  iconClassName="h-5 w-5 text-charcoal transition hover:text-gold"
-                />
+                </dt>
+                <dd className="font-display text-lg text-navy">
+                  <OfficeAddress addressClassName="text-navy" />
+                  <SocialLinks
+                    className="mt-4 flex items-center gap-4"
+                    iconClassName="h-5 w-5 text-navy transition hover:text-gold"
+                  />
+                </dd>
               </div>
-            </div>
+            </dl>
           </div>
 
-          <div className="border border-charcoal/8 bg-white p-6 shadow-sm md:p-8">
+          <div className="self-start rounded-2xl bg-white p-6 shadow-sm shadow-navy/5 md:p-10">
             {sent ? (
               <div className="py-6 text-center">
-                <p className="font-display text-xl font-bold text-gold">{t.contact.successTitle}</p>
+                <p className="font-display text-2xl text-navy">{t.contact.successTitle}</p>
                 <p className="mt-2 text-sm text-slate-warm">{t.contact.successMessage}</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid gap-6 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+                    <label htmlFor="name" className="field-label">
                       {t.contact.name}
                     </label>
-                    <input id="name" name="name" required className="input-field rounded-sm" />
+                    <input id="name" name="name" required className="input-field" />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+                    <label htmlFor="phone" className="field-label">
                       {t.contact.phoneField}
                     </label>
-                    <input id="phone" name="phone" type="tel" required className="input-field rounded-sm" />
+                    <input id="phone" name="phone" type="tel" required className="input-field" />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+                  <label htmlFor="email" className="field-label">
                     {t.contact.emailField}
                   </label>
-                  <input id="email" name="email" type="email" required className="input-field rounded-sm" />
+                  <input id="email" name="email" type="email" required className="input-field" />
                 </div>
                 <div>
-                  <label htmlFor="interest" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+                  <label htmlFor="interest" className="field-label">
                     {t.contact.interest}
                   </label>
-                  <select id="interest" name="interest" className="input-field rounded-sm">
+                  <select id="interest" name="interest" className="input-field">
                     <option>{t.contact.buy}</option>
                     <option>{t.contact.sell}</option>
                     <option>{t.contact.rent}</option>
@@ -117,14 +121,14 @@ export default function Contact() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+                  <label htmlFor="message" className="field-label">
                     {t.contact.message}
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     rows={4}
-                    className="input-field resize-none rounded-sm"
+                    className="input-field resize-none"
                     placeholder={t.contact.messagePlaceholder}
                   />
                 </div>
@@ -134,7 +138,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-60"
+                  className="btn-navy w-full justify-center disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {submitting ? t.contact.submitting : t.contact.submit}
                 </button>

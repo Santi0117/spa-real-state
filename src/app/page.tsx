@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
 import FeaturedProperties from "@/components/FeaturedProperties";
 import ServicesMarquee from "@/components/ServicesMarquee";
 import Areas from "@/components/Areas";
@@ -20,7 +19,6 @@ export default function Home() {
       <Header />
       <main className="min-w-0 overflow-x-clip">
         <Hero />
-        <Stats />
         <FeaturedProperties />
         <ServicesMarquee />
         <Areas />

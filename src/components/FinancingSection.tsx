@@ -7,7 +7,13 @@ import FinanceLenderCard from "@/components/forms/FinanceLenderCard";
 import PropertyVisitPicker from "@/components/forms/PropertyVisitPicker";
 import { useTranslations } from "@/components/LanguageProvider";
 import { financingLenders, minDownPayment } from "@/lib/financing";
-import { formatPrice, getPropertyById, getPropertyPriceAmount, resolvePropertySelection } from "@/lib/properties";
+import {
+  canFinance,
+  formatPrice,
+  getPropertyById,
+  getPropertyPriceAmount,
+  resolvePropertySelection,
+} from "@/lib/properties";
 import { site } from "@/lib/site";
 import { agendarVisitaHref } from "@/lib/visit-scheduling";
 
@@ -15,7 +21,7 @@ function resolveInitialSelection(propertyId?: string | null, propertyName?: stri
   return resolvePropertySelection({
     id: propertyId,
     title: propertyName,
-    filter: (property) => property.status === "Venta",
+    filter: canFinance,
   });
 }
 
@@ -37,10 +43,8 @@ export default function FinancingSection() {
     setSelectedId(initial.id);
   }, [initial.id]);
 
-  const selectedProperty =
-    selectedId && getPropertyById(selectedId)?.status === "Venta"
-      ? getPropertyById(selectedId)
-      : undefined;
+  const candidate = selectedId ? getPropertyById(selectedId) : undefined;
+  const selectedProperty = candidate && canFinance(candidate) ? candidate : undefined;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -75,16 +79,16 @@ export default function FinancingSection() {
     }
 
     const property = getPropertyById(id);
-    if (!property || property.status !== "Venta") return;
+    if (!property || !canFinance(property)) return;
     setSelectedId(id);
   }
 
   return (
-    <section id="financiamiento" className="scroll-mt-28 overflow-hidden border-t border-charcoal/8 bg-cream py-16 md:py-20">
+    <section id="financiamiento" className="scroll-mt-28 overflow-hidden bg-sand py-20 md:py-28">
       <div className="mx-auto min-w-0 max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl">
           <p className="section-label">{t.financing.label}</p>
-          <h2 className="font-display mt-3 text-3xl font-medium tracking-tight text-charcoal md:text-4xl">
+          <h2 className="font-display mt-4 text-4xl font-normal tracking-tight text-navy md:text-5xl">
             {t.financing.title}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-warm md:text-base">
@@ -92,18 +96,18 @@ export default function FinancingSection() {
           </p>
         </div>
 
-        <div className="mt-8 min-w-0 rounded-sm border border-charcoal/8 bg-white p-4 shadow-sm sm:p-5">
+        <div className="mt-10 min-w-0 rounded-2xl bg-white p-5 shadow-sm shadow-navy/5 sm:p-7">
           <PropertyVisitPicker
             selectedId={selectedId}
             onSelect={handlePropertySelect}
-            filter={(property) => property.status === "Venta"}
+            filter={canFinance}
           />
           <p className="mt-3 text-xs text-slate-warm">{t.financing.pickerHint}</p>
         </div>
 
         {selectedProperty && propertyPrice > 0 ? (
           <div className="mt-8 space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-sm border border-gold/30 bg-gold/5 px-4 py-4 sm:px-5">
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-gold/40 bg-gold/5 px-4 py-4 sm:px-5">
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
                   {t.financing.selectedLabel}
@@ -120,7 +124,7 @@ export default function FinancingSection() {
                   {t.financing.clearSelection}
                 </button>
               </div>
-              <p className="font-display text-2xl font-semibold text-gold sm:text-3xl">
+              <p className="text-2xl font-bold text-navy sm:text-3xl">
                 {formatPrice(propertyPrice, selectedProperty.priceLabel)}
               </p>
             </div>
@@ -141,13 +145,13 @@ export default function FinancingSection() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-gold justify-center rounded-sm sm:min-w-[240px]"
+                className="btn-gold justify-center sm:min-w-[240px]"
               >
                 {t.financing.whatsapp}
               </a>
               <Link
                 href={agendarVisitaHref({ propertyId: selectedProperty.id })}
-                className="btn-outline justify-center rounded-sm sm:min-w-[200px]"
+                className="btn-outline justify-center sm:min-w-[200px]"
               >
                 {t.financing.schedule}
               </Link>

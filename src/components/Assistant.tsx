@@ -109,27 +109,38 @@ export default function Assistant() {
   };
 
   return (
-    <section id="asistente" className="border-t border-charcoal/8 bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <div className="text-center">
-          <p className="section-label">{t.assistant.label}</p>
-          <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-charcoal md:text-5xl">
+    <section id="asistente" className="bg-navy py-20 md:py-28">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20">
+        <div>
+          <p className="section-label-gold">{t.assistant.label}</p>
+          <h2 className="font-display mt-4 text-4xl font-normal tracking-tight text-white md:text-6xl">
             {t.assistant.title}
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-slate-warm">
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-white/80">
             {t.assistant.description}
           </p>
+          <div className="mt-8 flex flex-col items-start gap-4">
+            <Link href="/agendar-visita" className="btn-gold">
+              {t.cta.schedule}
+            </Link>
+            <a
+              href={`mailto:${site.email}`}
+              className="text-sm text-white/80 transition hover:text-gold"
+            >
+              {t.assistant.orWriteUs} {site.email}
+            </a>
+          </div>
         </div>
 
-        <div className="mt-10 overflow-hidden border border-charcoal/8 bg-cream shadow-sm">
-          <div className="flex items-center gap-3 border-b border-charcoal/8 bg-gold/10 px-5 py-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold font-display text-lg text-white">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-2xl shadow-black/30">
+          <div className="flex items-center gap-3 px-6 pb-2 pt-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-navy font-display text-lg text-gold">
               J
             </div>
             <div>
-              <p className="text-sm font-semibold text-charcoal">{t.assistant.virtualAssistant}</p>
+              <p className="text-sm font-bold text-navy">{t.assistant.virtualAssistant}</p>
               <p className="flex items-center gap-1.5 text-xs text-slate-warm">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
                 {t.assistant.onlineNow}
               </p>
             </div>
@@ -137,7 +148,7 @@ export default function Assistant() {
 
           <div
             ref={scrollRef}
-            className="max-h-[360px] space-y-4 overflow-y-auto p-5 md:p-6"
+            className="max-h-[320px] space-y-3 overflow-y-auto px-6 py-4"
           >
             {messages.map((msg) => (
               <div
@@ -145,10 +156,10 @@ export default function Assistant() {
                 className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[88%] rounded-sm px-4 py-3 text-sm leading-relaxed ${
+                  className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-gold text-white"
-                      : "border border-charcoal/8 bg-white text-charcoal/85"
+                      ? "rounded-br-sm bg-navy text-white"
+                      : "rounded-bl-sm bg-sand text-navy/90"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -158,7 +169,7 @@ export default function Assistant() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="flex gap-1 rounded-sm border border-charcoal/8 bg-white px-4 py-3">
+                <div className="flex gap-1 rounded-2xl rounded-bl-sm bg-sand px-4 py-3">
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gold/70 [animation-delay:0ms]" />
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gold/70 [animation-delay:150ms]" />
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gold/70 [animation-delay:300ms]" />
@@ -169,7 +180,7 @@ export default function Assistant() {
             {error && <p className="text-center text-xs text-red-600">{error}</p>}
           </div>
 
-          <div className="border-t border-charcoal/8 px-5 pb-4 pt-3">
+          <div className="px-6 pb-4">
             <div className="flex flex-wrap gap-2">
               {t.assistant.quickReplies.map((reply) => (
                 <button
@@ -177,7 +188,7 @@ export default function Assistant() {
                   type="button"
                   disabled={loading}
                   onClick={() => sendMessage(reply)}
-                  className="rounded-sm border border-charcoal/15 bg-white px-3 py-2 text-xs text-charcoal/80 transition hover:border-gold hover:bg-gold/5 hover:text-charcoal disabled:opacity-50 md:text-sm"
+                  className="rounded-full border border-dashed border-navy/40 px-4 py-2 text-xs text-navy transition hover:border-gold hover:bg-gold/10 disabled:opacity-50"
                 >
                   {reply}
                 </button>
@@ -185,40 +196,27 @@ export default function Assistant() {
             </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-charcoal/8 px-4 py-4"
-          >
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={t.assistant.placeholder}
-              disabled={loading}
-              maxLength={500}
-              className="input-field flex-1 rounded-sm"
-            />
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="btn-gold flex h-11 w-11 shrink-0 items-center justify-center rounded-sm p-0 disabled:opacity-40"
-              aria-label={t.assistant.send}
-            >
-              →
-            </button>
+          <form onSubmit={handleSubmit} className="px-6 pb-6">
+            <div className="flex items-center gap-2 rounded-full bg-sand py-1.5 pl-5 pr-1.5">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={t.assistant.placeholder}
+                disabled={loading}
+                maxLength={500}
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm text-navy outline-none placeholder:text-slate-warm/70"
+              />
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy text-white transition hover:bg-navy-deep disabled:opacity-40"
+                aria-label={t.assistant.send}
+              >
+                →
+              </button>
+            </div>
           </form>
-        </div>
-
-        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <Link href="/agendar-visita" className="btn-gold rounded-sm">
-            {t.cta.schedule}
-          </Link>
-          <a
-            href={`mailto:${site.email}`}
-            className="text-sm text-slate-warm transition hover:text-gold"
-          >
-            {t.assistant.orWriteUs} {site.email}
-          </a>
         </div>
       </div>
     </section>

@@ -106,7 +106,7 @@ export default function FinanceLenderCard({
                 value={downPaymentInput}
                 onChange={(e) => setDownPaymentInput(e.target.value)}
                 onBlur={applyDownPayment}
-                className="input-field rounded-sm py-2 text-sm"
+                className="input-field py-2 text-sm"
                 aria-label={`Prima ${lender.name}`}
               />
               <button

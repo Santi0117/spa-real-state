@@ -37,39 +37,52 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const { t } = useTranslations();
 
-  const bodyPadding = compact ? "p-3 sm:p-3.5" : "p-4 lg:p-5";
   const titleClass = compact
-    ? "font-display text-base font-medium leading-snug text-charcoal group-hover:text-gold sm:text-lg"
-    : "font-display text-xl font-medium leading-snug text-charcoal group-hover:text-gold lg:text-[1.35rem]";
-  const priceClass = compact
-    ? "font-display shrink-0 text-right text-lg font-semibold leading-tight text-gold sm:text-xl"
-    : "font-display shrink-0 text-right text-xl font-semibold leading-tight text-gold sm:text-2xl lg:text-[1.65rem]";
+    ? "font-display text-base font-medium leading-snug text-navy transition group-hover:text-gold sm:text-lg"
+    : "font-display text-xl font-medium leading-snug text-navy transition group-hover:text-gold lg:text-2xl";
   const tagPadding = compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]";
-  const statsClass = compact
-    ? "mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-charcoal/8 pt-3 text-[10px] font-medium uppercase tracking-wide text-slate-warm"
-    : "mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-charcoal/8 pt-4 text-[12px] font-medium uppercase tracking-wide text-slate-warm";
 
   const statusLabel = property.status === "Venta" ? t.property.sale : t.property.rent;
   const typeLabel = translatePropertyType(property.type, t);
-  const hasDualRate = Boolean(property.rentalRates);
+  const priceText = formatPropertyPrice(property);
+  const imageTag =
+    property.status === "Venta" && !property.priceOnRequest ? priceText : statusLabel;
+  const stats = [
+    formatMessage(t.property.beds, { count: property.beds }),
+    formatMessage(t.property.baths, { count: property.baths }),
+    ...(property.area ? [formatArea(property.area)] : []),
+  ];
 
   const tagsOverlay = (
-    <div className="pointer-events-none absolute right-0 top-0 z-10 flex gap-px">
-      {property.new && (
-        <span className={`bg-gold font-bold uppercase tracking-wider text-white ${tagPadding}`}>
-          {t.property.new}
-        </span>
-      )}
-      <span className={`bg-charcoal/90 font-bold uppercase tracking-wider text-white ${tagPadding}`}>
-        {statusLabel}
+    <>
+      <span
+        className={`tag-arrow pointer-events-none absolute left-0 z-10 ${
+          compact ? "top-2 !text-[9px]" : "top-4 sm:!text-[11px]"
+        }`}
+      >
+        {imageTag}
       </span>
-    </div>
+      <div
+        className={`pointer-events-none absolute z-10 flex gap-1 ${
+          compact ? "right-2 top-2" : "right-4 top-4"
+        }`}
+      >
+        {property.new && (
+          <span className={`bg-gold font-bold uppercase tracking-[0.14em] text-navy ${tagPadding}`}>
+            {t.property.new}
+          </span>
+        )}
+        <span className={`bg-white font-bold uppercase tracking-[0.14em] text-navy ${tagPadding}`}>
+          {statusLabel}
+        </span>
+      </div>
+    </>
   );
 
   return (
-    <article className="property-card group w-full min-w-0">
+    <article className="property-card group @container w-full min-w-0">
       <Link href={propertyHref(property.id)} className="block min-w-0">
-        <div className="relative w-full min-w-0 overflow-hidden bg-stone-100">
+        <div className="relative w-full min-w-0 overflow-hidden rounded-2xl bg-white shadow-sm shadow-navy/5 transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-navy/15">
           {property.images.length > 1 ? (
             <PropertyCardGallery
               images={property.images}
@@ -85,69 +98,65 @@ export default function PropertyCard({
           )}
         </div>
 
-        <div className={`border border-t-0 border-charcoal/8 bg-white ${bodyPadding}`}>
-          <p
-            className={`font-semibold uppercase tracking-[0.14em] text-gold ${
-              compact ? "text-[9px]" : "text-[10px]"
-            }`}
-          >
-            {typeLabel} · {property.zone}
-          </p>
-
-          <div className={`mt-1 ${hasDualRate ? "space-y-2" : ""}`}>
-            {hasDualRate ? (
-              <>
-                <h3 className={titleClass}>{property.title}</h3>
-                <p className="font-display text-base font-semibold leading-snug text-gold sm:text-lg">
-                  {formatPropertyPrice(property)}
-                </p>
-                <p className={`text-slate-warm ${compact ? "text-xs" : "text-sm"}`}>
-                  {property.location}
-                </p>
-              </>
-            ) : (
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <h3 className={titleClass}>{property.title}</h3>
-                  <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
-                    {property.location}
-                  </p>
-                </div>
-                <p className={priceClass}>{formatPropertyPrice(property)}</p>
-              </div>
+        <div
+          className={`grid gap-x-5 gap-y-3 border-t border-navy/25 @md:grid-cols-[minmax(0,1fr)_auto] ${
+            compact ? "mt-3 pt-3" : "mt-4 pt-4"
+          }`}
+        >
+          <div className="min-w-0">
+            <p
+              className={`font-semibold uppercase tracking-[0.22em] text-navy/60 ${
+                compact ? "text-[9px]" : "text-[10px]"
+              }`}
+            >
+              {typeLabel} · {property.zone}
+            </p>
+            <h3 className={`mt-1.5 ${titleClass}`}>{property.title}</h3>
+            <p className={`text-slate-warm ${compact ? "mt-0.5 text-xs" : "mt-1 text-sm"}`}>
+              {property.location}
+            </p>
+            {showDescription && (
+              <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-warm">
+                {property.description}
+              </p>
             )}
           </div>
 
-          {showDescription && (
-            <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-warm">
-              {property.description}
+          <div className="min-w-0 @md:max-w-[15rem] @md:text-right">
+            <p
+              className={`font-bold leading-snug text-navy ${
+                compact ? "text-sm" : "text-base lg:text-lg"
+              }`}
+            >
+              {priceText}
             </p>
-          )}
-
-          <div className={statsClass}>
-            <span>{formatMessage(t.property.beds, { count: property.beds })}</span>
-            <span className="text-charcoal/20">|</span>
-            <span>{formatMessage(t.property.baths, { count: property.baths })}</span>
-            <span className="text-charcoal/20">|</span>
-            <span>{formatArea(property.area)}</span>
-          </div>
-
-          {property.tags && property.tags.length > 0 && (
-            <div className={`flex min-w-0 flex-wrap gap-1.5 ${compact ? "mt-2" : "mt-3"}`}>
-              {property.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`border border-charcoal/10 uppercase tracking-wide text-slate-warm ${
-                    compact
-                      ? "px-1.5 py-0.5 text-[9px]"
-                      : "px-2 py-0.5 text-[10px]"
-                  }`}
-                >
-                  {tag}
+            <p
+              className={`mt-1 flex flex-wrap gap-x-2 text-slate-warm @md:justify-end ${
+                compact ? "text-[10px]" : "text-xs"
+              }`}
+            >
+              {stats.map((item, index) => (
+                <span key={item} className="flex gap-2">
+                  {index > 0 && <span className="text-navy/25">|</span>}
+                  {item}
                 </span>
               ))}
-            </div>
-          )}
+            </p>
+            {property.tags && property.tags.length > 0 && (
+              <div className={`flex min-w-0 flex-wrap gap-1.5 @md:justify-end ${compact ? "mt-2" : "mt-3"}`}>
+                {property.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className={`rounded-full border border-navy/30 text-navy/80 ${
+                      compact ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-0.5 text-[11px]"
+                    }`}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </Link>
     </article>

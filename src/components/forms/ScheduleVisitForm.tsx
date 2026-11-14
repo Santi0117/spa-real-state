@@ -130,29 +130,29 @@ export default function ScheduleVisitForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="firstName" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+          <label htmlFor="firstName" className="field-label">
             {t.forms.firstName}
           </label>
-          <input id="firstName" name="firstName" required className="input-field rounded-sm" />
+          <input id="firstName" name="firstName" required className="input-field" />
         </div>
         <div>
-          <label htmlFor="lastName" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+          <label htmlFor="lastName" className="field-label">
             {t.forms.lastName}
           </label>
-          <input id="lastName" name="lastName" required className="input-field rounded-sm" />
+          <input id="lastName" name="lastName" required className="input-field" />
         </div>
       </div>
       <div>
-        <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+        <label htmlFor="phone" className="field-label">
           {t.forms.phone}
         </label>
-        <input id="phone" name="phone" type="tel" required className="input-field rounded-sm" />
+        <input id="phone" name="phone" type="tel" required className="input-field" />
       </div>
       <div>
-        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-charcoal/80">
+        <label htmlFor="email" className="field-label">
           {t.forms.email}
         </label>
-        <input id="email" name="email" type="email" required className="input-field rounded-sm" />
+        <input id="email" name="email" type="email" required className="input-field" />
       </div>
 
       <VisitCalendar
@@ -185,7 +185,7 @@ export default function ScheduleVisitForm({
       <button
         type="submit"
         disabled={!canSubmit || submitting}
-        className="btn-gold w-full justify-center rounded-sm disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-navy w-full justify-center disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? t.forms.submitting : t.forms.scheduleVisit.confirm}
       </button>

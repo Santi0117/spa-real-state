@@ -8,19 +8,19 @@ export default function ServicesMarquee() {
 
   return (
     <div
-      className="services-marquee overflow-hidden border-y border-[#a6845d]/50 bg-gold"
+      className="services-marquee overflow-hidden bg-khaki"
       aria-label={t.services.title}
     >
       <div className="services-marquee-track flex flex-nowrap">
         {items.map((text, i) => (
           <span
             key={`${text}-${i}`}
-            className="flex shrink-0 flex-nowrap items-center gap-8 px-8 py-3.5 md:gap-10 md:px-12 md:py-4"
+            className="flex shrink-0 flex-nowrap items-center gap-8 px-8 py-4 md:gap-12 md:px-12 md:py-5"
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white md:text-xs">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-navy md:text-xs">
               {text}
             </span>
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/70" aria-hidden />
+            <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-navy" aria-hidden />
           </span>
         ))}
       </div>

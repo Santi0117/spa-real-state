@@ -35,7 +35,7 @@ export default function SelectedPropertySummary({
       <div className="mt-3 flex gap-4">
         {property ? (
           <div
-            className={`relative shrink-0 overflow-hidden rounded-sm border border-charcoal/10 bg-stone-100 ${
+            className={`relative shrink-0 overflow-hidden rounded-sm border border-charcoal/10 bg-sand ${
               orientation === "portrait" ? "h-20 w-14" : "h-16 w-24"
             }`}
           >

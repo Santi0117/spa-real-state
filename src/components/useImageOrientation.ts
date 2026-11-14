@@ -55,7 +55,7 @@ export function thumbFrameClass(orientation: ImageOrientation) {
 }
 
 export function mainFrameClass(large?: boolean) {
-  return `relative mx-auto w-full max-w-full overflow-hidden bg-stone-100 ${
+  return `relative mx-auto w-full max-w-full overflow-hidden bg-sand ${
     large ? "max-h-[min(70vh,680px)]" : "max-h-[min(62vh,540px)]"
   }`;
 }

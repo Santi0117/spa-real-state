@@ -1,11 +1,11 @@
-import { formatPrice, properties, zones } from "./properties";
+import { formatPropertyPrice, properties, zones } from "./properties";
 import { site } from "./site";
 
 const zoneList = zones.filter((z) => z !== "Todas").join(", ");
 const listingSummary = properties
   .map(
     (p) =>
-      `- ${p.title} (${p.location}, ${p.status}, ${p.type}, ${formatPrice(p.price, p.priceLabel, p.currency)})`
+      `- ${p.title} (${p.location}, ${p.status}, ${p.type}, ${formatPropertyPrice(p)})`
   )
   .join("\n");
 

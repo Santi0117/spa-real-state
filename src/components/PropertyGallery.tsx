@@ -49,7 +49,7 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                 key={src}
                 type="button"
                 onClick={() => setActive(index)}
-                className={`relative shrink-0 overflow-hidden rounded-sm bg-stone-100 transition ${thumbFrameClass(orientation)} ${
+                className={`relative shrink-0 overflow-hidden rounded-sm bg-sand transition ${thumbFrameClass(orientation)} ${
                   index === active
                     ? "ring-2 ring-gold"
                     : "opacity-75 hover:opacity-100"

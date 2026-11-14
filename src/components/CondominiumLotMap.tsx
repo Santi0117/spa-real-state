@@ -225,7 +225,7 @@ export default function CondominiumLotMap({
               href={`/agendar-visita?propiedad=${encodeURIComponent(
                 `Condominio ${condominium.name} — ${display.label}`
               )}`}
-              className="btn-gold inline-flex w-full justify-center rounded-sm"
+              className="btn-gold inline-flex w-full justify-center"
             >
               {t.propertyVisit.title}
             </Link>
@@ -233,7 +233,7 @@ export default function CondominiumLotMap({
               href={financiarHref({
                 propertyName: `Condominio ${condominium.name} — ${display.label}`,
               })}
-              className="btn-gold inline-flex w-full justify-center rounded-sm"
+              className="btn-gold inline-flex w-full justify-center"
             >
               {t.common.finance}
             </Link>

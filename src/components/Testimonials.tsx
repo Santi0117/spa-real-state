@@ -6,26 +6,28 @@ export default function Testimonials() {
   const { t } = useTranslations();
 
   return (
-    <section className="border-t border-charcoal/8 bg-charcoal py-20 md:py-28">
+    <section className="bg-cream py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="text-center">
-          <p className="section-label text-gold-light">{t.testimonials.label}</p>
-          <h2 className="font-display mt-3 text-4xl font-medium tracking-tight text-white md:text-5xl">
+        <div className="max-w-2xl">
+          <p className="section-label">{t.testimonials.label}</p>
+          <h2 className="font-display mt-4 text-4xl font-normal tracking-tight text-navy md:text-6xl">
             {t.testimonials.title}
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3 md:gap-8">
+        <div className="mt-14 grid gap-6 md:grid-cols-3 md:gap-6">
           {t.testimonials.items.map((item) => (
             <blockquote
               key={item.name}
-              className="flex flex-col border border-white/10 bg-white/5 p-6 backdrop-blur-sm lg:p-8"
+              className="flex flex-col border-t-2 border-gold bg-white p-7 shadow-sm shadow-navy/5 lg:p-8"
             >
-              <p className="font-display text-4xl leading-none text-gold/40">&ldquo;</p>
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-white/80">{item.quote}</p>
-              <footer className="mt-6 border-t border-white/10 pt-5">
-                <p className="text-sm font-semibold text-white">{item.name}</p>
-                <p className="mt-0.5 text-[11px] uppercase tracking-wider text-white/50">
+              <p className="font-display text-5xl leading-none text-gold">&ldquo;</p>
+              <p className="font-display mt-3 flex-1 text-lg italic leading-relaxed text-navy/85">
+                {item.quote}
+              </p>
+              <footer className="mt-8">
+                <p className="text-sm font-bold text-navy">{item.name}</p>
+                <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-warm">
                   {item.role}
                 </p>
               </footer>

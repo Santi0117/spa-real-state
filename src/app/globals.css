@@ -79,6 +79,11 @@
     clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
   }
 
+  .tag-arrow-left {
+    @apply inline-flex items-center bg-navy py-1.5 pl-5 pr-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-white;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+  }
+
   .property-card {
     @apply min-w-0 max-w-full;
   }

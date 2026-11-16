@@ -54,19 +54,12 @@ export default function PropertyCard({
   ];
 
   const tagsOverlay = (
-    <>
-      <span
-        className={`tag-arrow pointer-events-none absolute left-0 z-10 ${
-          compact ? "top-2 !text-[9px]" : "top-4 sm:!text-[11px]"
-        }`}
-      >
-        {imageTag}
-      </span>
-      <div
-        className={`pointer-events-none absolute z-10 flex gap-1 ${
-          compact ? "right-2 top-2" : "right-4 top-4"
-        }`}
-      >
+    <div
+      className={`pointer-events-none absolute right-0 z-10 flex flex-col items-end gap-1.5 ${
+        compact ? "top-2" : "top-4"
+      }`}
+    >
+      <div className={`flex gap-1 ${compact ? "mr-2" : "mr-4"}`}>
         {property.new && (
           <span className={`bg-gold font-bold uppercase tracking-[0.14em] text-navy ${tagPadding}`}>
             {t.property.new}
@@ -76,7 +69,12 @@ export default function PropertyCard({
           {statusLabel}
         </span>
       </div>
-    </>
+      {imageTag !== statusLabel && (
+        <span className={`tag-arrow-left ${compact ? "!text-[9px]" : "sm:!text-[11px]"}`}>
+          {imageTag}
+        </span>
+      )}
+    </div>
   );
 
   return (

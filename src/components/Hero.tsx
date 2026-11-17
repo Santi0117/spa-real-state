@@ -17,14 +17,21 @@ const SLIDE_MS = 6500;
 const slides = [
   {
     propertyId: "1",
-    src: "/hero/orosi-landscape.jpg",
-    mobileSrc: "/hero/orosi-portrait.jpg",
+    src: "/hero/orosi-laptop.jpg",
+    mobileSrc: "/hero/orosi-celular.jpg",
     position: "50% 60%",
   },
   {
     propertyId: "13",
-    src: "/hero/takiscu.jpg",
+    src: "/hero/takiscu-laptop.jpg",
+    mobileSrc: "/hero/takiscu-celular.jpg",
     position: "45% 50%",
+  },
+  {
+    propertyId: "19",
+    src: "/hero/pacayas-laptop.jpg",
+    mobileSrc: "/hero/pacayas-celular.jpg",
+    position: "40% 55%",
   },
 ];
 

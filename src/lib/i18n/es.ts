@@ -26,6 +26,10 @@ export const es: Translations = {
     titleLine2: "que merecés",
     description:
       "Asesoría inmobiliaria premium en Costa Rica. Casas, apartamentos, terrenos y proyectos de lujo en las mejores zonas.",
+    labelShort: "Costa Rica · Premium",
+    viewProperties: "Ver propiedades",
+    inPhoto: "En la foto",
+    showSlide: "Ver foto {count}",
   },
   search: {
     type: "Tipo",

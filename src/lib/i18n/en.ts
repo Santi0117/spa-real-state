@@ -26,6 +26,10 @@ export const en: Translations = {
     titleLine2: "you deserve",
     description:
       "Premium real estate advisory in Costa Rica. Houses, apartments, land, and luxury projects in the best locations.",
+    labelShort: "Costa Rica · Premium",
+    viewProperties: "View properties",
+    inPhoto: "In the photo",
+    showSlide: "Show photo {count}",
   },
   search: {
     type: "Type",

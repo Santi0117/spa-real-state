@@ -26,6 +26,10 @@ export const pt: Translations = {
     titleLine2: "que voce merece",
     description:
       "Consultoria imobiliaria premium na Costa Rica. Casas, apartamentos, terrenos e projetos de luxo nas melhores regioes.",
+    labelShort: "Costa Rica · Premium",
+    viewProperties: "Ver imoveis",
+    inPhoto: "Na foto",
+    showSlide: "Ver foto {count}",
   },
   search: {
     type: "Tipo",

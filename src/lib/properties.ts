@@ -90,16 +90,6 @@ export const propertyTypes: PropertyType[] = [
   "Penthouse",
 ];
 
-export const zones = [
-  "Todas",
-  "Escazú",
-  "Santa Ana",
-  "Heredia",
-  "Jacó",
-  "Curridabat",
-  "Cartago",
-] as const;
-
 export const properties: Property[] = [
   {
     id: "1",
@@ -122,7 +112,6 @@ export const properties: Property[] = [
     images: [
       "/properties/orosi/portada.png",
       "/properties/orosi/cover.png",
-      "/properties/orosi/gallery.png",
       "/properties/orosi/interior-dining.png",
       "/properties/orosi/kitchen.png",
       "/properties/orosi/stairs.png",
@@ -159,7 +148,6 @@ export const properties: Property[] = [
     image: "/properties/tejar/portada.png",
     images: [
       "/properties/tejar/portada.png",
-      "/properties/tejar/exterior.png",
       "/properties/tejar/living-kitchen.png",
       "/properties/tejar/hallway.png",
       "/properties/tejar/bedroom.png",
@@ -195,7 +183,6 @@ export const properties: Property[] = [
     image: "/properties/palo-verde/portada.png",
     images: [
       "/properties/palo-verde/portada.png",
-      "/properties/palo-verde/cover.png",
       "/properties/palo-verde/living-fireplace.png",
       "/properties/palo-verde/living.png",
       "/properties/palo-verde/dining.png",
@@ -234,13 +221,11 @@ export const properties: Property[] = [
     images: [
       "/properties/villa-bonita/portada.png",
       "/properties/villa-bonita/garage.png",
-      "/properties/villa-bonita/exterior-frente.png",
       "/properties/villa-bonita/kitchen.png",
       "/properties/villa-bonita/kitchen-2.png",
       "/properties/villa-bonita/bedroom.png",
       "/properties/villa-bonita/bedroom-2.png",
       "/properties/villa-bonita/bedroom-3.png",
-      "/properties/villa-bonita/bedroom-4.png",
       "/properties/villa-bonita/bathroom.png",
     ],
     description:
@@ -270,7 +255,6 @@ export const properties: Property[] = [
     image: "/properties/takiscu-530/portada.jpg",
     images: [
       "/properties/takiscu-530/portada.jpg",
-      "/properties/takiscu-530/cover.jpg",
       "/properties/takiscu-530/living-view.jpg",
       "/properties/takiscu-530/kitchen.jpg",
       "/properties/takiscu-530/kitchen-dining.jpg",
@@ -309,7 +293,6 @@ export const properties: Property[] = [
     image: "/properties/takiscu-515/portada.jpg",
     images: [
       "/properties/takiscu-515/portada.jpg",
-      "/properties/takiscu-515/cover.jpg",
       "/properties/takiscu-515/garden.jpg",
       "/properties/takiscu-515/dining.jpg",
       "/properties/takiscu-515/kitchen.jpg",
@@ -343,7 +326,6 @@ export const properties: Property[] = [
     image: "/properties/senderos-del-este-60/portada.jpg",
     images: [
       "/properties/senderos-del-este-60/portada.jpg",
-      "/properties/senderos-del-este-60/cover.jpg",
       "/properties/senderos-del-este-60/living.jpg",
       "/properties/senderos-del-este-60/kitchen.jpg",
       "/properties/senderos-del-este-60/hallway.jpg",
@@ -377,7 +359,6 @@ export const properties: Property[] = [
     image: "/properties/senderos-del-este-65/portada.jpg",
     images: [
       "/properties/senderos-del-este-65/portada.jpg",
-      "/properties/senderos-del-este-65/cover.jpg",
       "/properties/senderos-del-este-65/living-kitchen.jpg",
       "/properties/senderos-del-este-65/kitchen.jpg",
       "/properties/senderos-del-este-65/bedroom.jpg",
@@ -412,7 +393,6 @@ export const properties: Property[] = [
     image: "/properties/estacion-21/portada.jpg",
     images: [
       "/properties/estacion-21/portada.jpg",
-      "/properties/estacion-21/cover.jpg",
       "/properties/estacion-21/living-kitchen.jpg",
       "/properties/estacion-21/kitchen.jpg",
       "/properties/estacion-21/bedroom.jpg",
@@ -449,7 +429,6 @@ export const properties: Property[] = [
     image: "/properties/el-bosque/portada.jpg",
     images: [
       "/properties/el-bosque/portada.jpg",
-      "/properties/el-bosque/cover.jpg",
       "/properties/el-bosque/living.jpg",
       "/properties/el-bosque/kitchen.jpg",
       "/properties/el-bosque/bedroom.jpg",
@@ -484,7 +463,6 @@ export const properties: Property[] = [
     image: "/properties/pacayas/portada.jpg",
     images: [
       "/properties/pacayas/portada.jpg",
-      "/properties/pacayas/cover.jpg",
       "/properties/pacayas/living.jpg",
       "/properties/pacayas/living-2.jpg",
       "/properties/pacayas/hallway.jpg",
@@ -520,7 +498,6 @@ export const properties: Property[] = [
     image: "/properties/villa-bonita-2/portada.jpg",
     images: [
       "/properties/villa-bonita-2/portada.jpg",
-      "/properties/villa-bonita-2/cover.jpg",
       "/properties/villa-bonita-2/garage.jpg",
       "/properties/villa-bonita-2/living.jpg",
       "/properties/villa-bonita-2/living-2.jpg",
@@ -544,6 +521,8 @@ export const properties: Property[] = [
 ];
 
 export const featuredProperties = properties.filter((p) => p.featured);
+
+export const zones = ["Todas", ...new Set(properties.map((p) => p.zone))];
 
 export type SortOption = "price-asc" | "price-desc" | "area-desc" | "newest";
 

@@ -25,6 +25,10 @@ export type Translations = {
     titleLine1: string;
     titleLine2: string;
     description: string;
+    labelShort: string;
+    viewProperties: string;
+    inPhoto: string;
+    showSlide: string;
   };
   search: {
     type: string;

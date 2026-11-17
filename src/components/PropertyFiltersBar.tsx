@@ -7,6 +7,7 @@ import {
   defaultFilters,
   getActiveFilterTags,
   getPriceSliderConfig,
+  zones,
   type PropertyFilters,
   type PropertyStatus,
 } from "@/lib/properties";
@@ -22,8 +23,6 @@ type PropertyFiltersBarProps = {
 type OpenPanel = "status" | "type" | "price" | "rooms" | "more" | null;
 
 const types = ["Todos", "Casa", "Apartamento", "Terreno", "Penthouse"] as const;
-
-const zoneValues = ["Todas", "Escazú", "Santa Ana", "Heredia", "Jacó", "Curridabat", "Cartago"] as const;
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -351,7 +350,7 @@ export default function PropertyFiltersBar({
     { value: "4" as const, label: "+ 4" },
   ];
 
-  const zoneOptions = zoneValues.map((zone) => ({
+  const zoneOptions = zones.map((zone) => ({
     value: zone,
     label: zone === "Todas" ? t.filters.allZones : zone,
   }));
@@ -558,7 +557,7 @@ export default function PropertyFiltersBar({
               : null;
 
   return (
-    <div ref={barRef} className={`relative mt-10 min-w-0 space-y-4 ${openPanel ? "z-50" : "z-30"}`}>
+    <div ref={barRef} className={`relative mt-5 min-w-0 space-y-4 md:mt-[22px] ${openPanel ? "z-50" : "z-30"}`}>
       <div className="hide-scrollbar flex items-center gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0">
         <div className="relative shrink-0" ref={statusRef}>
           <FilterPill

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import PropertyCardGallery from "./PropertyCardGallery";
 import { formatArea, formatPropertyPrice, propertyHref, type Property } from "@/lib/properties";
 import { useTranslations } from "@/components/LanguageProvider";
 import { formatMessage, type Translations } from "@/lib/i18n";
@@ -50,21 +50,17 @@ export default function PropertyCard({
         href={propertyHref(property.id)}
         className="flex h-full flex-col overflow-hidden rounded-[18px] bg-white text-navy shadow-[0_10px_30px_rgba(28,51,89,0.07)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(28,51,89,0.14)] md:rounded-[20px]"
       >
-        <div className="relative aspect-video w-full overflow-hidden bg-sand">
-          <Image
-            src={property.image}
-            alt={property.title}
-            fill
-            quality={85}
-            className="object-cover transition duration-700 group-hover:scale-[1.03]"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-          />
-          {property.new && (
-            <span className="absolute right-3 top-3 rounded-full bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-navy">
-              {t.property.new}
-            </span>
-          )}
-        </div>
+        <PropertyCardGallery
+          images={property.images.length > 0 ? property.images : [property.image]}
+          title={property.title}
+          badge={
+            property.new && (
+              <span className="rounded-full bg-gold px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-navy">
+                {t.property.new}
+              </span>
+            )
+          }
+        />
 
         <div
           className={`flex flex-1 flex-col gap-1.5 md:gap-2 ${

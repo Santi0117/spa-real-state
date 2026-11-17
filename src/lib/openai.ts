@@ -1,3 +1,4 @@
+import type { LanguageCode } from "@/lib/i18n";
 import { assistantContext, type ChatMessage } from "./assistant-context";
 import { getChatResponse } from "./chatbot";
 
@@ -7,20 +8,21 @@ export function isOpenAIConfigured(): boolean {
 
 export async function getAssistantReply(
   message: string,
-  history: ChatMessage[] = []
+  history: ChatMessage[] = [],
+  locale: LanguageCode = "es"
 ): Promise<{ reply: string; provider: "openai" | "fallback" }> {
   const apiKey = process.env.OPENAI_API_KEY?.trim();
 
   if (!apiKey) {
     return {
-      reply: getChatResponse(message),
+      reply: getChatResponse(message, locale),
       provider: "fallback",
     };
   }
 
   try {
     const messages = [
-      { role: "system" as const, content: assistantContext.systemPrompt },
+      { role: "system" as const, content: assistantContext.getSystemPrompt(locale) },
       ...history.slice(-10).map((m) => ({
         role: m.role,
         content: m.content,
@@ -45,7 +47,7 @@ export async function getAssistantReply(
     if (!res.ok) {
       console.error("OpenAI error:", await res.text());
       return {
-        reply: getChatResponse(message),
+        reply: getChatResponse(message, locale),
         provider: "fallback",
       };
     }
@@ -55,7 +57,7 @@ export async function getAssistantReply(
 
     if (!reply) {
       return {
-        reply: getChatResponse(message),
+        reply: getChatResponse(message, locale),
         provider: "fallback",
       };
     }
@@ -64,7 +66,7 @@ export async function getAssistantReply(
   } catch (error) {
     console.error("OpenAI fetch failed:", error);
     return {
-      reply: getChatResponse(message),
+      reply: getChatResponse(message, locale),
       provider: "fallback",
     };
   }

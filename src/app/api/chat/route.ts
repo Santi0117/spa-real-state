@@ -1,12 +1,46 @@
 import { NextResponse } from "next/server";
 import { saveChatExchange } from "@/lib/chat-db";
 import type { ChatMessage } from "@/lib/assistant-context";
+import type { LanguageCode } from "@/lib/i18n";
 import { getAssistantReply } from "@/lib/openai";
 
 const MAX_MESSAGE_LENGTH = 500;
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 20;
 const RATE_WINDOW_MS = 60_000;
+
+const apiErrors: Record<
+  LanguageCode,
+  {
+    rateLimit: string;
+    empty: string;
+    tooLong: string;
+    process: string;
+  }
+> = {
+  es: {
+    rateLimit: "Demasiados mensajes. Intentá de nuevo en un minuto.",
+    empty: "El mensaje no puede estar vacío.",
+    tooLong: "El mensaje es demasiado largo.",
+    process: "Error al procesar el mensaje.",
+  },
+  en: {
+    rateLimit: "Too many messages. Please try again in a minute.",
+    empty: "The message cannot be empty.",
+    tooLong: "The message is too long.",
+    process: "Error processing the message.",
+  },
+  pt: {
+    rateLimit: "Muitas mensagens. Tente novamente em um minuto.",
+    empty: "A mensagem nao pode estar vazia.",
+    tooLong: "A mensagem e muito longa.",
+    process: "Erro ao processar a mensagem.",
+  },
+};
+
+function parseLocale(raw: unknown): LanguageCode {
+  return raw === "en" || raw === "pt" ? raw : "es";
+}
 
 function getClientId(request: Request): string {
   return (
@@ -45,17 +79,18 @@ function parseHistory(raw: unknown): ChatMessage[] {
 }
 
 export async function POST(request: Request) {
+  let locale: LanguageCode = "es";
+
   try {
     const clientId = getClientId(request);
+    const body = await request.json();
+    locale = parseLocale(body.locale);
+    const errors = apiErrors[locale];
 
     if (isRateLimited(clientId)) {
-      return NextResponse.json(
-        { error: "Demasiados mensajes. Intentá de nuevo en un minuto." },
-        { status: 429 }
-      );
+      return NextResponse.json({ error: errors.rateLimit }, { status: 429 });
     }
 
-    const body = await request.json();
     const message = typeof body.message === "string" ? body.message.trim() : "";
     const history = parseHistory(body.history);
     const sessionId =
@@ -64,27 +99,21 @@ export async function POST(request: Request) {
         : clientId;
 
     if (!message) {
-      return NextResponse.json(
-        { error: "El mensaje no puede estar vacío." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: errors.empty }, { status: 400 });
     }
 
     if (message.length > MAX_MESSAGE_LENGTH) {
-      return NextResponse.json(
-        { error: "El mensaje es demasiado largo." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: errors.tooLong }, { status: 400 });
     }
 
-    const { reply, provider } = await getAssistantReply(message, history);
+    const { reply, provider } = await getAssistantReply(message, history, locale);
 
     await saveChatExchange(sessionId, message, reply, provider);
 
     return NextResponse.json({ reply, provider });
   } catch {
     return NextResponse.json(
-      { error: "Error al procesar el mensaje." },
+      { error: apiErrors[locale].process },
       { status: 500 }
     );
   }

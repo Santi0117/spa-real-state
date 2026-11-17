@@ -79,6 +79,7 @@ export default function Assistant() {
           message: trimmed,
           history: historyForApi,
           sessionId: getSessionId(),
+          locale,
         }),
       });
 

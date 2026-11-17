@@ -1,3 +1,4 @@
+import type { LanguageCode } from "@/lib/i18n";
 import { formatPropertyPrice, properties, zones } from "./properties";
 import { site } from "./site";
 
@@ -9,15 +10,16 @@ const listingSummary = properties
   )
   .join("\n");
 
-export const assistantContext = {
-  name: `Asistente de ${site.brand}`,
-  model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-  temperature: 0.6,
-  maxTokens: 450,
+const languageInstructions: Record<LanguageCode, string> = {
+  es: "Respondé siempre en español de Costa Rica (vos).",
+  en: "Always reply in clear, professional English.",
+  pt: "Responda sempre em português do Brasil, de forma clara e profissional.",
+};
 
-  systemPrompt: `Sos el asistente virtual de ${site.brand}, inmobiliaria premium en Costa Rica.
+function buildSystemPrompt(locale: LanguageCode): string {
+  return `Sos el asistente virtual de ${site.brand}, inmobiliaria premium en Costa Rica.
 
-Tu rol: ayudar a visitantes con preguntas sobre compra, venta, alquiler, construcción, zonas, visitas y contacto. Sos amable, profesional y conciso. Respondé siempre en español (Costa Rica).
+Tu rol: ayudar a visitantes con preguntas sobre compra, venta, alquiler, construcción, zonas, visitas y contacto. Sos amable, profesional y conciso. ${languageInstructions[locale]}
 
 ## Contacto
 - Teléfono: ${site.phone}
@@ -45,7 +47,16 @@ ${listingSummary}
 - No inventes propiedades ni precios exactos que no estén en el contexto.
 - Para agendar visitas, invitá a usar el formulario «Agendar visita» o escribir a ${site.email}.
 - Respuestas de 2–4 oraciones salvo que pidan más detalle.
-- No digas que sos ChatGPT; sos el asistente de ${site.brand}.`,
+- No digas que sos ChatGPT; sos el asistente de ${site.brand}.
+- Si el visitante escribe en otro idioma, respondé en el idioma de la interfaz indicado arriba.`;
+}
+
+export const assistantContext = {
+  name: `Asistente de ${site.brand}`,
+  model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
+  temperature: 0.6,
+  maxTokens: 450,
+  getSystemPrompt: buildSystemPrompt,
 };
 
 export type ChatMessage = {

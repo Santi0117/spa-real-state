@@ -259,6 +259,20 @@ export type Translations = {
       dayUnit: string;
       nightUnit: string;
       estimatedTotal: string;
+      checkInTimeLabel: string;
+      checkInTimeValue: string;
+      arrivalTimeLabel: string;
+      arrivalTimeHint: string;
+      blockedWeekend: string;
+      depositTitle: string;
+      depositDescription: string;
+      depositAmount: string;
+      paymentMethodLabel: string;
+      paymentSinpe: string;
+      paymentTransfer: string;
+      paymentAccount: string;
+      paymentSinpePhone: string;
+      paymentConfirmHint: string;
     };
     calendar: {
       pickDayTime: string;

@@ -19,6 +19,11 @@ export const site = {
     instagram: "https://www.instagram.com/joparealestate",
     facebook: "https://www.facebook.com/joparealestate",
   },
+  payment: {
+    depositPercent: 50,
+    accountName: "Jopa Real Estate",
+    sinpePhone: "506 8640-4222",
+  },
 } as const;
 
 export const servicesMarqueeLines = [

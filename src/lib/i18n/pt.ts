@@ -325,6 +325,22 @@ export const pt: Translations = {
       dayUnit: "dias",
       nightUnit: "noites",
       estimatedTotal: "Total estimado: {total}",
+      checkInTimeLabel: "Horario de entrada",
+      checkInTimeValue: "8:00 a.m.",
+      arrivalTimeLabel: "A que horas voce vai chegar?",
+      arrivalTimeHint: "Confirme o horario de chegada no dia de entrada.",
+      blockedWeekend: "Indisponivel (fim de semana ja reservado)",
+      depositTitle: "Sinal de 50% — SINPE ou transferencia",
+      depositDescription:
+        "Para confirmar a reserva, pague 50% do total estimado por SINPE Movil ou transferencia bancaria.",
+      depositAmount: "Sinal a pagar: {amount}",
+      paymentMethodLabel: "Forma de pagamento",
+      paymentSinpe: "SINPE Movil",
+      paymentTransfer: "Transferencia",
+      paymentAccount: "Em nome de {name}",
+      paymentSinpePhone: "SINPE para {phone}",
+      paymentConfirmHint:
+        "Ao enviar o formulario, um assessor confirmara a reserva e o comprovante do sinal.",
     },
     calendar: {
       pickDayTime: "Escolha dia e horario (8:00 – 16:00)",

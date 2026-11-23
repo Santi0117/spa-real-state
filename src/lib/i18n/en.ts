@@ -323,6 +323,22 @@ export const en: Translations = {
       dayUnit: "days",
       nightUnit: "nights",
       estimatedTotal: "Estimated total: {total}",
+      checkInTimeLabel: "Check-in time",
+      checkInTimeValue: "8:00 a.m.",
+      arrivalTimeLabel: "What time will you arrive?",
+      arrivalTimeHint: "Confirm your arrival time on check-in day.",
+      blockedWeekend: "Unavailable (weekend already booked)",
+      depositTitle: "50% deposit — SINPE or bank transfer",
+      depositDescription:
+        "To confirm the booking, pay 50% of the estimated total via SINPE Móvil or bank transfer.",
+      depositAmount: "Deposit due: {amount}",
+      paymentMethodLabel: "Payment method",
+      paymentSinpe: "SINPE Móvil",
+      paymentTransfer: "Bank transfer",
+      paymentAccount: "Account name: {name}",
+      paymentSinpePhone: "SINPE to {phone}",
+      paymentConfirmHint:
+        "After you submit, an advisor will confirm the booking and your deposit receipt.",
     },
     calendar: {
       pickDayTime: "Choose day and time (8:00 a.m. – 4:00 p.m.)",

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import FormSuccess from "./FormSuccess";
 import PropertyVisitPicker from "./PropertyVisitPicker";
 import ReservationCalendar, {
+  type ReservationPaymentMethod,
   type ReservationRateType,
 } from "./ReservationCalendar";
 import SelectedPropertySummary from "./SelectedPropertySummary";
@@ -57,6 +58,8 @@ export default function ScheduleReservationForm({
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [rateType, setRateType] = useState<ReservationRateType>("night");
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<ReservationPaymentMethod | "">("");
   const [selectedId, setSelectedId] = useState(prefill.id);
   const [manualTitle, setManualTitle] = useState(
     prefill.property ? "" : prefill.title
@@ -74,7 +77,12 @@ export default function ScheduleReservationForm({
   }, [prefill]);
 
   const canSubmit = Boolean(
-    checkIn && checkOut && selectedTitle && acceptedTerms
+    checkIn &&
+      checkOut &&
+      arrivalTime &&
+      paymentMethod &&
+      selectedTitle &&
+      acceptedTerms
   );
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -87,7 +95,10 @@ export default function ScheduleReservationForm({
       propertyId: selectedId,
       checkIn,
       checkOut,
+      checkInTime: "08:00",
+      arrivalTime,
       rateType,
+      paymentMethod,
     };
 
     setSubmitting(true);
@@ -115,6 +126,8 @@ export default function ScheduleReservationForm({
     setShowPicker(false);
     setCheckIn("");
     setCheckOut("");
+    setArrivalTime("");
+    setPaymentMethod("");
   }
 
   return (
@@ -177,10 +190,14 @@ export default function ScheduleReservationForm({
           checkIn={checkIn}
           checkOut={checkOut}
           rateType={rateType}
+          arrivalTime={arrivalTime}
+          paymentMethod={paymentMethod}
           rentalRates={selectedProperty?.rentalRates}
           onCheckInChange={setCheckIn}
           onCheckOutChange={setCheckOut}
           onRateTypeChange={setRateType}
+          onArrivalTimeChange={setArrivalTime}
+          onPaymentMethodChange={setPaymentMethod}
         />
       ) : null}
 
